@@ -252,7 +252,7 @@ public class TransportGame {
             	}
             	
             } else if (link.getStartPoint() == point) {
-                line.setStrokeWidth(8);
+                line.setStrokeWidth(6);
                 line.setOnMouseClicked(e -> {
                 	
                     route.addLink(link);
