@@ -197,49 +197,54 @@ public class TransportGame {
     
     
     private void displayGems() {
-    	mainGameArea.getChildren().clear();
+        mainGameArea.getChildren().clear();
         AnchorPane anchorPane = new AnchorPane();
         mainGameArea.getChildren().add(anchorPane);
         Image mapImage = new Image(getClass().getResourceAsStream("map_background.jpg"));
         ImageView mapView = new ImageView(mapImage);
         anchorPane.getChildren().add(mapView);
 
-        Label myLabel = new Label("me");
+        // Place player sprite on the map
+        Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
+        ImageView playerImageView = new ImageView(playerSprite);
+        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
+        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
         
-        pointsMap.values().forEach(place -> {
-            // Scale or adjust these values as necessary to fit your AnchorPane
-            double x = place.getLongitude() * scaleX + offsetX; // Example scaling
-            double y = place.getLatitude() * scaleY + offsetY; // Example scaling
+        // Assuming the player's sprite image is too big, let's scale it down
+        playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
+        playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
+        playerImageView.setX(playerX - 10); // Center the player image
+        playerImageView.setY(playerY - 10);
 
-            Circle circle = new Circle(x, y, 5, Color.BLUE);
-            Label label = new Label(place.getName());
-            label.setLayoutX(x + 5); // Offset the label a bit from the circle
-            label.setLayoutY(y);
+        anchorPane.getChildren().add(playerImageView);
 
-            mainGameArea.getChildren().addAll(circle, label);
-        });
-        
-        
-        
-        double x = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
-        double y = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
-
-        Circle circle = new Circle(x, y, 7, Color.PURPLE);
-        
-        anchorPane.getChildren().add(circle);
-        
-
+        // Display gem sprites instead of buttons
         for (Integer gemLocation : availableGems) {
-            Button gemButton = new Button("Gem at " + pointsMap.get(gemLocation).getName());
-            gemButton.setLayoutX(pointsMap.get(gemLocation).getLongitude() * scaleX + offsetX);
-            gemButton.setLayoutY(pointsMap.get(gemLocation).getLatitude() * scaleY + offsetY);
+            Image gemSprite = new Image(getClass().getResourceAsStream("gem.png"));
+            ImageView gemImageView = new ImageView(gemSprite);
+            
+            // Set the size of the gem sprite
+            double gemSize = 25; // Example size, adjust as necessary
+            gemImageView.setFitWidth(gemSize); // Set width to 30px, adjust as necessary
+            gemImageView.setFitHeight(gemSize); // Set height to 30px, adjust as necessary
 
-            //gemButton.setOnAction(e -> displayRouteOptions(gemLocation, anchorPane));
-            gemButton.setOnAction(e -> displayLinkOptions(player.getLocation(), new Route(),gemLocation));
-            anchorPane.getChildren().add(gemButton);
+            // Calculate the position so the center of the gem is at the location point
+            double gemX = pointsMap.get(gemLocation).getLongitude() * scaleX + offsetX - gemSize / 2;
+            double gemY = pointsMap.get(gemLocation).getLatitude() * scaleY + offsetY - gemSize / 2;
+            gemImageView.setX(gemX);
+            gemImageView.setY(gemY);
+
+            // Add click event to gem sprite to invoke the link options display
+            gemImageView.setOnMouseClicked(e -> {
+                // Trigger the display of link options for the selected gem location
+                displayLinkOptions(player.getLocation(), new Route(), gemLocation);
+            });
+
+            anchorPane.getChildren().add(gemImageView);
         }
     }
-    
+
+
     private void displayLinkOptions(int point, Route route, int gemLocation) {
     	mainGameArea.getChildren().removeIf(node -> node instanceof Line);
     	
