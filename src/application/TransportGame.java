@@ -279,6 +279,7 @@ public class TransportGame {
             	
             } else if (link.getStartPoint() == point) {
                 line.setStrokeWidth(8);
+                line.setOpacity(1);
                 line.setOnMouseClicked(e -> {
                 	
                     route.addLink(link);
@@ -350,6 +351,9 @@ public class TransportGame {
                              endPoint.getLongitude() * scaleX + offsetX + this.offsetX,
                              endPoint.getLatitude() * scaleY + offsetY + this.offsetY);
         line.setStrokeWidth(4);
+        line.setOpacity(0.2);
+        
+        
 
         //Line line = new Line(startPoint.getLongitude() * scaleX + offsetX, startPoint.getLatitude() * scaleY + offsetY, endPoint.getLongitude() * scaleX + offsetX, endPoint.getLatitude() * scaleY + offsetY);
         
@@ -379,6 +383,8 @@ public class TransportGame {
                 link.getCarbonFootprint());
 				Tooltip tooltip = new Tooltip(tooltipText);
 				Tooltip.install(line, tooltip);
+		
+		
 				
 		return line;
     }
