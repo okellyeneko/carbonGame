@@ -21,8 +21,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.BorderPane;
-
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
@@ -41,10 +39,11 @@ public class TransportGame {
     private int currentLocation = 1; // Assuming the game starts at point 1
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleX = 100.0;
-    double scaleY = 100.0;
-    double offsetX = 50.0; // Example offset if needed
-    double offsetY = 50.0;
+    double scaleFactor = 1.7; // You can adjust this factor as needed
+    double scaleX = 100.0 * scaleFactor;
+    double scaleY = 100.0 * scaleFactor;
+    double offsetX = 50.0 * scaleFactor; // Example offset if needed
+    double offsetY = 50.0 * scaleFactor;
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
@@ -197,19 +196,40 @@ public class TransportGame {
     
     
     private void displayGems() {
-        mainGameArea.getChildren().clear();
+        mainGameArea.getChildren().clear(); // Clear existing content
+
+        // Create an AnchorPane to hold the map
         AnchorPane anchorPane = new AnchorPane();
-        mainGameArea.getChildren().add(anchorPane);
+        mainGameArea.getChildren().add(anchorPane); // Add anchorPane to the main game area
+
+        // Load the map image
         Image mapImage = new Image(getClass().getResourceAsStream("map_background.jpg"));
         ImageView mapView = new ImageView(mapImage);
-        anchorPane.getChildren().add(mapView);
+        anchorPane.getChildren().add(mapView); // Add the map to the container
+
+        // Increase the size of the map
+        mapView.setFitWidth(mapImage.getWidth() * scaleFactor);
+        mapView.setFitHeight(mapImage.getHeight() * scaleFactor);
+
+        // Display station names and redraw circles for stations
+        for (Point point : pointsMap.values()) {
+            // Display station name label
+            Label stationLabel = new Label(point.getName());
+            stationLabel.setLayoutX(point.getLongitude() * scaleX + offsetX);
+            stationLabel.setLayoutY(point.getLatitude() * scaleY + offsetY);
+            anchorPane.getChildren().add(stationLabel);
+
+            // Redraw circle for station
+            Circle stationCircle = new Circle(point.getLongitude() * scaleX + offsetX, point.getLatitude() * scaleY + offsetY, 5, Color.BLUE);
+            anchorPane.getChildren().add(stationCircle);
+        }
 
         // Place player sprite on the map
         Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
         ImageView playerImageView = new ImageView(playerSprite);
         double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
         double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
-        
+
         // Assuming the player's sprite image is too big, let's scale it down
         playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
         playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
@@ -222,7 +242,7 @@ public class TransportGame {
         for (Integer gemLocation : availableGems) {
             Image gemSprite = new Image(getClass().getResourceAsStream("gem.png"));
             ImageView gemImageView = new ImageView(gemSprite);
-            
+
             // Set the size of the gem sprite
             double gemSize = 25; // Example size, adjust as necessary
             gemImageView.setFitWidth(gemSize); // Set width to 30px, adjust as necessary
@@ -243,6 +263,7 @@ public class TransportGame {
             anchorPane.getChildren().add(gemImageView);
         }
     }
+
 
 
     private void displayLinkOptions(int point, Route route, int gemLocation) {
