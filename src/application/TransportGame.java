@@ -526,8 +526,10 @@ public class TransportGame {
             	}
             	
             } else if (link.getStartPoint() == point) {
+
                 line.setStrokeWidth(8);
                 line.setOpacity(1);
+
                 line.setOnMouseClicked(e -> {
                 	
                     route.addLink(link);
