@@ -39,6 +39,8 @@ public class TransportGame {
     private int gemsCollected = 0;
     private int gemsToCollect = 4; // Initial value for level 1
     private int currentLocation = 1; // Assuming the game starts at point 1
+    HighScoreManager highScoreManager = new HighScoreManager();
+    private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
     double scaleX = 100.0;
@@ -63,7 +65,7 @@ public class TransportGame {
         this.root.setLeft(leftPanel);
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);
-
+        highScore = highScoreManager.readHighScore();
         // You might need to adjust how the scene or stage is handled based on your game's requirements.
         // This method should prepare the game's UI within the provided BorderPane.
     }
@@ -552,7 +554,14 @@ public class TransportGame {
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
         // Mark the gem as collected by removing it from the list of available gems
         availableGems.remove(Integer.valueOf(gemLocation));
+        player.collectGem();
         
+        //new high score
+        if(player.getGemsCollected() >= highScore) {
+        	System.out.println("New High Score");
+        	highScore = player.getGemsCollected();
+        	highScoreManager.writeHighScore(player.getGemsCollected());
+        }
         // Optionally, update the GUI here to reflect the gem's collection and the route's effects
 
         // Check if all gems for the round have been collected to possibly proceed to the next round
