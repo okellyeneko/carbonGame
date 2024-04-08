@@ -3,7 +3,6 @@ package application;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -20,17 +19,14 @@ public class GameMenu {
 
     // Method to initialize and return the game menu scene
     public Scene getGameMenuScene() {
-        // Create a VBox as the root layout with spacing and alignment
+        // Create a VBox as the root layout
         VBox layout = new VBox(10); // Spacing between nodes
         layout.setPrefSize(Main.WIDTH, Main.HEIGHT);
-        layout.setStyle("-fx-background-color: #333; -fx-padding: 20; -fx-alignment: center;"); // Example styling
-
-        // Create a "Play Game" button with styling
+        // Create a "Play Game" button
         Button playGameButton = new Button("Play Game");
-        playGameButton.setStyle("-fx-font-size: 16px; -fx-background-color: #64DD17;");
         playGameButton.setOnAction(e -> {
-            BorderPane gameRoot = new BorderPane();
-            Scene gameScene = new Scene(gameRoot, 800, 600);
+            BorderPane gameRoot = new BorderPane(); // Or retrieve an existing one
+            Scene gameScene = new Scene(gameRoot, 800, 600); // Or use an existing scene
             TransportGame game = new TransportGame(gameRoot, gameScene);
             game.startGame();
             stage.setScene(gameScene);
@@ -54,15 +50,12 @@ public class GameMenu {
             instructionsAlert.showAndWait();
         });
 
-        // Add the buttons to the VBox
-        layout.getChildren().addAll(playGameButton, instructionsButton);
+        // Add the button to the VBox
+        layout.getChildren().add(playGameButton);
 
-        // Create and return the scene with potential styling
-        Scene scene = new Scene(layout);
-        scene.getStylesheets().add("style.css"); // Assuming an external stylesheet (optional)
-        return scene;
+        // Create and return the scene
+        return new Scene(layout); // Adjust the size as needed
     }
-
 
     
 }

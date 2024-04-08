@@ -24,10 +24,15 @@ public class Player {
         this.gemsCollected++;
     }
 
-    public void updateBudgets(int timeCost, int monetaryCost, int carbonCost) {
-        this.timeBudget -= timeCost;
+    public boolean updateBudgets(int timeCost, int monetaryCost, int carbonCost) {
+    	this.timeBudget -= timeCost;
         this.costBudget -= monetaryCost;
         this.carbonBudget -= carbonCost;
+    	if(this.timeBudget <= 0 || this.costBudget <= 0 || this.costBudget  <= 0 ) {
+    		return false;
+    	}
+    	return true;
+        
     }
 
     // New methods to specifically deduct time, cost, and carbon footprint

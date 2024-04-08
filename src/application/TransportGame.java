@@ -18,18 +18,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.control.Tooltip;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.BorderPane;
 import java.util.HashMap;
 import java.util.Map;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class TransportGame {
     
@@ -41,13 +40,15 @@ public class TransportGame {
     private int gemsCollected = 0;
     private int gemsToCollect = 4; // Initial value for level 1
     private int currentLocation = 1; // Assuming the game starts at point 1
+    HighScoreManager highScoreManager = new HighScoreManager();
+    private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.7; // You can adjust this factor as needed
+    double scaleFactor = 0.5; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
-    double playerOffsetX = -20.0; // Example offset if needed
-    double playerOffsetY = -20.0;
+    double offsetX = 0.0 * scaleFactor; // Example offset if needed
+    double offsetY = 0.0 * scaleFactor;
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
@@ -82,6 +83,12 @@ public class TransportGame {
             "-fx-border-radius: 5; " +
             "-fx-background-radius: 5;";
 
+    private VBox routeOptions;
+    private VBox budgetsArea;
+    private Label carbonBudgetLabel;
+    private Label timeBudgetLabel;
+    private Label costBudgetLabel;
+    
     
     public TransportGame(BorderPane root, Scene gameScene) {
         this.root = root;
@@ -92,12 +99,20 @@ public class TransportGame {
     private void initializeGame() {
         // Here, initialize your game components. For example:
         leftPanel = new VBox(10);
+        routeOptions = new VBox(5);
+        budgetsArea = new VBox(5);
         leftPanel.setStyle("-fx-background-color: #778899;");
         leftPanel.setPrefWidth(400);
         this.root.setLeft(leftPanel);
+        carbonBudgetLabel = new Label("Carbon Budget: ");
+        timeBudgetLabel = new Label("Time Budget: ");
+        costBudgetLabel = new Label("Cost Budget: ");
+        budgetsArea.getChildren().addAll(carbonBudgetLabel, timeBudgetLabel, costBudgetLabel);
+        leftPanel.getChildren().add(routeOptions);
+        leftPanel.getChildren().add(budgetsArea);
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);
-
+        highScore = highScoreManager.readHighScore();
         // You might need to adjust how the scene or stage is handled based on your game's requirements.
         // This method should prepare the game's UI within the provided BorderPane.
     }
@@ -479,6 +494,7 @@ public class TransportGame {
     
     private void displayGems() {
         mainGameArea.getChildren().clear(); // Clear existing content
+        updatePlayerStatus();
         // Create an AnchorPane to hold the map
         AnchorPane anchorPane = new AnchorPane();
         mainGameArea.getChildren().add(anchorPane); // Add anchorPane to the main game area
@@ -492,7 +508,7 @@ public class TransportGame {
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
-            // Display station name label with background, modified text, and shadow effect
+            // Display station name label
             Label stationLabel = new Label(point.getName());
             stationLabel.setLayoutX(point.getLongitude() * scaleX);
             stationLabel.setLayoutY(point.getLatitude() * scaleY);
@@ -507,10 +523,11 @@ public class TransportGame {
             dropShadow.setOffsetY(2.0);
             dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
             stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
+
             anchorPane.getChildren().add(stationLabel);
 
             // Redraw circle for station
-            Circle stationCircle = new Circle(point.getLongitude() * scaleX, point.getLatitude() * scaleY, 5, Color.BLUE);
+            Circle stationCircle = new Circle(point.getLongitude() * scaleX + offsetX, point.getLatitude() * scaleY + offsetY, 5, Color.BLUE);
             anchorPane.getChildren().add(stationCircle);
         }
 
@@ -519,9 +536,10 @@ public class TransportGame {
         ImageView playerImageView = new ImageView(playerSprite);
         double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + playerOffsetX; // Example scaling
         double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + playerOffsetY; // Example scaling
+
         // Assuming the player's sprite image is too big, let's scale it down
-        playerImageView.setFitWidth(40); // Set width to 20px, adjust as necessary
-        playerImageView.setFitHeight(40); // Set height to 20px, adjust as necessary
+        playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
+        playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
         playerImageView.setX(playerX - 10); // Center the player image
         playerImageView.setY(playerY - 10);
         anchorPane.getChildren().add(playerImageView);
@@ -536,8 +554,8 @@ public class TransportGame {
             gemImageView.setFitHeight(gemSize); // Set height to 30px, adjust as necessary
 
             // Calculate the position so the center of the gem is at the location point
-            double gemX = pointsMap.get(gemLocation).getLongitude() * scaleX - gemSize / 2;
-            double gemY = pointsMap.get(gemLocation).getLatitude() * scaleY - gemSize / 2;
+            double gemX = pointsMap.get(gemLocation).getLongitude() * scaleX + offsetX - gemSize / 2;
+            double gemY = pointsMap.get(gemLocation).getLatitude() * scaleY + offsetY - gemSize / 2;
             gemImageView.setX(gemX);
             gemImageView.setY(gemY);
 
@@ -559,29 +577,29 @@ public class TransportGame {
         	Line line = drawLine(link);
             if(point == gemLocation) {
             	if(route.containsLink(link)) {
-            		line.setStrokeWidth(6);
-            		
+            		line.setStrokeWidth(8);
             	}
             	
             } else if (link.getStartPoint() == point) {
                 line.setStrokeWidth(6);
+
                 line.setOpacity(1);
                 line.setOnMouseClicked(e -> {
                 	
                     route.addLink(link);
                     addRouteDetails(route);
                     Button clearButton = new Button("Clear");
-                    clearButton.setStyle(baseStyle); // Apply the base style initially
-
-                    clearButton.setOnMouseEntered(event -> clearButton.setStyle(hoverStyle));
-                    clearButton.setOnMouseExited(event -> clearButton.setStyle(baseStyle));
-                    
                     clearButton.setOnAction(r -> {
-                    	leftPanel.getChildren().clear();
+                    	routeOptions.getChildren().clear();
                     	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
                     });
+
                     // Add the leftPanel and cancelButton to the main layout
                     leftPanel.getChildren().addAll(clearButton);
+                    
+                    // Add the routeOptions and cancelButton to the main layout
+                    routeOptions.getChildren().addAll(clearButton);
+
                     
                     //Dont really need this if statement
                     if (link.getEndPoint() == gemLocation) {
@@ -602,21 +620,19 @@ public class TransportGame {
         
         //Add Collect Gem Button
         if(point == gemLocation) {
-//        	Button clearButton = new Button("Clear");
-//        	clearButton.setOnMouseEntered(event -> clearButton.setStyle(hoverStyle));
-//        	clearButton.setOnMouseExited(event -> clearButton.setStyle(baseStyle));
-//            
-//            clearButton.setOnAction(r -> {
-//            	leftPanel.getChildren().clear();
-//            	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
-//            });
+        	Button clearButton = new Button("Clear");
+            clearButton.setOnAction(r -> {
+            	routeOptions.getChildren().clear();
+            	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
+            });
             Button collectGemButton = new Button("Collect Gem");
             collectGemButton.setStyle(collectBaseStyle); 
             collectGemButton.setOnMouseExited(event -> collectGemButton.setStyle(collectBaseStyle));
             collectGemButton.setOnMouseEntered(event -> collectGemButton.setStyle(collectHoverStyle));
+
             collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
-            // Add the leftPanel and cancelButton to the main layout
-            leftPanel.getChildren().addAll(collectGemButton);
+            // Add the routeOptions and cancelButton to the main layout
+            routeOptions.getChildren().addAll(clearButton, collectGemButton);
         }
         
         
@@ -637,12 +653,21 @@ public class TransportGame {
         double dx = targetX - baseX;
         double dy = targetY - baseY;
         double length = Math.sqrt(dx * dx + dy * dy);
+
         double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 6 : 0); // Example: only offset cycles
         double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 6 : 0);
         Line line = new Line(startPoint.getLongitude() * scaleX + offsetX,
                              startPoint.getLatitude() * scaleY + offsetY,
                              endPoint.getLongitude() * scaleX + offsetX,
                              endPoint.getLatitude() * scaleY + offsetY);
+
+        double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 4 : 0); // Example: only offset cycles
+        double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 4 : 0);
+
+        Line line = new Line(startPoint.getLongitude() * scaleX + offsetX + this.offsetX,
+                             startPoint.getLatitude() * scaleY + offsetY + this.offsetY,
+                             endPoint.getLongitude() * scaleX + offsetX + this.offsetX,
+                             endPoint.getLatitude() * scaleY + offsetY + this.offsetY);
         line.setStrokeWidth(4);
         line.setOpacity(0.3);
         
@@ -668,9 +693,7 @@ public class TransportGame {
             line.setStroke(Color.BLACK); // Default color if none of the cases match
             break;
         }
-     // Adjust the delay of the tooltip
         
-      
         String tooltipText = String.format("Transport: %s\nCost: %d\nTime: %d\nCarbon: %d",
                 link.getTransport(),
                 link.getCost(),
@@ -697,8 +720,6 @@ public class TransportGame {
 	    
 		return line;
     }
-    
-    
     
   /*
     
@@ -764,7 +785,7 @@ public class TransportGame {
 		List<Line> cheapestRouteLines = drawRoute(anchorPane, cheapestRoute);
 		List<Line> lowestCarbonRouteLines = drawRoute(anchorPane, lowestCarbonRoute);
 		
-		leftPanel.getChildren().clear(); // Clear existing content in the leftPanel
+		routeOptions.getChildren().clear(); // Clear existing content in the routeOptions
 
 		
 		Button btnFastest = new Button("Fastest Route");
@@ -777,7 +798,7 @@ public class TransportGame {
 		// Example positioning, adjust as necessary
 		
 
-		leftPanel.getChildren().addAll(btnFastest, btnCheapest, btnLowestCarbon);
+		routeOptions.getChildren().addAll(btnFastest, btnCheapest, btnLowestCarbon);
 		
 		VBox fastestBox = new VBox(2);
 	    VBox cheapestBox = new VBox(2);
@@ -809,7 +830,7 @@ public class TransportGame {
         });
 	    
 	    // Add everything to the anchorPane
-	    leftPanel.getChildren().addAll(fastestBox, cheapestBox, lowestCarbonBox);
+	    routeOptions.getChildren().addAll(fastestBox, cheapestBox, lowestCarbonBox);
 	    
 	    
 			
@@ -834,8 +855,8 @@ public class TransportGame {
     */
     
     private void addRouteDetails(Route route) {
-    	leftPanel.getChildren().clear();
-        leftPanel.getChildren().add(new Label("Route details:")); // Title for the route details section
+    	routeOptions.getChildren().clear();
+    	routeOptions.getChildren().add(new Label("Route details:")); // Title for the route details section
         if (route.getLinks().isEmpty()) return;
         System.out.println("Cost: " + route.getTotalCost());
         System.out.println("Time: " + route.getTotalTime());
@@ -859,7 +880,7 @@ public class TransportGame {
                 segmentTime += currentLink.getTime();
             } else {
                 // Transport type changed, print the segment and reset accumulators
-                printSegment(leftPanel, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
+                printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
 
                 // Start a new segment with the current link
                 startSegment = currentLink.getStartPoint();
@@ -872,7 +893,10 @@ public class TransportGame {
         }
 
         // Ensure the last segment is printed
-        printSegment(leftPanel, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
+        printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
+        
+        String routeSummary = String.format("Carbon: %d Cost: %d  Time: %d", route.getTotalCarbonFootprint(), route.getTotalCost(), route.getTotalTime());
+        routeOptions.getChildren().add(new Label(routeSummary));
     }
 
     private void printSegment(VBox vbox, int startSegment, int endSegment, Transport transportType,
@@ -885,26 +909,62 @@ public class TransportGame {
     
     private void collectGem(int gemLocation, Route chosenRoute) {
         System.out.println("Collecting gem at " + gemLocation + " via chosen route.");
-        leftPanel.getChildren().clear();
+        routeOptions.getChildren().clear();
         
         // Update the player's location to the route's end point
         player.setLocation(gemLocation);
 
         // Update the player's budgets based on the selected route
-        player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
+        boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
         // Mark the gem as collected by removing it from the list of available gems
-        availableGems.remove(Integer.valueOf(gemLocation));
-        
-        // Optionally, update the GUI here to reflect the gem's collection and the route's effects
+        if(canContinue) {
+        	availableGems.remove(Integer.valueOf(gemLocation));
+            player.collectGem();
+            
+            //new high score
+            if(player.getGemsCollected() >= highScore) {
+            	System.out.println("New High Score");
+            	highScore = player.getGemsCollected();
+            	highScoreManager.writeHighScore(player.getGemsCollected());
+            }
+            // Optionally, update the GUI here to reflect the gem's collection and the route's effects
 
-        // Check if all gems for the round have been collected to possibly proceed to the next round
-        if (availableGems.isEmpty()) {
-            System.out.println("All gems collected for this round.");
-            currentRound++;
-            startRound();
+            // Check if all gems for the round have been collected to possibly proceed to the next round
+            if (availableGems.isEmpty()) {
+                System.out.println("All gems collected for this round.");
+                currentRound++;
+                startRound();
+            }else {
+            	displayGems();
+            }
         }else {
-        	displayGems();
+        	showGameOverPopup("Game OVER!!!");
         }
+        
+    }
+    
+    public void updatePlayerStatus() {
+        carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
+        timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget());
+        costBudgetLabel.setText("Cost Budget: " + player.getCostBudget());
+    }
+    
+    public void showGameOverPopup(String message) {
+        // Create a new Alert of type INFORMATION
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Game Over"); // Set the title of the popup window
+        alert.setHeaderText(null); // Set the header text. Null means no header.
+        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); // Set the actual message to display
+
+        // Show the alert and wait for the user to close it
+        alert.showAndWait();
+        Stage primaryStage = Main.getPrimaryStage();
+        GameMenu gameMenu = new GameMenu(primaryStage);
+        Scene menuScene = gameMenu.getGameMenuScene();
+
+        
+        primaryStage.setScene(menuScene);
+        primaryStage.show();
     }
 }
