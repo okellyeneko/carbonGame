@@ -30,8 +30,6 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-
-
 public class TransportGame {
     
     private BorderPane  root; // Using BorderPane  for simplicity, replace with your actual game layout
@@ -54,6 +52,37 @@ public class TransportGame {
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
+    final String baseStyle = "-fx-background-color: #ff6347; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-border-color: black; " +
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 5; " +
+            "-fx-background-radius: 5;";
+	final String hoverStyle = "-fx-background-color: #e57373; " +
+	             "-fx-text-fill: white; " +
+	             "-fx-font-weight: bold; " +
+	             "-fx-border-color: black; " +
+	             "-fx-border-width: 2; " +
+	             "-fx-border-radius: 5; " +
+	             "-fx-background-radius: 5;";
+	
+    final String collectBaseStyle = "-fx-background-color: #4CAF50; " + // Material Design Green 500
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-border-color: #388E3C; " + // Darker green for the border
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 5; " +
+            "-fx-background-radius: 5;";
+ 
+	final String collectHoverStyle = "-fx-background-color: #81C784; " + // Material Design Green 300 for hover
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-border-color: #388E3C; " + 
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 5; " +
+            "-fx-background-radius: 5;";
+
     private VBox routeOptions;
     private VBox budgetsArea;
     private Label carbonBudgetLabel;
@@ -469,23 +498,32 @@ public class TransportGame {
         // Create an AnchorPane to hold the map
         AnchorPane anchorPane = new AnchorPane();
         mainGameArea.getChildren().add(anchorPane); // Add anchorPane to the main game area
-
         // Load the map image
         Image mapImage = new Image(getClass().getResourceAsStream("map.jpeg"));
         ImageView mapView = new ImageView(mapImage);
         anchorPane.getChildren().add(mapView); // Add the map to the container
-
         // Increase the size of the map
         double scaleFactor2 = 0.4;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
-
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
             // Display station name label
             Label stationLabel = new Label(point.getName());
-            stationLabel.setLayoutX(point.getLongitude() * scaleX + offsetX);
-            stationLabel.setLayoutY(point.getLatitude() * scaleY + offsetY);
+            stationLabel.setLayoutX(point.getLongitude() * scaleX);
+            stationLabel.setLayoutY(point.getLatitude() * scaleY);
+            stationLabel.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 1.5;");
+            stationLabel.setFont(new Font("Arial", 12)); // Set font size and family
+            stationLabel.setWrapText(true); // Allow text wrapping
+            stationLabel.setMaxWidth(80); // Set a max width for text wrapping and alignment
+            // Create and apply the DropShadow effect
+            DropShadow dropShadow = new DropShadow();
+            dropShadow.setRadius(3.0);
+            dropShadow.setOffsetX(2.0);
+            dropShadow.setOffsetY(2.0);
+            dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
+            stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
+
             anchorPane.getChildren().add(stationLabel);
 
             // Redraw circle for station
@@ -496,17 +534,15 @@ public class TransportGame {
         // Place player sprite on the map
         Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
         ImageView playerImageView = new ImageView(playerSprite);
-        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
-        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
+        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + playerOffsetX; // Example scaling
+        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + playerOffsetY; // Example scaling
 
         // Assuming the player's sprite image is too big, let's scale it down
         playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
         playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
         playerImageView.setX(playerX - 10); // Center the player image
         playerImageView.setY(playerY - 10);
-
         anchorPane.getChildren().add(playerImageView);
-
         // Display gem sprites instead of buttons
         for (Integer gemLocation : availableGems) {
             Image gemSprite = new Image(getClass().getResourceAsStream("gem.png"));
@@ -528,7 +564,6 @@ public class TransportGame {
                 // Trigger the display of link options for the selected gem location
                 displayLinkOptions(player.getLocation(), new Route(), gemLocation);
             });
-
             anchorPane.getChildren().add(gemImageView);
         }
     }
@@ -540,17 +575,15 @@ public class TransportGame {
     	
         for (Link link : mapGrap.getAllLinks()) {
         	Line line = drawLine(link);
-        	
             if(point == gemLocation) {
             	if(route.containsLink(link)) {
             		line.setStrokeWidth(8);
             	}
             	
             } else if (link.getStartPoint() == point) {
+                line.setStrokeWidth(6);
 
-                line.setStrokeWidth(8);
                 line.setOpacity(1);
-
                 line.setOnMouseClicked(e -> {
                 	
                     route.addLink(link);
@@ -560,9 +593,13 @@ public class TransportGame {
                     	routeOptions.getChildren().clear();
                     	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
                     });
+
+                    // Add the leftPanel and cancelButton to the main layout
+                    leftPanel.getChildren().addAll(clearButton);
                     
                     // Add the routeOptions and cancelButton to the main layout
                     routeOptions.getChildren().addAll(clearButton);
+
                     
                     //Dont really need this if statement
                     if (link.getEndPoint() == gemLocation) {
@@ -578,8 +615,7 @@ public class TransportGame {
             //Dont add the line if it is ending at the current point as it makes it harder to click the lines we want to travel
             if(link.getEndPoint() != point) {
             	mainGameArea.getChildren().add(line);
-            }
-            
+            }          
         }
         
         //Add Collect Gem Button
@@ -590,6 +626,10 @@ public class TransportGame {
             	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
             });
             Button collectGemButton = new Button("Collect Gem");
+            collectGemButton.setStyle(collectBaseStyle); 
+            collectGemButton.setOnMouseExited(event -> collectGemButton.setStyle(collectBaseStyle));
+            collectGemButton.setOnMouseEntered(event -> collectGemButton.setStyle(collectHoverStyle));
+
             collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
             // Add the routeOptions and cancelButton to the main layout
             routeOptions.getChildren().addAll(clearButton, collectGemButton);
@@ -602,7 +642,6 @@ public class TransportGame {
     private Line drawLine(Link link) {
     	Point startPoint = pointsMap.get(link.getStartPoint());
         Point endPoint = pointsMap.get(link.getEndPoint());
-        
         boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
         double baseX = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
         double baseY = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
@@ -614,6 +653,14 @@ public class TransportGame {
         double dx = targetX - baseX;
         double dy = targetY - baseY;
         double length = Math.sqrt(dx * dx + dy * dy);
+
+        double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 6 : 0); // Example: only offset cycles
+        double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 6 : 0);
+        Line line = new Line(startPoint.getLongitude() * scaleX + offsetX,
+                             startPoint.getLatitude() * scaleY + offsetY,
+                             endPoint.getLongitude() * scaleX + offsetX,
+                             endPoint.getLatitude() * scaleY + offsetY);
+
         double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 4 : 0); // Example: only offset cycles
         double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 4 : 0);
 
@@ -654,9 +701,23 @@ public class TransportGame {
                 link.getCarbonFootprint());
 				Tooltip tooltip = new Tooltip(tooltipText);
 				Tooltip.install(line, tooltip);
-		
-		
 				
+				tooltip.setShowDelay(javafx.util.Duration.millis(100)); // Use the fully qualified name
+
+	
+        	    // Enhance hover effect
+	    final Color originalStrokeColor = (Color) line.getStroke();
+	    
+	    line.setOnMouseEntered(e -> {
+	        line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
+	        line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
+	    });
+	    
+	    line.setOnMouseExited(e -> {
+	        line.setStrokeWidth(6); // Revert to original stroke width
+	        line.setStroke(originalStrokeColor); // Revert to original color
+	    });		
+	    
 		return line;
     }
     
