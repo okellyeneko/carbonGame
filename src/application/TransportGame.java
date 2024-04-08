@@ -26,6 +26,9 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 public class TransportGame {
     
@@ -41,7 +44,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.7; // You can adjust this factor as needed
+    double scaleFactor = 0.5; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; // Example offset if needed
@@ -832,27 +835,50 @@ public class TransportGame {
         player.setLocation(gemLocation);
 
         // Update the player's budgets based on the selected route
-        player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
+        boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
         // Mark the gem as collected by removing it from the list of available gems
-        availableGems.remove(Integer.valueOf(gemLocation));
-        player.collectGem();
-        
-        //new high score
-        if(player.getGemsCollected() >= highScore) {
-        	System.out.println("New High Score");
-        	highScore = player.getGemsCollected();
-        	highScoreManager.writeHighScore(player.getGemsCollected());
-        }
-        // Optionally, update the GUI here to reflect the gem's collection and the route's effects
+        if(canContinue) {
+        	availableGems.remove(Integer.valueOf(gemLocation));
+            player.collectGem();
+            
+            //new high score
+            if(player.getGemsCollected() >= highScore) {
+            	System.out.println("New High Score");
+            	highScore = player.getGemsCollected();
+            	highScoreManager.writeHighScore(player.getGemsCollected());
+            }
+            // Optionally, update the GUI here to reflect the gem's collection and the route's effects
 
-        // Check if all gems for the round have been collected to possibly proceed to the next round
-        if (availableGems.isEmpty()) {
-            System.out.println("All gems collected for this round.");
-            currentRound++;
-            startRound();
+            // Check if all gems for the round have been collected to possibly proceed to the next round
+            if (availableGems.isEmpty()) {
+                System.out.println("All gems collected for this round.");
+                currentRound++;
+                startRound();
+            }else {
+            	displayGems();
+            }
         }else {
-        	displayGems();
+        	showGameOverPopup("Game OVER!!!");
         }
+        
+    }
+    
+    public void showGameOverPopup(String message) {
+        // Create a new Alert of type INFORMATION
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Game Over"); // Set the title of the popup window
+        alert.setHeaderText(null); // Set the header text. Null means no header.
+        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); // Set the actual message to display
+
+        // Show the alert and wait for the user to close it
+        alert.showAndWait();
+        Stage primaryStage = Main.getPrimaryStage();
+        GameMenu gameMenu = new GameMenu(primaryStage);
+        Scene menuScene = gameMenu.getGameMenuScene();
+
+        
+        primaryStage.setScene(menuScene);
+        primaryStage.show();
     }
 }
