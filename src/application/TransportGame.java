@@ -29,6 +29,9 @@ import java.util.Random;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
+
+
 
 public class TransportGame {
     
@@ -721,6 +724,8 @@ public class TransportGame {
 		return line;
     }
     
+    
+    
   /*
     
     
@@ -910,7 +915,7 @@ public class TransportGame {
     private void collectGem(int gemLocation, Route chosenRoute) {
         System.out.println("Collecting gem at " + gemLocation + " via chosen route.");
         routeOptions.getChildren().clear();
-        
+        compareRoutes(chosenRoute, gemLocation);
         // Update the player's location to the route's end point
         player.setLocation(gemLocation);
 
@@ -943,6 +948,47 @@ public class TransportGame {
         }
         
     }
+    
+    private void compareRoutes(Route selectedRoute, int gemLocation) {
+        Route fastestRoute = mapGrap.findRoute(player.getLocation(), gemLocation, "time");
+        Route cheapestRoute = mapGrap.findRoute(player.getLocation(), gemLocation, "cost");
+        Route lowestCarbonRoute = mapGrap.findRoute(player.getLocation(), gemLocation, "carbon");
+
+        boolean isFastest = selectedRoute.getTotalTime() <= fastestRoute.getTotalTime();
+        boolean isCheapest = selectedRoute.getTotalCost() <= cheapestRoute.getTotalCost();
+        boolean isLowestCarbon = selectedRoute.getTotalCarbonFootprint() <= lowestCarbonRoute.getTotalCarbonFootprint();
+
+        StringBuilder message = new StringBuilder();
+
+        if (isLowestCarbon) {
+            message.append("Congratulations! You've chosen the route with the lowest carbon footprint. Thank you for being environmentally conscious!");
+        } else {
+            message.append("You've chosen a good route, but here's how you could do even better:\n");
+            if (!isFastest) {
+                message.append(String.format("Faster route: Saves you %d minutes.\n", fastestRoute.getTotalTime() - selectedRoute.getTotalTime()));
+            }
+            if (!isCheapest) {
+                message.append(String.format("Cheaper route: Saves you $%d.\n", cheapestRoute.getTotalCost() - selectedRoute.getTotalCost()));
+            }
+            if (!isLowestCarbon) {
+                message.append(String.format("Lower carbon route: Reduces carbon emissions by %d units.\n", lowestCarbonRoute.getTotalCarbonFootprint() - selectedRoute.getTotalCarbonFootprint()));
+            }
+            message.append("Consider these options next time to optimize your travel impact!");
+        }
+
+    
+   
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Route Comparison");
+        alert.setHeaderText(null); // No header text
+        alert.setContentText(message.toString());
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
+        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
+        alert.showAndWait();
+       
+    }
+
     
     public void updatePlayerStatus() {
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
