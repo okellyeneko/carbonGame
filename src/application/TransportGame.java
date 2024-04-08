@@ -51,7 +51,6 @@ public class TransportGame {
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
-    
     final String baseStyle = "-fx-background-color: #ff6347; " +
             "-fx-text-fill: white; " +
             "-fx-font-weight: bold; " +
