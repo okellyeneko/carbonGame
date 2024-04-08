@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -43,7 +44,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.7; // You can adjust this factor as needed
+    double scaleFactor = 0.5; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; // Example offset if needed
@@ -868,9 +869,16 @@ public class TransportGame {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Game Over"); // Set the title of the popup window
         alert.setHeaderText(null); // Set the header text. Null means no header.
-        alert.setContentText(message); // Set the actual message to display
+        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); // Set the actual message to display
 
         // Show the alert and wait for the user to close it
         alert.showAndWait();
+        Stage primaryStage = Main.getPrimaryStage();
+        GameMenu gameMenu = new GameMenu(primaryStage);
+        Scene menuScene = gameMenu.getGameMenuScene();
+
+        
+        primaryStage.setScene(menuScene);
+        primaryStage.show();
     }
 }
