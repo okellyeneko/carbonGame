@@ -52,6 +52,12 @@ public class TransportGame {
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
+    private VBox routeOptions;
+    private VBox budgetsArea;
+    private Label carbonBudgetLabel;
+    private Label timeBudgetLabel;
+    private Label costBudgetLabel;
+    
     
     public TransportGame(BorderPane root, Scene gameScene) {
         this.root = root;
@@ -62,9 +68,17 @@ public class TransportGame {
     private void initializeGame() {
         // Here, initialize your game components. For example:
         leftPanel = new VBox(10);
+        routeOptions = new VBox(5);
+        budgetsArea = new VBox(5);
         leftPanel.setStyle("-fx-background-color: #778899;");
         leftPanel.setPrefWidth(400);
         this.root.setLeft(leftPanel);
+        carbonBudgetLabel = new Label("Carbon Budget: ");
+        timeBudgetLabel = new Label("Time Budget: ");
+        costBudgetLabel = new Label("Cost Budget: ");
+        budgetsArea.getChildren().addAll(carbonBudgetLabel, timeBudgetLabel, costBudgetLabel);
+        leftPanel.getChildren().add(routeOptions);
+        leftPanel.getChildren().add(budgetsArea);
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);
         highScore = highScoreManager.readHighScore();
@@ -449,7 +463,7 @@ public class TransportGame {
     
     private void displayGems() {
         mainGameArea.getChildren().clear(); // Clear existing content
-
+        updatePlayerStatus();
         // Create an AnchorPane to hold the map
         AnchorPane anchorPane = new AnchorPane();
         mainGameArea.getChildren().add(anchorPane); // Add anchorPane to the main game area
@@ -541,12 +555,12 @@ public class TransportGame {
                     addRouteDetails(route);
                     Button clearButton = new Button("Clear");
                     clearButton.setOnAction(r -> {
-                    	leftPanel.getChildren().clear();
+                    	routeOptions.getChildren().clear();
                     	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
                     });
                     
-                    // Add the leftPanel and cancelButton to the main layout
-                    leftPanel.getChildren().addAll(clearButton);
+                    // Add the routeOptions and cancelButton to the main layout
+                    routeOptions.getChildren().addAll(clearButton);
                     
                     //Dont really need this if statement
                     if (link.getEndPoint() == gemLocation) {
@@ -570,13 +584,13 @@ public class TransportGame {
         if(point == gemLocation) {
         	Button clearButton = new Button("Clear");
             clearButton.setOnAction(r -> {
-            	leftPanel.getChildren().clear();
+            	routeOptions.getChildren().clear();
             	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
             });
             Button collectGemButton = new Button("Collect Gem");
             collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
-            // Add the leftPanel and cancelButton to the main layout
-            leftPanel.getChildren().addAll(clearButton, collectGemButton);
+            // Add the routeOptions and cancelButton to the main layout
+            routeOptions.getChildren().addAll(clearButton, collectGemButton);
         }
         
         
@@ -708,7 +722,7 @@ public class TransportGame {
 		List<Line> cheapestRouteLines = drawRoute(anchorPane, cheapestRoute);
 		List<Line> lowestCarbonRouteLines = drawRoute(anchorPane, lowestCarbonRoute);
 		
-		leftPanel.getChildren().clear(); // Clear existing content in the leftPanel
+		routeOptions.getChildren().clear(); // Clear existing content in the routeOptions
 
 		
 		Button btnFastest = new Button("Fastest Route");
@@ -721,7 +735,7 @@ public class TransportGame {
 		// Example positioning, adjust as necessary
 		
 
-		leftPanel.getChildren().addAll(btnFastest, btnCheapest, btnLowestCarbon);
+		routeOptions.getChildren().addAll(btnFastest, btnCheapest, btnLowestCarbon);
 		
 		VBox fastestBox = new VBox(2);
 	    VBox cheapestBox = new VBox(2);
@@ -753,7 +767,7 @@ public class TransportGame {
         });
 	    
 	    // Add everything to the anchorPane
-	    leftPanel.getChildren().addAll(fastestBox, cheapestBox, lowestCarbonBox);
+	    routeOptions.getChildren().addAll(fastestBox, cheapestBox, lowestCarbonBox);
 	    
 	    
 			
@@ -778,8 +792,8 @@ public class TransportGame {
     */
     
     private void addRouteDetails(Route route) {
-    	leftPanel.getChildren().clear();
-        leftPanel.getChildren().add(new Label("Route details:")); // Title for the route details section
+    	routeOptions.getChildren().clear();
+    	routeOptions.getChildren().add(new Label("Route details:")); // Title for the route details section
         if (route.getLinks().isEmpty()) return;
         System.out.println("Cost: " + route.getTotalCost());
         System.out.println("Time: " + route.getTotalTime());
@@ -803,7 +817,7 @@ public class TransportGame {
                 segmentTime += currentLink.getTime();
             } else {
                 // Transport type changed, print the segment and reset accumulators
-                printSegment(leftPanel, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
+                printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
 
                 // Start a new segment with the current link
                 startSegment = currentLink.getStartPoint();
@@ -816,7 +830,10 @@ public class TransportGame {
         }
 
         // Ensure the last segment is printed
-        printSegment(leftPanel, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
+        printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
+        
+        String routeSummary = String.format("Carbon: %d Cost: %d  Time: %d", route.getTotalCarbonFootprint(), route.getTotalCost(), route.getTotalTime());
+        routeOptions.getChildren().add(new Label(routeSummary));
     }
 
     private void printSegment(VBox vbox, int startSegment, int endSegment, Transport transportType,
@@ -829,7 +846,7 @@ public class TransportGame {
     
     private void collectGem(int gemLocation, Route chosenRoute) {
         System.out.println("Collecting gem at " + gemLocation + " via chosen route.");
-        leftPanel.getChildren().clear();
+        routeOptions.getChildren().clear();
         
         // Update the player's location to the route's end point
         player.setLocation(gemLocation);
@@ -862,6 +879,12 @@ public class TransportGame {
         	showGameOverPopup("Game OVER!!!");
         }
         
+    }
+    
+    public void updatePlayerStatus() {
+        carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
+        timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget());
+        costBudgetLabel.setText("Cost Budget: " + player.getCostBudget());
     }
     
     public void showGameOverPopup(String message) {
