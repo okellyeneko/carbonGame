@@ -43,7 +43,6 @@ public class GameMenu {
         	Alert instructionsAlert = new Alert(Alert.AlertType.INFORMATION);
             instructionsAlert.setTitle("Game Instructions");
             instructionsAlert.setHeaderText("Welcome to our transport game!");
-
             String instructionsContent = 
                     "Objective: Collect as many gems as possible by navigating the map using Buses, Bikes, and the Luas. Manage your Stamina, Money, and Carbon Footprint wisely.\n\n" +
                     "- Stamina decreases with physical activity. Cycling is nice until you can't breath, it's game over.\n" +
