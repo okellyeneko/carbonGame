@@ -18,17 +18,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.BorderPane;
 import java.util.HashMap;
 import java.util.Map;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
+
 
 public class TransportGame {
     
@@ -47,11 +51,43 @@ public class TransportGame {
     double scaleFactor = 0.5; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
-    double offsetX = 0.0 * scaleFactor; // Example offset if needed
-    double offsetY = 0.0 * scaleFactor;
+    double playerOffsetX = -20.0; // Example offset if needed
+    double playerOffsetY = -20.0;
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
+    
+    final String baseStyle = "-fx-background-color: #ff6347; " +
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-border-color: black; " +
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 5; " +
+            "-fx-background-radius: 5;";
+	final String hoverStyle = "-fx-background-color: #e57373; " +
+	             "-fx-text-fill: white; " +
+	             "-fx-font-weight: bold; " +
+	             "-fx-border-color: black; " +
+	             "-fx-border-width: 2; " +
+	             "-fx-border-radius: 5; " +
+	             "-fx-background-radius: 5;";
+	
+    final String collectBaseStyle = "-fx-background-color: #4CAF50; " + // Material Design Green 500
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-border-color: #388E3C; " + // Darker green for the border
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 5; " +
+            "-fx-background-radius: 5;";
+ 
+	final String collectHoverStyle = "-fx-background-color: #81C784; " + // Material Design Green 300 for hover
+            "-fx-text-fill: white; " +
+            "-fx-font-weight: bold; " +
+            "-fx-border-color: #388E3C; " + 
+            "-fx-border-width: 2; " +
+            "-fx-border-radius: 5; " +
+            "-fx-background-radius: 5;";
+
     
     public TransportGame(BorderPane root, Scene gameScene) {
         this.root = root;
@@ -466,26 +502,42 @@ public class TransportGame {
 
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
-            // Display station name label
+            // Display station name label with background, modified text, and shadow effect
             Label stationLabel = new Label(point.getName());
-            stationLabel.setLayoutX(point.getLongitude() * scaleX + offsetX);
-            stationLabel.setLayoutY(point.getLatitude() * scaleY + offsetY);
+            stationLabel.setLayoutX(point.getLongitude() * scaleX);
+            stationLabel.setLayoutY(point.getLatitude() * scaleY);
+            stationLabel.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 1.5;");
+            stationLabel.setFont(new Font("Arial", 12)); // Set font size and family
+            stationLabel.setWrapText(true); // Allow text wrapping
+            stationLabel.setMaxWidth(80); // Set a max width for text wrapping and alignment
+
+            // Create and apply the DropShadow effect
+            DropShadow dropShadow = new DropShadow();
+            dropShadow.setRadius(3.0);
+            dropShadow.setOffsetX(2.0);
+            dropShadow.setOffsetY(2.0);
+            dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
+
+            stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
+
             anchorPane.getChildren().add(stationLabel);
 
             // Redraw circle for station
-            Circle stationCircle = new Circle(point.getLongitude() * scaleX + offsetX, point.getLatitude() * scaleY + offsetY, 5, Color.BLUE);
+            Circle stationCircle = new Circle(point.getLongitude() * scaleX, point.getLatitude() * scaleY, 5, Color.BLUE);
             anchorPane.getChildren().add(stationCircle);
         }
+
+   
 
         // Place player sprite on the map
         Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
         ImageView playerImageView = new ImageView(playerSprite);
-        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
-        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
+        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + playerOffsetX; // Example scaling
+        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + playerOffsetY; // Example scaling
 
         // Assuming the player's sprite image is too big, let's scale it down
-        playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
-        playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
+        playerImageView.setFitWidth(40); // Set width to 20px, adjust as necessary
+        playerImageView.setFitHeight(40); // Set height to 20px, adjust as necessary
         playerImageView.setX(playerX - 10); // Center the player image
         playerImageView.setY(playerY - 10);
 
@@ -502,8 +554,8 @@ public class TransportGame {
             gemImageView.setFitHeight(gemSize); // Set height to 30px, adjust as necessary
 
             // Calculate the position so the center of the gem is at the location point
-            double gemX = pointsMap.get(gemLocation).getLongitude() * scaleX + offsetX - gemSize / 2;
-            double gemY = pointsMap.get(gemLocation).getLatitude() * scaleY + offsetY - gemSize / 2;
+            double gemX = pointsMap.get(gemLocation).getLongitude() * scaleX - gemSize / 2;
+            double gemY = pointsMap.get(gemLocation).getLatitude() * scaleY - gemSize / 2;
             gemImageView.setX(gemX);
             gemImageView.setY(gemY);
 
@@ -527,12 +579,13 @@ public class TransportGame {
         	
             if(point == gemLocation) {
             	if(route.containsLink(link)) {
-            		line.setStrokeWidth(8);
+            		line.setStrokeWidth(6);
+            		
             	}
             	
             } else if (link.getStartPoint() == point) {
 
-                line.setStrokeWidth(8);
+                line.setStrokeWidth(6);
                 line.setOpacity(1);
 
                 line.setOnMouseClicked(e -> {
@@ -540,6 +593,11 @@ public class TransportGame {
                     route.addLink(link);
                     addRouteDetails(route);
                     Button clearButton = new Button("Clear");
+                    clearButton.setStyle(baseStyle); // Apply the base style initially
+
+                    clearButton.setOnMouseEntered(event -> clearButton.setStyle(hoverStyle));
+                    clearButton.setOnMouseExited(event -> clearButton.setStyle(baseStyle));
+                    
                     clearButton.setOnAction(r -> {
                     	leftPanel.getChildren().clear();
                     	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
@@ -568,15 +626,22 @@ public class TransportGame {
         
         //Add Collect Gem Button
         if(point == gemLocation) {
-        	Button clearButton = new Button("Clear");
-            clearButton.setOnAction(r -> {
-            	leftPanel.getChildren().clear();
-            	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
-            });
+//        	Button clearButton = new Button("Clear");
+//        	clearButton.setOnMouseEntered(event -> clearButton.setStyle(hoverStyle));
+//        	clearButton.setOnMouseExited(event -> clearButton.setStyle(baseStyle));
+//            
+//            clearButton.setOnAction(r -> {
+//            	leftPanel.getChildren().clear();
+//            	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
+//            });
             Button collectGemButton = new Button("Collect Gem");
+            collectGemButton.setStyle(collectBaseStyle); 
+            collectGemButton.setOnMouseExited(event -> collectGemButton.setStyle(collectBaseStyle));
+            collectGemButton.setOnMouseEntered(event -> collectGemButton.setStyle(collectHoverStyle));
+            
             collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
             // Add the leftPanel and cancelButton to the main layout
-            leftPanel.getChildren().addAll(clearButton, collectGemButton);
+            leftPanel.getChildren().addAll(collectGemButton);
         }
         
         
@@ -598,13 +663,13 @@ public class TransportGame {
         double dx = targetX - baseX;
         double dy = targetY - baseY;
         double length = Math.sqrt(dx * dx + dy * dy);
-        double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 4 : 0); // Example: only offset cycles
-        double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 4 : 0);
+        double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 6 : 0); // Example: only offset cycles
+        double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 6 : 0);
 
-        Line line = new Line(startPoint.getLongitude() * scaleX + offsetX + this.offsetX,
-                             startPoint.getLatitude() * scaleY + offsetY + this.offsetY,
-                             endPoint.getLongitude() * scaleX + offsetX + this.offsetX,
-                             endPoint.getLatitude() * scaleY + offsetY + this.offsetY);
+        Line line = new Line(startPoint.getLongitude() * scaleX + offsetX,
+                             startPoint.getLatitude() * scaleY + offsetY,
+                             endPoint.getLongitude() * scaleX + offsetX,
+                             endPoint.getLatitude() * scaleY + offsetY);
         line.setStrokeWidth(4);
         line.setOpacity(0.3);
         
@@ -630,7 +695,9 @@ public class TransportGame {
             line.setStroke(Color.BLACK); // Default color if none of the cases match
             break;
         }
+     // Adjust the delay of the tooltip
         
+      
         String tooltipText = String.format("Transport: %s\nCost: %d\nTime: %d\nCarbon: %d",
                 link.getTransport(),
                 link.getCost(),
@@ -638,11 +705,23 @@ public class TransportGame {
                 link.getCarbonFootprint());
 				Tooltip tooltip = new Tooltip(tooltipText);
 				Tooltip.install(line, tooltip);
-		
-		
-				
+				tooltip.setShowDelay(javafx.util.Duration.millis(100)); // Use the fully qualified name
+
+	
+        	    // Enhance hover effect
+	    final Color originalStrokeColor = (Color) line.getStroke();
+	    line.setOnMouseEntered(e -> {
+	        line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
+	        line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
+	    });
+	    line.setOnMouseExited(e -> {
+	        line.setStrokeWidth(6); // Revert to original stroke width
+	        line.setStroke(originalStrokeColor); // Revert to original color
+	    });		
 		return line;
     }
+    
+    
     
   /*
     
