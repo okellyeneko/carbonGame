@@ -553,36 +553,9 @@ public class TransportGame {
 
                 line.setStrokeWidth(8);
                 line.setOpacity(1);
-                Image image = new Image(getClass().getResourceAsStream("bus.png")); // Update the path to your image file
-                ImageView imageView = new ImageView(image);
                 
-                imageView.setFitHeight(50); // Adjust as necessary
-                imageView.setFitWidth(50);
-                
-                Point startPoint = pointsMap.get(link.getStartPoint());
-                Point endPoint = pointsMap.get(link.getEndPoint());
-                
-                boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
-                double x1 = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
-                double y1 = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
-                double x2 = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
-                double y2 = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
-                
-                double midX = (x1 + x2) / 2;
-                double midY = (y1 + y2) / 2;
-                
-                double dx = x2 - x1;
-                double dy = y2 - y1;
-                double length = Math.sqrt(dx * dx + dy * dy);
-                double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 30 : 0); // Example: only offset cycles
-                double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 30 : 0);
-
-                // Position the image at the midpoint of the line
-                // Adjust imageView's position to center it on the midpoint (considering the image's size)
-                imageView.setX((midX* scaleX - imageView.getFitWidth() / 2) + offsetX);
-                imageView.setY((midY* scaleY - imageView.getFitHeight() / 2) + offsetY);
+                ImageView  imageView = placeIcon(link);
                 mainGameArea.getChildren().add(imageView);
-
                 line.setOnMouseClicked(e -> {
                 	
                     route.addLink(link);
@@ -616,19 +589,73 @@ public class TransportGame {
         
         //Add Collect Gem Button
         if(point == gemLocation) {
-        	Button clearButton = new Button("Clear");
-            clearButton.setOnAction(r -> {
-            	routeOptions.getChildren().clear();
-            	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
-            });
+        	
             Button collectGemButton = new Button("Collect Gem");
             collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
             // Add the routeOptions and cancelButton to the main layout
-            routeOptions.getChildren().addAll(clearButton, collectGemButton);
+            routeOptions.getChildren().add(collectGemButton);
         }
         
         
         
+    }
+    
+    private ImageView placeIcon(Link link) {
+    	
+        Point startPoint = pointsMap.get(link.getStartPoint());
+        Point endPoint = pointsMap.get(link.getEndPoint());
+        
+        boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
+        double x1 = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
+        double y1 = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
+        double x2 = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
+        double y2 = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
+        
+        double midX = (x1 + x2) / 2;
+        double midY = (y1 + y2) / 2;
+        
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double length = Math.sqrt(dx * dx + dy * dy);
+        
+        Transport transportType = link.getTransport(); // Assuming link is an object that knows the transport type
+
+	     // Determine the image and offset based on the transport type
+	     Image image;
+	     double offsetX, offsetY;// Assuming dx and dy are defined as the difference in x and y coordinates
+	
+	     switch (transportType) {
+	         case BUS:
+	             image = new Image(getClass().getResourceAsStream("bus.png"));
+	             offsetX = (dy / length) * 30; // Offset for bus
+	             offsetY = (-dx / length) * 30;
+	             break;
+	         case CYCLE:
+	             image = new Image(getClass().getResourceAsStream("bike.png")); // Ensure you have a "cycle.png" in your resources
+	             offsetX = (dy / length) * 20; // Different offset for cycle
+	             offsetY = (-dx / length) * 20;
+	             break;
+	         case LUAS:
+	             image = new Image(getClass().getResourceAsStream("luas.png")); // Ensure you have a "luas.png" in your resources
+	             offsetX = (dy / length) * -25; // Different offset for LUAS
+	             offsetY = (-dx / length) * -25;
+	             break;
+	         default:
+	             // Default case, could be an error or a generic image
+	             image = new Image(getClass().getResourceAsStream("bus.png")); // Fallback image
+	             offsetX = offsetY = 0; // No offset
+	             break;
+	     }
+
+	    ImageView imageView = new ImageView(image);
+	    imageView.setFitHeight(50); // Adjust as necessary
+        imageView.setFitWidth(50);
+		imageView.setX((midX* scaleX - imageView.getFitWidth() / 2) + offsetX);
+		imageView.setY((midY* scaleY - imageView.getFitHeight() / 2) + offsetY);
+		
+		
+		return imageView;
+    	
     }
     
     private Line drawLine(Link link) {
