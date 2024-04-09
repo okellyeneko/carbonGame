@@ -553,11 +553,11 @@ public class TransportGame {
 
                 line.setStrokeWidth(8);
                 line.setOpacity(1);
-                Image image = new Image("bus.png"); // Update the path to your image file
+                Image image = new Image(getClass().getResourceAsStream("bus.png")); // Update the path to your image file
                 ImageView imageView = new ImageView(image);
                 
-                imageView.setFitHeight(100); // Adjust as necessary
-                imageView.setFitWidth(100);
+                imageView.setFitHeight(50); // Adjust as necessary
+                imageView.setFitWidth(50);
                 
                 Point startPoint = pointsMap.get(link.getStartPoint());
                 Point endPoint = pointsMap.get(link.getEndPoint());
@@ -570,11 +570,18 @@ public class TransportGame {
                 
                 double midX = (x1 + x2) / 2;
                 double midY = (y1 + y2) / 2;
+                
+                double dx = x2 - x1;
+                double dy = y2 - y1;
+                double length = Math.sqrt(dx * dx + dy * dy);
+                double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 30 : 0); // Example: only offset cycles
+                double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 30 : 0);
 
                 // Position the image at the midpoint of the line
                 // Adjust imageView's position to center it on the midpoint (considering the image's size)
-                imageView.setX(midX - imageView.getFitWidth() / 2);
-                imageView.setY(midY - imageView.getFitHeight() / 2);
+                imageView.setX((midX* scaleX - imageView.getFitWidth() / 2) + offsetX);
+                imageView.setY((midY* scaleY - imageView.getFitHeight() / 2) + offsetY);
+                mainGameArea.getChildren().add(imageView);
 
                 line.setOnMouseClicked(e -> {
                 	
