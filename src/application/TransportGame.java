@@ -49,7 +49,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 0.5; // You can adjust this factor as needed
+    double scaleFactor = 1.2; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; // Example offset if needed
@@ -553,6 +553,28 @@ public class TransportGame {
 
                 line.setStrokeWidth(8);
                 line.setOpacity(1);
+                Image image = new Image("bus.png"); // Update the path to your image file
+                ImageView imageView = new ImageView(image);
+                
+                imageView.setFitHeight(100); // Adjust as necessary
+                imageView.setFitWidth(100);
+                
+                Point startPoint = pointsMap.get(link.getStartPoint());
+                Point endPoint = pointsMap.get(link.getEndPoint());
+                
+                boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
+                double x1 = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
+                double y1 = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
+                double x2 = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
+                double y2 = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
+                
+                double midX = (x1 + x2) / 2;
+                double midY = (y1 + y2) / 2;
+
+                // Position the image at the midpoint of the line
+                // Adjust imageView's position to center it on the midpoint (considering the image's size)
+                imageView.setX(midX - imageView.getFitWidth() / 2);
+                imageView.setY(midY - imageView.getFitHeight() / 2);
 
                 line.setOnMouseClicked(e -> {
                 	
