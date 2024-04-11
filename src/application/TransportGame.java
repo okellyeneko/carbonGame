@@ -717,6 +717,7 @@ public class TransportGame {
         compareRoutes(chosenRoute, gemLocation);
         // Update the player's location to the route's end point
         player.setLocation(gemLocation);
+        SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
 
         // Update the player's budgets based on the selected route
         boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
@@ -742,7 +743,9 @@ public class TransportGame {
             	displayGems();
             }
         }else {
+
         	showGameOverPopup("Game OVER!!!");
+        	
         }
         
     }
@@ -822,6 +825,7 @@ public class TransportGame {
 
         
         primaryStage.setScene(menuScene);
+       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
         primaryStage.show();
     }
 
