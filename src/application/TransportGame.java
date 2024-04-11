@@ -164,6 +164,9 @@ public class TransportGame {
     	mapGrap.addLink(new Link(1, 12, Transport.LUAS, 5, 2, 10));
     	mapGrap.addLink(new Link(1, 9, Transport.LUAS, 5, 2, 10));
     	
+    	mapGrap.addLink(new Link(1, 12, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(1, 9, Transport.CYCLE, 5, 2, 10));
+    	
     	mapGrap.addLink(new Link(7, 3, Transport.LUAS, 5, 2, 10));
     	
       	mapGrap.addLink(new Link(9, 1, Transport.LUAS, 5, 2, 10));
@@ -582,6 +585,11 @@ public class TransportGame {
 	         addRouteDetails(currentRoute); // Update route details with the current route
 	         displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
 	         showClearButton(currentRoute, gemLocation);
+	         
+            String soundFileName = TransportSoundMapper.getSoundFileNameForTransport(link.getTransport());
+            if (soundFileName != null) {
+                SoundEffectsPlayer.playSound(soundFileName);
+            }
 	         
 	     });
 	     
