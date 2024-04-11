@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -87,6 +88,7 @@ public class TransportGame {
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);
         highScore = highScoreManager.readHighScore();
+        
     }
   
 
@@ -764,18 +766,31 @@ public class TransportGame {
             message.append("Consider these options next time to optimize your travel impact!");
         }
 
-    
-   
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Route Comparison");
-        alert.setHeaderText(null); // No header text
-        alert.setContentText(message.toString());
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
-        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
-        alert.showAndWait();
-       
+        Platform.runLater(() -> {
+            Stage primaryStage = Main.getPrimaryStage(); // Use your static method to get the primary stage
+            boolean wasFullScreen = primaryStage.isFullScreen();
+
+            // Temporarily exit full screen to ensure alert is visible
+            if (wasFullScreen) {
+                primaryStage.setFullScreen(false);
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Route Comparison");
+            alert.setHeaderText(null); // No header text
+            alert.setContentText(message.toString());
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
+            dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
+            alert.showAndWait();
+
+            // Return to full-screen mode if it was originally set
+            if (wasFullScreen) {
+                primaryStage.setFullScreen(true);
+            }
+        });
     }
+
 
     
     public void updatePlayerStatus() {
@@ -787,9 +802,9 @@ public class TransportGame {
     public void showGameOverPopup(String message) {
         // Create a new Alert of type INFORMATION
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game Over"); // Set the title of the popup window
-        alert.setHeaderText(null); // Set the header text. Null means no header.
-        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); // Set the actual message to display
+        alert.setTitle("Game Over"); 
+        alert.setHeaderText(null); 
+        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); 
 
         // Show the alert and wait for the user to close it
         alert.showAndWait();
@@ -801,4 +816,5 @@ public class TransportGame {
         primaryStage.setScene(menuScene);
         primaryStage.show();
     }
+
 }

@@ -18,6 +18,11 @@ public class Main extends Application {
         primaryStage.setTitle("Game Menu");
         primaryStage.setScene(menuScene);
         primaryStage.show();
+        
+        // Suppress the full-screen exit hint
+        primaryStage.setFullScreenExitHint("");
+
+        primaryStage.show();
     }
     
     public static Stage getPrimaryStage() {
