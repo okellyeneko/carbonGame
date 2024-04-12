@@ -1,5 +1,5 @@
-module carbonGame {
-	requires javafx.controls;
-	
-	opens application to javafx.graphics, javafx.fxml;
-}
+//module carbonGame {
+//	requires javafx.controls;
+//	
+//	opens application to javafx.graphics, javafx.fxml;
+//}

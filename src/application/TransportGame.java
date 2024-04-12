@@ -1,6 +1,7 @@
 package application;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -49,7 +50,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.2; // You can adjust this factor as needed
+    double scaleFactor = 1.7; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; // Example offset if needed
@@ -71,7 +72,7 @@ public class TransportGame {
     }
     
     private void initializeGame() {
-        // Here, initialize your game components. For example:
+
         leftPanel = new VBox(10);
         routeOptions = new VBox(5);
         budgetsArea = new VBox(5);
@@ -87,8 +88,7 @@ public class TransportGame {
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);
         highScore = highScoreManager.readHighScore();
-        // You might need to adjust how the scene or stage is handled based on your game's requirements.
-        // This method should prepare the game's UI within the provided BorderPane.
+        
     }
   
 
@@ -163,6 +163,9 @@ public class TransportGame {
     	
     	mapGrap.addLink(new Link(1, 12, Transport.LUAS, 5, 2, 10));
     	mapGrap.addLink(new Link(1, 9, Transport.LUAS, 5, 2, 10));
+    	
+    	mapGrap.addLink(new Link(1, 12, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(1, 9, Transport.CYCLE, 5, 2, 10));
     	
     	mapGrap.addLink(new Link(7, 3, Transport.LUAS, 5, 2, 10));
     	
@@ -357,64 +360,8 @@ public class TransportGame {
     	mapGrap.addLink(new Link(20, 19, Transport.BUS, 10, 1, 15));
 
 
-   
-//        mapGrap.addLink(new Link(2, 3, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(3, 4, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(4, 5, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(5, 6, Transport.DART, 5, 2, 10));
-//        mapGrap.addLink(new Link(6, 7, Transport.DART, 5, 2, 10));
-//        mapGrap.addLink(new Link(7, 8, Transport.DART, 5, 2, 10));
-//        mapGrap.addLink(new Link(8, 9, Transport.DART, 5, 2, 10));
-//        
-//        mapGrap.addLink(new Link(9, 10, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(10, 11, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(11, 12, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(12, 4, Transport.BUS, 5, 1, 15));
-//        
-//        mapGrap.addLink(new Link(1, 2, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(2, 3, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(3, 4, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(4, 5, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(2, 1, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(3, 2, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(4, 3, Transport.CYCLE, 15, 1, 0));
-//        mapGrap.addLink(new Link(5, 4, Transport.CYCLE, 15, 1, 0));
-//        
-//        
-//        mapGrap.addLink(new Link(1, 11, Transport.BUS, 10, 1, 15));
-//        mapGrap.addLink(new Link(11, 3, Transport.BUS, 10, 1, 15));
-//        mapGrap.addLink(new Link(3, 12, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(12, 7, Transport.BUS, 10, 1, 15));
-//        
-//        mapGrap.addLink(new Link(8, 11, Transport.CYCLE, 30, 1, 0));
-//        mapGrap.addLink(new Link(4, 7, Transport.CYCLE, 30, 1, 0));
-//        
-//        mapGrap.addLink(new Link(2, 1, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(3, 2, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(4, 3, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(5, 4, Transport.LUAS, 5, 2, 10));
-//        mapGrap.addLink(new Link(6, 5, Transport.DART, 5, 2, 10));
-//        mapGrap.addLink(new Link(7, 6, Transport.DART, 5, 2, 10));
-//        mapGrap.addLink(new Link(8, 7, Transport.DART, 5, 2, 10));
-//        mapGrap.addLink(new Link(9, 8, Transport.DART, 5, 2, 10));
-//
-//        mapGrap.addLink(new Link(10, 9, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(11, 10, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(12, 11, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(4, 12, Transport.BUS, 5, 1, 15));
-//
-//        mapGrap.addLink(new Link(11, 1, Transport.BUS, 10, 1, 15));
-//        mapGrap.addLink(new Link(3, 11, Transport.BUS, 10, 1, 15));
-//        mapGrap.addLink(new Link(12, 3, Transport.BUS, 5, 1, 15));
-//        mapGrap.addLink(new Link(7, 12, Transport.BUS, 10, 1, 15));
-//
-//        mapGrap.addLink(new Link(11, 8, Transport.CYCLE, 30, 1, 0));
-//        mapGrap.addLink(new Link(7, 4, Transport.CYCLE, 30, 1, 0));
-
-        
     }
 
-    
 
     public void startGame() {
         currentLevel = 1;
@@ -433,7 +380,6 @@ public class TransportGame {
         startRound();
     }
 
-    
 
     private void startRound() {
         if (currentRound <= 4) { // Check if the current level still has rounds to play
@@ -539,6 +485,7 @@ public class TransportGame {
 
 
     private void displayLinkOptions(int point, Route route, int gemLocation) {
+    	mainGameArea.getChildren().removeIf(node -> "iconTag".equals(node.getUserData()));
     	mainGameArea.getChildren().removeIf(node -> node instanceof Line);
     	
         for (Link link : mapGrap.getAllLinks()) {
@@ -553,54 +500,13 @@ public class TransportGame {
 
                 line.setStrokeWidth(8);
                 line.setOpacity(1);
-                Image image = new Image("bus.png"); // Update the path to your image file
-                ImageView imageView = new ImageView(image);
                 
-                imageView.setFitHeight(100); // Adjust as necessary
-                imageView.setFitWidth(100);
+                ImageView  imageView = placeIcon(link, route,  gemLocation);
+	       	     
+                mainGameArea.getChildren().add(imageView);
                 
-                Point startPoint = pointsMap.get(link.getStartPoint());
-                Point endPoint = pointsMap.get(link.getEndPoint());
-                
-                boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
-                double x1 = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
-                double y1 = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
-                double x2 = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
-                double y2 = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
-                
-                double midX = (x1 + x2) / 2;
-                double midY = (y1 + y2) / 2;
-
-                // Position the image at the midpoint of the line
-                // Adjust imageView's position to center it on the midpoint (considering the image's size)
-                imageView.setX(midX - imageView.getFitWidth() / 2);
-                imageView.setY(midY - imageView.getFitHeight() / 2);
-
-                line.setOnMouseClicked(e -> {
-                	
-                    route.addLink(link);
-                    addRouteDetails(route);
-                    Button clearButton = new Button("Clear");
-                    clearButton.setOnAction(r -> {
-                    	routeOptions.getChildren().clear();
-                    	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
-                    });
-                    
-                    // Add the routeOptions and cancelButton to the main layout
-                    routeOptions.getChildren().addAll(clearButton);
-                    
-                    //Dont really need this if statement
-                    if (link.getEndPoint() == gemLocation) {
-                        // End point reached, possibly end or reset the game here
-                        System.out.println("Gem location reached. Route completed.");
-                        displayLinkOptions(link.getEndPoint(), route, gemLocation);
-                    } else {
-                        // Recursive call to allow further link selection
-                        displayLinkOptions(link.getEndPoint(), route, gemLocation);
-                    }
-                });
             }
-            //Dont add the line if it is ending at the current point as it makes it harder to click the lines we want to travel
+            
             if(link.getEndPoint() != point) {
             	mainGameArea.getChildren().add(line);
             }
@@ -609,51 +515,128 @@ public class TransportGame {
         
         //Add Collect Gem Button
         if(point == gemLocation) {
-        	Button clearButton = new Button("Clear");
-            clearButton.setOnAction(r -> {
-            	routeOptions.getChildren().clear();
-            	displayLinkOptions(player.getLocation(), new Route(),gemLocation);
-            });
+        	
             Button collectGemButton = new Button("Collect Gem");
             collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
-            // Add the routeOptions and cancelButton to the main layout
-            routeOptions.getChildren().addAll(clearButton, collectGemButton);
+
+            routeOptions.getChildren().add(collectGemButton);
         }
-        
-        
-        
     }
+    
+    private ImageView placeIcon(Link link, Route currentRoute, int gemLocation) {
+    	
+        Point startPoint = pointsMap.get(link.getStartPoint());
+        Point endPoint = pointsMap.get(link.getEndPoint());
+        
+        boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
+        double x1 = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
+        double y1 = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
+        double x2 = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
+        double y2 = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
+        
+        double midX = (x1 + x2) / 2;
+        double midY = (y1 + y2) / 2;
+        
+        double dx = x2 - x1;
+        double dy = y2 - y1;
+        double length = Math.sqrt(dx * dx + dy * dy);
+        
+        Transport transportType = link.getTransport(); // Assuming link is an object that knows the transport type
+
+	     // Determine the image and offset based on the transport type
+	     Image image;
+	     double offsetX, offsetY;// Assuming dx and dy are defined as the difference in x and y coordinates
+	
+	     switch (transportType) {
+	         case BUS:
+	             image = new Image(getClass().getResourceAsStream("bus.png"));
+	             offsetX = (dy / length) * 20; // Offset for bus
+	             offsetY = (-dx / length) * 20;
+	             break;
+	         case CYCLE:
+	             image = new Image(getClass().getResourceAsStream("bike.png")); 
+	             offsetX = (dy / length) * 10; // Different offset for cycle
+	             offsetY = (-dx / length) * 10;
+	             break;
+	         case LUAS:
+	             image = new Image(getClass().getResourceAsStream("luas.png")); 
+	             offsetX = (dy / length) * -15; // Different offset for LUAS
+	             offsetY = (-dx / length) * -15;
+	             break;
+	         default:
+	             // Default case
+	             image = new Image(getClass().getResourceAsStream("bus.png")); 
+	             offsetX = offsetY = 0; // No offset
+	             break;
+	     }
+
+	     // Create the ImageView for the transport icon as before
+	     ImageView imageView = new ImageView(image);
+	     imageView.setFitHeight(30); // Adjust as necessary
+	     imageView.setFitWidth(30);
+	     imageView.setX((midX * scaleX - imageView.getFitWidth() / 2) + offsetX);
+	     imageView.setY((midY * scaleY - imageView.getFitHeight() / 2) + offsetY);
+	     
+	     // Event handler for imageView clicks
+	     imageView.setOnMouseClicked(e -> {
+	         // Add the link to the current route instead of creating a new one
+	    	 
+	         currentRoute.addLink(link);
+	         addRouteDetails(currentRoute); // Update route details with the current route
+	         displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
+	         showClearButton(currentRoute, gemLocation);
+	         
+            String soundFileName = TransportSoundMapper.getSoundFileNameForTransport(link.getTransport());
+            if (soundFileName != null) {
+                SoundEffectsPlayer.playSound(soundFileName);
+            }
+	         
+	     });
+	     
+	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
+                 pointsMap.get(link.getEndPoint()).getName(), 
+                 link.getTransport().toString(),
+                 link.getTime(),
+                 link.getCost(),
+                 link.getCarbonFootprint());
+		Tooltip tooltip = new Tooltip(tooltipText);
+		Tooltip.install(imageView, tooltip);
+		tooltip.setShowDelay(javafx.util.Duration.millis(0));
+	     
+	     imageView.setUserData("iconTag"); 
+	     return imageView;
+    	
+    }
+    
+    private void showClearButton(Route route, int gemLocation) {
+        Button clearButton = new Button("Clear");
+        clearButton.setOnAction(event -> {
+            // Reset the route 
+            routeOptions.getChildren().clear(); 
+            Route newRoute = new Route(); 
+            displayLinkOptions(player.getLocation(), newRoute, gemLocation);
+        });
+
+        // Add the clearButton to routeOptions
+        
+        if (!routeOptions.getChildren().contains(clearButton)) {
+            routeOptions.getChildren().add(clearButton);
+        }
+    }
+
     
     private Line drawLine(Link link) {
     	Point startPoint = pointsMap.get(link.getStartPoint());
         Point endPoint = pointsMap.get(link.getEndPoint());
         
-        boolean startPointIsLower = link.getStartPoint() < link.getEndPoint();
-        double baseX = startPointIsLower ? startPoint.getLongitude() : endPoint.getLongitude();
-        double baseY = startPointIsLower ? startPoint.getLatitude() : endPoint.getLatitude();
-        double targetX = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
-        double targetY = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
-
-        
-     // Calculate direction vector (base to target) and normalize
-        double dx = targetX - baseX;
-        double dy = targetY - baseY;
-        double length = Math.sqrt(dx * dx + dy * dy);
-        double offsetX = (dy / length) * (link.getTransport() == Transport.BUS ? 4 : 0); // Example: only offset cycles
-        double offsetY = (-dx / length) * (link.getTransport() == Transport.BUS ? 4 : 0);
-
-        Line line = new Line(startPoint.getLongitude() * scaleX + offsetX + this.offsetX,
-                             startPoint.getLatitude() * scaleY + offsetY + this.offsetY,
-                             endPoint.getLongitude() * scaleX + offsetX + this.offsetX,
-                             endPoint.getLatitude() * scaleY + offsetY + this.offsetY);
+        Line line = new Line(startPoint.getLongitude() * scaleX,
+                             startPoint.getLatitude() * scaleY,
+                             endPoint.getLongitude() * scaleX,
+                             endPoint.getLatitude() * scaleY);
         line.setStrokeWidth(4);
         line.setOpacity(0.3);
         
-        
-
-        //Line line = new Line(startPoint.getLongitude() * scaleX + offsetX, startPoint.getLatitude() * scaleY + offsetY, endPoint.getLongitude() * scaleX + offsetX, endPoint.getLatitude() * scaleY + offsetY);
-        
-        
+       
         switch (link.getTransport()) {
         case BUS:
             line.setStroke(Color.YELLOW);
@@ -671,154 +654,9 @@ public class TransportGame {
             line.setStroke(Color.BLACK); // Default color if none of the cases match
             break;
         }
-        
-        String tooltipText = String.format("Transport: %s\nCost: %d\nTime: %d\nCarbon: %d",
-                link.getTransport(),
-                link.getCost(),
-                link.getTime(),
-                link.getCarbonFootprint());
-				Tooltip tooltip = new Tooltip(tooltipText);
-				Tooltip.install(line, tooltip);
-		
-		
-				
 		return line;
     }
-    
-    
-    
-  /*
-    
-    
-    private void displayRouteOptions(int gemLocation, AnchorPane anchorPane) {
-        // Clear previous content but keep the background
-        anchorPane.getChildren().clear();
-        ImageView mapView = new ImageView(new Image(getClass().getResourceAsStream("map_background.jpg")));
-        anchorPane.getChildren().add(mapView);
-
-        // Fetch routes with different criteria
-        Route fastestRoute = mapGrap.findRoute(player.getLocation(), gemLocation, "time");
-        Route cheapestRoute = mapGrap.findRoute(player.getLocation(), gemLocation, "cost");
-        Route lowestCarbonRoute = mapGrap.findRoute(player.getLocation(), gemLocation, "carbon");
-
-        
-
-        // Add buttons for selecting a route
-        addRouteSelectionButtons(anchorPane, gemLocation, fastestRoute, cheapestRoute, lowestCarbonRoute);
-    }
-
-    private List<Line> drawRoute(AnchorPane anchorPane, Route route) {
-        List<Line> routeLines = new ArrayList<>();
-
-        for (Link link : route.getLinks()) {
-            Point start = pointsMap.get(link.getStartPoint());
-            Point end = pointsMap.get(link.getEndPoint());
-            Line line = new Line(start.getLongitude() * scaleX + offsetX, start.getLatitude() * scaleY + offsetY,
-                                 end.getLongitude() * scaleX + offsetX, end.getLatitude() * scaleY + offsetY);
-
-            // Determine the color based on the method of transport
-            switch (link.getTransport()) {
-                case BUS:
-                    line.setStroke(Color.YELLOW);
-                    break;
-                case LUAS:
-                    line.setStroke(Color.GREEN);
-                    break;
-                case CYCLE:
-                    line.setStroke(Color.ORANGE);
-                    break;
-                case DART:
-                    line.setStroke(Color.RED);
-                    break;
-                default:
-                    line.setStroke(Color.BLACK); // Default color if none of the cases match
-                    break;
-            }
-
-            line.setStrokeWidth(4); // Default stroke width
-            Tooltip.install(line, new Tooltip(link.getTransport().toString())); // Tooltip showing the route name and transport method
-            anchorPane.getChildren().add(line);
-            routeLines.add(line);
-        }
-
-        return routeLines;
-    }
-
-
-    private void addRouteSelectionButtons(AnchorPane anchorPane, int gemLocation,
-        Route fastestRoute, Route cheapestRoute, Route lowestCarbonRoute) {
-		List<Line> fastestRouteLines = drawRoute(anchorPane, fastestRoute);
-		List<Line> cheapestRouteLines = drawRoute(anchorPane, cheapestRoute);
-		List<Line> lowestCarbonRouteLines = drawRoute(anchorPane, lowestCarbonRoute);
-		
-		routeOptions.getChildren().clear(); // Clear existing content in the routeOptions
-
-		
-		Button btnFastest = new Button("Fastest Route");
-		Button btnCheapest = new Button("Cheapest Route");
-		Button btnLowestCarbon = new Button("Lowest Carbon Route");
-		
-		setupButtonWithRouteLines(btnFastest, fastestRouteLines, gemLocation, fastestRoute);
-		setupButtonWithRouteLines(btnCheapest, cheapestRouteLines, gemLocation, cheapestRoute);
-		setupButtonWithRouteLines(btnLowestCarbon, lowestCarbonRouteLines, gemLocation, lowestCarbonRoute);
-		// Example positioning, adjust as necessary
-		
-
-		routeOptions.getChildren().addAll(btnFastest, btnCheapest, btnLowestCarbon);
-		
-		VBox fastestBox = new VBox(2);
-	    VBox cheapestBox = new VBox(2);
-	    VBox lowestCarbonBox = new VBox(2);
-
-	    // Adjust these as necessary for layout
-	    fastestBox.setLayoutX(50); fastestBox.setLayoutY(400);
-	    cheapestBox.setLayoutX(250); cheapestBox.setLayoutY(400);
-	    lowestCarbonBox.setLayoutX(450); lowestCarbonBox.setLayoutY(400);
-
-
-	    // Add labels for each link in the route
-	    addRouteDetails(fastestBox, fastestRoute);
-	    addRouteDetails(cheapestBox, cheapestRoute);
-	    addRouteDetails(lowestCarbonBox, lowestCarbonRoute);
-
-	    
-	    pointsMap.values().forEach(point -> {
-            // Scale or adjust these values as necessary to fit your AnchorPane
-            double x = point.getLongitude() * scaleX + offsetX; // Example scaling
-            double y = point.getLatitude() * scaleY + offsetY; // Example scaling
-
-            Circle circle = new Circle(x, y, 5, Color.BLUE);
-            Label label = new Label(point.getName());
-            label.setLayoutX(x + 5); // Offset the label a bit from the circle
-            label.setLayoutY(y);
-
-            anchorPane.getChildren().addAll(circle, label);
-        });
-	    
-	    // Add everything to the anchorPane
-	    routeOptions.getChildren().addAll(fastestBox, cheapestBox, lowestCarbonBox);
-	    
-	    
-			
-	}
-    
-    
    
-    
-
-
-    
-    
-    private void setupButtonWithRouteLines(Button button, List<Line> routeLines, int gemLocation, Route route) {
-        button.setLayoutY(550); // Common Y for simplicity
-        button.setOnMouseEntered(e -> routeLines.forEach(line -> line.setStrokeWidth(10))); // Thicker on hover
-        button.setOnMouseExited(e -> routeLines.forEach(line -> line.setStrokeWidth(5))); // Back to normal
-        button.setOnAction(e -> collectGem(gemLocation, route));
-
-        // Tooltip for additional route info (optional)
-        Tooltip.install(button, new Tooltip("TEST")); // Assuming route.toString() gives meaningful info
-    }
-    */
     
     private void addRouteDetails(Route route) {
     	routeOptions.getChildren().clear();
@@ -879,6 +717,7 @@ public class TransportGame {
         compareRoutes(chosenRoute, gemLocation);
         // Update the player's location to the route's end point
         player.setLocation(gemLocation);
+        SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
 
         // Update the player's budgets based on the selected route
         boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
@@ -894,7 +733,6 @@ public class TransportGame {
             	highScore = player.getGemsCollected();
             	highScoreManager.writeHighScore(player.getGemsCollected());
             }
-            // Optionally, update the GUI here to reflect the gem's collection and the route's effects
 
             // Check if all gems for the round have been collected to possibly proceed to the next round
             if (availableGems.isEmpty()) {
@@ -905,7 +743,9 @@ public class TransportGame {
             	displayGems();
             }
         }else {
+
         	showGameOverPopup("Game OVER!!!");
+        	
         }
         
     }
@@ -937,18 +777,31 @@ public class TransportGame {
             message.append("Consider these options next time to optimize your travel impact!");
         }
 
-    
-   
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Route Comparison");
-        alert.setHeaderText(null); // No header text
-        alert.setContentText(message.toString());
-        DialogPane dialogPane = alert.getDialogPane();
-        dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
-        dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
-        alert.showAndWait();
-       
+        Platform.runLater(() -> {
+            Stage primaryStage = Main.getPrimaryStage(); // Use your static method to get the primary stage
+            boolean wasFullScreen = primaryStage.isFullScreen();
+
+            // Temporarily exit full screen to ensure alert is visible
+            if (wasFullScreen) {
+                primaryStage.setFullScreen(false);
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Route Comparison");
+            alert.setHeaderText(null); // No header text
+            alert.setContentText(message.toString());
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
+            dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
+            alert.showAndWait();
+
+            // Return to full-screen mode if it was originally set
+            if (wasFullScreen) {
+                primaryStage.setFullScreen(true);
+            }
+        });
     }
+
 
     
     public void updatePlayerStatus() {
@@ -960,9 +813,9 @@ public class TransportGame {
     public void showGameOverPopup(String message) {
         // Create a new Alert of type INFORMATION
         Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game Over"); // Set the title of the popup window
-        alert.setHeaderText(null); // Set the header text. Null means no header.
-        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); // Set the actual message to display
+        alert.setTitle("Game Over"); 
+        alert.setHeaderText(null); 
+        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); 
 
         // Show the alert and wait for the user to close it
         alert.showAndWait();
@@ -972,6 +825,8 @@ public class TransportGame {
 
         
         primaryStage.setScene(menuScene);
+       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
         primaryStage.show();
     }
+
 }
