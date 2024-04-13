@@ -1,0 +1,76 @@
+/* General Styling for the Left Panel */
+.left-panel {
+    -fx-background-color: #778899; /* Light Slate Gray */
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-pref-width: 200px; /* Preferred width */
+}
+
+/* Styling for Route Options VBox */
+.route-options {
+    -fx-spacing: 5px; /* Space between children */
+    -fx-padding: 5px; /* Padding around the content */
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Light Gray background */
+    -fx-border-color: black; /* Lighter Gray border */
+    -fx-border-width: 1px;
+}
+
+/* Styling for Budgets Area VBox */
+.budgets-area {
+    -fx-spacing: 5px;
+    -fx-padding: 5px;
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Off White background */
+    -fx-border-color: #d3d3d3; /* Light Gray border */
+    -fx-border-width: 1px;
+    -fx-text-fill: white;
+}
+
+/* Styling for Labels with Bold Font in Budgets Area */
+.label-budget {
+    -fx-font-family: 'Arial', sans-serif; /* Font family */
+    -fx-font-size: 12px; /* Font size */
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: white;
+}
+
+/* Additional styles for Buttons if needed */
+.button-style {
+    -fx-background-color: #336699; /* Blue background for buttons */
+    -fx-text-fill: white; /* White text */
+    -fx-font-weight: bold; /* Bold text */
+}
+
+/* Tooltip Styling for enhanced user experience */
+.tooltip {
+    -fx-font-size: 10px;
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Very light gray background */
+    -fx-text-fill: black; /* Black text */
+}
+
+.high-score-label {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 24px; 
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD700; 
+    -fx-background-color: rgba(0, 0, 0, 0.8); 
+    -fx-padding: 10px; 
+    -fx-border-radius: 10px; 
+    -fx-background-radius: 10px;  
+    -fx-border-color: gold; 
+    -fx-border-width: 2px;  
+    -fx-effect: dropshadow(three-pass-box, rgba(255,215,0,0.8), 5, 0, 0, 5);  
+}
+
+.score-label {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 16px; 
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFD700; 
+    -fx-background-color: rgba(0, 0, 0, 0.5);  
+    -fx-padding: 5px; 
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #c0c0c0;  
+    -fx-border-width: 1px; 
+    
+}

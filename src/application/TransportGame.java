@@ -31,6 +31,12 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.Font;
+
+
+
 
 
 
@@ -63,6 +69,8 @@ public class TransportGame {
     private Label carbonBudgetLabel;
     private Label timeBudgetLabel;
     private Label costBudgetLabel;
+    private Label highScoreLabel;
+    private Label scoreLabel;
     
     
     public TransportGame(BorderPane root, Scene gameScene) {
@@ -76,18 +84,31 @@ public class TransportGame {
         leftPanel = new VBox(10);
         routeOptions = new VBox(5);
         budgetsArea = new VBox(5);
-        leftPanel.setStyle("-fx-background-color: #778899;");
-        leftPanel.setPrefWidth(400);
         this.root.setLeft(leftPanel);
+        //leftPanel.setAlignment(Pos.CENTER);
         carbonBudgetLabel = new Label("Carbon Budget: ");
         timeBudgetLabel = new Label("Time Budget: ");
         costBudgetLabel = new Label("Cost Budget: ");
+        scoreLabel = new Label("Current Score: ");
+        highScoreLabel = new Label("High Score: " + highScore);
+        highScoreLabel.getStyleClass().add("high-score-label");
+        scoreLabel.getStyleClass().add("score-label");
         budgetsArea.getChildren().addAll(carbonBudgetLabel, timeBudgetLabel, costBudgetLabel);
+        leftPanel.getChildren().add(highScoreLabel);
+        leftPanel.getChildren().add(scoreLabel);
         leftPanel.getChildren().add(routeOptions);
-        leftPanel.getChildren().add(budgetsArea);
+        leftPanel.getChildren().add(budgetsArea);     
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);
         highScore = highScoreManager.readHighScore();
+        leftPanel.getStyleClass().add("left-panel");      
+        routeOptions.getStyleClass().add("route-options");       
+        budgetsArea.getStyleClass().add("budgets-area");
+        carbonBudgetLabel.getStyleClass().add("label-budget");
+        timeBudgetLabel.getStyleClass().add("label-budget");
+        costBudgetLabel.getStyleClass().add("label-budget");
+        gameScene.getStylesheets().add(getClass().getResource("/application/style.css").toExternalForm());
+        
         
     }
   
@@ -705,7 +726,7 @@ public class TransportGame {
 
     private void printSegment(VBox vbox, int startSegment, int endSegment, Transport transportType,
                               int cost, int carbon, int time) {
-        String detailText = String.format("From %s to %s via %s - Cost: %d, Carbon: %d, Time: %d",
+        String detailText = String.format("%s -> %s (%s) \nCost: %d \nCarbon: %d \nTime: %d",
         		pointsMap.get(startSegment).getName(),  pointsMap.get(endSegment).getName(), transportType, cost, carbon, time);
         System.out.println(detailText);
         vbox.getChildren().add(new Label(detailText));
@@ -808,6 +829,8 @@ public class TransportGame {
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
         timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget());
         costBudgetLabel.setText("Cost Budget: " + player.getCostBudget());
+        scoreLabel.setText("Score: " + player.getGemsCollected());
+        highScoreLabel.setText("High Score: " + highScore);
     }
     
     public void showGameOverPopup(String message) {
