@@ -69,8 +69,9 @@ public class TransportGame {
     private Label carbonBudgetLabel;
     private Label timeBudgetLabel;
     private Label costBudgetLabel;
-    private Label highScoreLabel;
     private Label scoreLabel;
+    private Label budgetsHeading;
+    private Label routeHeading;
     
     
     public TransportGame(BorderPane root, Scene gameScene) {
@@ -84,24 +85,28 @@ public class TransportGame {
         leftPanel = new VBox(10);
         routeOptions = new VBox(5);
         budgetsArea = new VBox(5);
-        this.root.setLeft(leftPanel);
-        //leftPanel.setAlignment(Pos.CENTER);
+        this.root.setLeft(leftPanel);        
+        budgetsHeading = new Label("Budget Overview");
+        routeHeading = new Label("Route Details");
         carbonBudgetLabel = new Label("Carbon Budget: ");
         timeBudgetLabel = new Label("Time Budget: ");
         costBudgetLabel = new Label("Cost Budget: ");
-        scoreLabel = new Label("Current Score: ");
-        highScoreLabel = new Label("High Score: " + highScore);
-        highScoreLabel.getStyleClass().add("high-score-label");
-        scoreLabel.getStyleClass().add("score-label");
+        scoreLabel = new Label("High Score:" + System.lineSeparator() + "Current Score");     
+        budgetsArea.getChildren().add(budgetsHeading);
         budgetsArea.getChildren().addAll(carbonBudgetLabel, timeBudgetLabel, costBudgetLabel);
-        leftPanel.getChildren().add(highScoreLabel);
-        leftPanel.getChildren().add(scoreLabel);
+        //leftPanel.getChildren().add(highScoreLabel);
+        leftPanel.getChildren().add(scoreLabel);        
+        leftPanel.getChildren().add(budgetsArea);
         leftPanel.getChildren().add(routeOptions);
-        leftPanel.getChildren().add(budgetsArea);     
+        routeOptions.getChildren().add(routeHeading);
         mainGameArea = new Pane();
-        root.setCenter(mainGameArea);
+        root.setCenter(mainGameArea);        
         highScore = highScoreManager.readHighScore();
-        leftPanel.getStyleClass().add("left-panel");      
+        // Styling in CSS
+        leftPanel.getStyleClass().add("left-panel"); 
+        scoreLabel.getStyleClass().add("score-label");
+        budgetsHeading.getStyleClass().add("heading-label");
+        routeHeading.getStyleClass().add("route-label");
         routeOptions.getStyleClass().add("route-options");       
         budgetsArea.getStyleClass().add("budgets-area");
         carbonBudgetLabel.getStyleClass().add("label-budget");
@@ -681,7 +686,7 @@ public class TransportGame {
     
     private void addRouteDetails(Route route) {
     	routeOptions.getChildren().clear();
-    	routeOptions.getChildren().add(new Label("Route details:")); // Title for the route details section
+    	routeOptions.getChildren().add(routeHeading); // Title for the route details section
         if (route.getLinks().isEmpty()) return;
         System.out.println("Cost: " + route.getTotalCost());
         System.out.println("Time: " + route.getTotalTime());
@@ -720,7 +725,7 @@ public class TransportGame {
         // Ensure the last segment is printed
         printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
         
-        String routeSummary = String.format("Carbon: %d Cost: %d  Time: %d", route.getTotalCarbonFootprint(), route.getTotalCost(), route.getTotalTime());
+        String routeSummary = String.format("Cost: %d Carbon: %d Time: %d", route.getTotalCost(), route.getTotalCarbonFootprint(), route.getTotalTime());
         routeOptions.getChildren().add(new Label(routeSummary));
     }
 
@@ -829,8 +834,9 @@ public class TransportGame {
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
         timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget());
         costBudgetLabel.setText("Cost Budget: " + player.getCostBudget());
-        scoreLabel.setText("Score: " + player.getGemsCollected());
-        highScoreLabel.setText("High Score: " + highScore);
+        scoreLabel.setText(String.format("High Score: %d%nCurrent Score: %d", highScore, player.getGemsCollected()));
+
+    
     }
     
     public void showGameOverPopup(String message) {
