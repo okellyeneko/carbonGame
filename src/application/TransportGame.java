@@ -23,6 +23,8 @@ import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.BorderPane;
 import java.util.HashMap;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,12 +68,21 @@ public class TransportGame {
     private VBox leftPanel;
     private VBox routeOptions;
     private VBox budgetsArea;
+    private ProgressBar carbonProgress;
+    private double progressCarbon;
+    private ProgressBar timeProgress;
+    private double progressTime;
+    private ProgressBar costProgress;
+    private double progressCost;
     private Label carbonBudgetLabel;
     private Label timeBudgetLabel;
     private Label costBudgetLabel;
     private Label scoreLabel;
     private Label budgetsHeading;
     private Label routeHeading;
+    private HBox carbonHbox;
+    private HBox timeHbox;
+    private HBox costHbox;
     
     
     public TransportGame(BorderPane root, Scene gameScene) {
@@ -91,9 +102,36 @@ public class TransportGame {
         carbonBudgetLabel = new Label("Carbon Budget: ");
         timeBudgetLabel = new Label("Time Budget: ");
         costBudgetLabel = new Label("Cost Budget: ");
-        scoreLabel = new Label("High Score:" + System.lineSeparator() + "Current Score");     
+        scoreLabel = new Label("High Score:" + System.lineSeparator() + "Current Score");  
+        
+        
+        carbonProgress = new ProgressBar();
+        carbonProgress.setStyle("-fx-accent: green;");
+        carbonProgress.setProgress(1.0);
+        timeProgress = new ProgressBar();
+        timeProgress.setStyle("-fx-accent: green;");
+        timeProgress.setProgress(1.0);
+        costProgress = new ProgressBar();
+        costProgress.setStyle("-fx-accent: green;");
+        costProgress.setProgress(1.0);
+        carbonBudgetLabel = new Label("Carbon Budget: ");
+        timeBudgetLabel = new Label("Time Budget:   ");
+        costBudgetLabel = new Label("Cost Budget:   ");
+
+        carbonHbox = new HBox();
+        timeHbox = new HBox();
+        costHbox = new HBox();
+        
+        carbonHbox.setSpacing(10);
+        timeHbox.setSpacing(10);
+        costHbox.setSpacing(10);
+        
+        carbonHbox.getChildren().addAll(carbonBudgetLabel, carbonProgress);
+        timeHbox.getChildren().addAll(timeBudgetLabel, timeProgress);
+        costHbox.getChildren().addAll(costBudgetLabel, costProgress);
+        
         budgetsArea.getChildren().add(budgetsHeading);
-        budgetsArea.getChildren().addAll(carbonBudgetLabel, timeBudgetLabel, costBudgetLabel);
+        budgetsArea.getChildren().addAll(carbonBudgetLabel, carbonHbox, timeBudgetLabel, timeHbox, costBudgetLabel, costHbox);
         //leftPanel.getChildren().add(highScoreLabel);
         leftPanel.getChildren().add(scoreLabel);        
         leftPanel.getChildren().add(budgetsArea);
@@ -831,6 +869,44 @@ public class TransportGame {
 
     
     public void updatePlayerStatus() {
+    	progressCarbon = player.getCarbonBudget();
+        progressCarbon = progressCarbon/200;
+        progressTime = player.getTimeBudget();
+        progressTime = progressTime/100;
+        progressCost = player.getCostBudget();
+        progressCost = progressCost/50;
+        
+        if (progressCarbon < 0) {
+        	progressCarbon = 0.0;
+        }
+        if (progressTime < 0) {
+        	progressTime = 0.0;
+        }
+        if (progressCost < 0) {
+        	progressCost = 0.0;
+        }
+                
+        if (progressCarbon < 0.25) {
+        	carbonProgress.setStyle("-fx-accent: red;");
+        }
+        else {
+        	carbonProgress.setStyle("-fx-accent: limegreen;");
+        }
+        if (progressTime < 0.25) {
+        	timeProgress.setStyle("-fx-accent: red;");
+        }
+        else {
+        	timeProgress.setStyle("-fx-accent: limegreen;");
+        }
+        if (progressCost < 0.25) {
+        	costProgress.setStyle("-fx-accent: red;");
+        }
+        else {
+        	costProgress.setStyle("-fx-accent: limegreen;");
+        }
+    	carbonProgress.setProgress(progressCarbon);
+        timeProgress.setProgress(progressTime);
+        costProgress.setProgress(progressCost);
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
         timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget());
         costBudgetLabel.setText("Cost Budget: " + player.getCostBudget());
