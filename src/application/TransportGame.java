@@ -1,5 +1,4 @@
 package application;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -19,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.BorderPane;
@@ -58,11 +58,13 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1; // You can adjust this factor as needed
+    double scaleFactor = 1.7; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; // Example offset if needed
     double offsetY = 0.0 * scaleFactor;
+    double playerOffsetX = -20.0; // Example offset if needed
+    double playerOffsetY = -20.0;
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
@@ -83,6 +85,7 @@ public class TransportGame {
     private HBox carbonHbox;
     private HBox timeHbox;
     private HBox costHbox;
+    
     
     
     public TransportGame(BorderPane root, Scene gameScene) {
@@ -280,26 +283,40 @@ public class TransportGame {
 
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
-            // Display station name label
+            // Display station name label with background, modified text, and shadow effect
             Label stationLabel = new Label(point.getName());
-            stationLabel.setLayoutX(point.getLongitude() * scaleX + offsetX);
-            stationLabel.setLayoutY(point.getLatitude() * scaleY + offsetY);
+            stationLabel.setLayoutX(point.getLongitude() * scaleX);
+            stationLabel.setLayoutY(point.getLatitude() * scaleY);
+            stationLabel.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 1.5;");
+            stationLabel.setFont(new Font("Arial", 12)); // Set font size and family
+            stationLabel.setWrapText(true); // Allow text wrapping
+            stationLabel.setMaxWidth(80); // Set a max width for text wrapping and alignment
+
+            // Create and apply the DropShadow effect
+            DropShadow dropShadow = new DropShadow();
+            dropShadow.setRadius(3.0);
+            dropShadow.setOffsetX(2.0);
+            dropShadow.setOffsetY(2.0);
+            dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
+
+            stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
+
             anchorPane.getChildren().add(stationLabel);
 
             // Redraw circle for station
-            Circle stationCircle = new Circle(point.getLongitude() * scaleX + offsetX, point.getLatitude() * scaleY + offsetY, 5, Color.BLUE);
+            Circle stationCircle = new Circle(point.getLongitude() * scaleX, point.getLatitude() * scaleY, 5, Color.BLUE);
             anchorPane.getChildren().add(stationCircle);
         }
 
         // Place player sprite on the map
         Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
         ImageView playerImageView = new ImageView(playerSprite);
-        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
-        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
+        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + playerOffsetX; // Example scaling
+        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + playerOffsetY; // Example scaling
 
         // Assuming the player's sprite image is too big, let's scale it down
-        playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
-        playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
+        playerImageView.setFitWidth(40); // Set width to 20px, adjust as necessary
+        playerImageView.setFitHeight(40); // Set height to 20px, adjust as necessary
         playerImageView.setX(playerX - 10); // Center the player image
         playerImageView.setY(playerY - 10);
 
@@ -503,6 +520,28 @@ public class TransportGame {
             line.setStroke(Color.BLACK); // Default color if none of the cases match
             break;
         }
+
+        
+        String tooltipText = String.format("Transport: %s\nCost: %d\nTime: %d\nCarbon: %d",
+                link.getTransport(),
+                link.getCost(),
+                link.getTime(),
+                link.getCarbonFootprint());
+				Tooltip tooltip = new Tooltip(tooltipText);
+				Tooltip.install(line, tooltip);
+				tooltip.setShowDelay(javafx.util.Duration.millis(100)); // Use the fully qualified name
+
+				
+    	    // Enhance hover effect
+		final Color originalStrokeColor = (Color) line.getStroke();
+		line.setOnMouseEntered(e -> {
+			line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
+			line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
+		});
+		line.setOnMouseExited(e -> {
+			line.setStrokeWidth(6); // Revert to original stroke width
+			line.setStroke(originalStrokeColor); // Revert to original color
+	    });	
 		return line;
     }
    
