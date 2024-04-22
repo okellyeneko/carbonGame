@@ -58,7 +58,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.2; // You can adjust this factor as needed
+    double scaleFactor = 1; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; // Example offset if needed
@@ -157,273 +157,58 @@ public class TransportGame {
   
 
     private void initializePoints() {
-        pointsMap.put(1, new Point(1, "Dundrum", 2.46, -0.05));
-        pointsMap.put(2, new Point(2, "Miltown", 0.82, 1.55));
-        pointsMap.put(3, new Point(3, "Ranelagh", 0.26, 1.85));
-        pointsMap.put(4, new Point(4, "Stephens Green", 0.82, 2.26));
-        pointsMap.put(5, new Point(5, "Connolly Station", 1.06, 3.87));
-        pointsMap.put(6, new Point(6, "Grand Canal Dock", 2.46, 3.46));
-        pointsMap.put(7, new Point(7, "Sandymount", 0.26, 4.05));
-        pointsMap.put(8, new Point(8, "Booterstown", 4.05, 1.5));
-        pointsMap.put(9, new Point(9, "Blackrock", 3.85, 0.17));
-        pointsMap.put(10, new Point(10, "Mount Merrion", 3.95, 2.94));
-        pointsMap.put(11, new Point(11, "UCD", 4.05, 2.18));
-        pointsMap.put(12, new Point(12, "Donnybrook", 0.53, -0.05));
-        pointsMap.put(13, new Point(13, "A", 3.51, 3.465));
-        pointsMap.put(14, new Point(14, "B", 5.28, 3.48));
-        pointsMap.put(15, new Point(15, "C", 4.53, 3.9));
-        pointsMap.put(16, new Point(16, "D", 4.09, 4.4));
-        pointsMap.put(17, new Point(17, "E", 4.45, 4.85));
-        pointsMap.put(18, new Point(18, "F", 3.4, 4.85));
-        pointsMap.put(19, new Point(19, "G", 2.95, 4.75));
-        pointsMap.put(20, new Point(20, "H", 2.5, 4.57));
-        pointsMap.put(21, new Point(21, "I", 5.28, 1.99));
-        pointsMap.put(22, new Point(22, "J", 5.29, 2.94));
-        pointsMap.put(23, new Point(23, "K", 2.89, 3.05));
-        pointsMap.put(24, new Point(24, "L", 1.89, 3.17));
-        pointsMap.put(25, new Point(25, "M", 1.89, 3.17));
-        pointsMap.put(26, new Point(26, "N", 4.1, 4.85));
-        pointsMap.put(27, new Point(27, "O", 2.7, 2.9));
-        pointsMap.put(28, new Point(28, "P", 3.45, 2.2));
-        pointsMap.put(29, new Point(29, "Q", 5.1, 4.0));
-        pointsMap.put(30, new Point(30, "R", 4.96, 2.2));
-        pointsMap.put(31, new Point(31, "S", 4.96, 2.7));
-        pointsMap.put(32, new Point(32, "T", 5.29, 2.7));
-        pointsMap.put(33, new Point(33, "U", 1.05, 2.7));
-        pointsMap.put(34, new Point(34, "V", 2.25, 4.1));
+    	
+    	//Volcano island
+    	
+        pointsMap.put(1, new Point(1, "Inferno Heart", 1.775, 3.05));
+        pointsMap.put(2, new Point(2, "Emberfall Coast", 1.775, 1.2));
+        pointsMap.put(3, new Point(3, "Lava's Edge", 3, 3.05));
+        pointsMap.put(4, new Point(4, "Pyroclast Tombs", 2.5, 2.2));
+        pointsMap.put(5, new Point(5, "Nidhogg's Nest", 2, 3.82));
+        
+        //Lighthouse - Forgotten Shores
+        
+        pointsMap.put(6, new Point(6, "Sentinel Point", 5.4, 4.55));
+        pointsMap.put(7, new Point(7, "Forgotten Shores", 8.43, 4.45));
+        
+        //Snowy mountains
+        
+        pointsMap.put(8, new Point(8, "Sailor's Sanctuary", 6.35, 2.77));
+        pointsMap.put(9, new Point(9, "Frostbound Slopes", 7.5, 3.1));
+        pointsMap.put(10, new Point(10, "Frozen Shores", 8.32, 2.5));
+        pointsMap.put(11, new Point(11, "Alpine Crossroads", 8.2, 0.8));
+        pointsMap.put(12, new Point(12, "Pinecrest forests", 6.5, 0.37));
+        pointsMap.put(13, new Point(13, "Snowglimmer Span", 8.92, -0.65));
+        pointsMap.put(14, new Point(14, "Flimmer Span", 7.95, -0.35));
+        pointsMap.put(15, new Point(15, "Whispering Woods", 7.3, -0.8));
+        pointsMap.put(16, new Point(16, "Evergreen Cross", 6.53, -1.17));
+        pointsMap.put(17, new Point(17, "Hares' Haven", 6.95, -1.55));
+        pointsMap.put(18, new Point(18, "Greenridge Pastures", 8.45, -2.82));
+        pointsMap.put(19, new Point(19, "Homestead Horizon", 8.95, -1.85));
+        pointsMap.put(20, new Point(20, "Rivercross Glaciergate", 9.15, -1.37));
+        pointsMap.put(21, new Point(21, "Snowdrift Domain", 8.27, 1.71));
+        pointsMap.put(22, new Point(22, "Silo Crossroads", 6.9, -3.87));
+        pointsMap.put(23, new Point(23, "Forgefront Curve", 5.87, -3.87));
+        pointsMap.put(24, new Point(24, "Gearwork Grove", 5.87, -3.18));
+        pointsMap.put(25, new Point(25, "Warehouse Wharf", 4.05, -2.75));
+        pointsMap.put(26, new Point(26, "Bolt & Barrel Borough", 3.1, -3.63));
+        pointsMap.put(27, new Point(27, "Assembly fields", 0.45, -3.63));
+        pointsMap.put(28, new Point(28, "Forgefield Commons", 1.9, -2.75));
+        pointsMap.put(29, new Point(29, "Meadowmere Fortress", 1.1, -1.86));
+        pointsMap.put(30, new Point(30, "Baron's Expanse", 2.5, -1.7));
+        pointsMap.put(31, new Point(31, "Crownlands Acres", 1.34, -0.7));
+        pointsMap.put(32, new Point(32, "Cobblestone Capital", 3.5, -1.25));
+        pointsMap.put(33, new Point(33, "Harborsky Port", 2.6, -0.6));
+        pointsMap.put(34, new Point(34, "Cabana Cove", 4.52, 0.1));
+        pointsMap.put(35, new Point(35, "TMainstreet Commons", 5.35, -1.7));
+        pointsMap.put(36, new Point(36, "Townhall Terrace", 4.5, -1.5));
+        
+        
+        
     }
     
     private void initializeMapGraph() {
-        // Initialise your mapGraph with Links, similar to previous examples
     	mapGrap.addLink(new Link(2, 4, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(2, 12, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(2, 3, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(3, 2, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(3, 7, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(4, 2, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(4, 33, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(6, 13, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(6, 23, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(6, 25, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(25, 6, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(25, 27, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(27, 25, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(27, 23, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(27, 28, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(28, 27, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(28, 11, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(33, 4, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(33, 5, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(12, 1, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(12, 2, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(1, 12, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(1, 9, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(1, 12, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(1, 9, Transport.CYCLE, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(7, 3, Transport.LUAS, 5, 2, 10));
-    	
-      	mapGrap.addLink(new Link(9, 1, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(9, 8, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(8, 9, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(8, 11, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(11, 28, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 30, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 8, Transport.LUAS, 5, 2, 10));
-
-
-    	mapGrap.addLink(new Link(10, 13, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(10, 22, Transport.LUAS, 5, 2, 10));
-    	
-     	mapGrap.addLink(new Link(13, 6, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(13, 10, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(13, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(13, 14, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(15, 14, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(15, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(15, 29, Transport.LUAS, 5, 2, 10));
-    	
-     	mapGrap.addLink(new Link(14, 13, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(14, 22, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(14, 29, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(14, 15, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(16, 26, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 19, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 29, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 13, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 15, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(19, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(19, 20, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(21, 32, Transport.LUAS, 5, 2, 10));
-     
-    	mapGrap.addLink(new Link(23, 27, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(23, 6, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(26, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(26, 17, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(26, 18, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(17, 26, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(18, 26, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(29, 14, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(29, 15, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(29, 16, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(5, 34, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(5, 33, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(30, 31, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(30, 11, Transport.LUAS, 5, 2, 10));
-    	
-      	mapGrap.addLink(new Link(31, 30, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(31, 32, Transport.LUAS, 5, 2, 10));
-    	
-     	mapGrap.addLink(new Link(32, 31, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(32, 21, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(32, 22, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(22, 32, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(22, 10, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(22, 14, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(34, 5, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(34, 20, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(20, 34, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(20, 19, Transport.LUAS, 5, 2, 10));
-    	
-    	// BUS routes addition
-    	mapGrap.addLink(new Link(2, 4, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(2, 12, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(2, 3, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(3, 2, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(3, 7, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(4, 2, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(4, 33, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(6, 13, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(6, 23, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(6, 25, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(25, 6, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(25, 27, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(27, 25, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(27, 23, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(27, 28, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(28, 27, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(28, 11, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(33, 4, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(33, 5, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(12, 1, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(12, 2,Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(1, 12, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(1, 9, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(7, 3, Transport.BUS, 10, 1, 15));
-    	
-      	mapGrap.addLink(new Link(9, 1, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(9, 8, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(8, 9, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(8, 11, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(11, 28, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(11, 30, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(11, 8, Transport.BUS, 10, 1, 15));
-
-
-    	mapGrap.addLink(new Link(10, 13, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(10, 22, Transport.BUS, 10, 1, 15));
-    	
-     	mapGrap.addLink(new Link(13, 6, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(13, 10, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(13, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(13, 14, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(15, 14, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(15, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(15, 29, Transport.BUS, 10, 1, 15));
-    	
-     	mapGrap.addLink(new Link(14, 13, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(14, 22, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(14, 29, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(14, 15, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(16, 26, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 19, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 29, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 13, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 15, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(19, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(19, 20, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(21, 32, Transport.BUS, 10, 1, 15));
-     
-    	mapGrap.addLink(new Link(23, 27, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(23, 6, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(26, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(26, 17, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(26, 18, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(17, 26, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(18, 26, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(29, 14, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(29, 15, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(29, 16, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(5, 34, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(5, 33, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(30, 31, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(30, 11, Transport.BUS, 10, 1, 15));
-    	
-      	mapGrap.addLink(new Link(31, 30, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(31, 32, Transport.BUS, 10, 1, 15));
-    	
-     	mapGrap.addLink(new Link(32, 31, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(32, 21, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(32, 22, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(22, 32, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(22, 10, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(22, 14, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(34, 5, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(34, 20, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(20, 34, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(20, 19, Transport.BUS, 10, 1, 15));
-
-
     }
 
 
@@ -484,12 +269,12 @@ public class TransportGame {
         mainGameArea.getChildren().add(anchorPane); // Add anchorPane to the main game area
 
         // Load the map image
-        Image mapImage = new Image(getClass().getResourceAsStream("map.jpeg"));
+        Image mapImage = new Image(getClass().getResourceAsStream("map.png"));
         ImageView mapView = new ImageView(mapImage);
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = 0.4;
+        double scaleFactor2 = 0.363;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
