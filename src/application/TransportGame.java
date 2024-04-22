@@ -66,6 +66,7 @@ public class TransportGame {
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
+    private VBox rightPanel;
     private VBox routeOptions;
     private VBox budgetsArea;
     private ProgressBar carbonProgress;
@@ -94,9 +95,18 @@ public class TransportGame {
     private void initializeGame() {
 
         leftPanel = new VBox(10);
+        
         routeOptions = new VBox(5);
         budgetsArea = new VBox(5);
-        this.root.setLeft(leftPanel);        
+        this.root.setLeft(leftPanel);
+        
+        rightPanel = new VBox(10);
+        
+        routeOptions = new VBox(5);
+        budgetsArea = new VBox(5);
+        this.root.setRight(rightPanel);
+        
+        
         budgetsHeading = new Label("Budget Overview");
         routeHeading = new Label("Route Details");
         carbonBudgetLabel = new Label("Carbon Budget: ");
@@ -135,13 +145,14 @@ public class TransportGame {
         //leftPanel.getChildren().add(highScoreLabel);
         leftPanel.getChildren().add(scoreLabel);        
         leftPanel.getChildren().add(budgetsArea);
-        leftPanel.getChildren().add(routeOptions);
+        rightPanel.getChildren().add(routeOptions);
         routeOptions.getChildren().add(routeHeading);
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);        
         highScore = highScoreManager.readHighScore();
         // Styling in CSS
         leftPanel.getStyleClass().add("left-panel"); 
+        rightPanel.getStyleClass().add("right-panel"); 
         scoreLabel.getStyleClass().add("score-label");
         budgetsHeading.getStyleClass().add("heading-label");
         routeHeading.getStyleClass().add("route-label");
@@ -769,15 +780,19 @@ public class TransportGame {
         printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
         
         String routeSummary = String.format("Cost: %d Carbon: %d Time: %d", route.getTotalCost(), route.getTotalCarbonFootprint(), route.getTotalTime());
-        routeOptions.getChildren().add(new Label(routeSummary));
+        Label label = new Label(routeSummary);
+        label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black; -fx-background-color: lightgreen; -fx-padding: 5px; -fx-border-color: black;");
+        routeOptions.getChildren().add(label);
     }
 
     private void printSegment(VBox vbox, int startSegment, int endSegment, Transport transportType,
                               int cost, int carbon, int time) {
-        String detailText = String.format("%s -> %s (%s) \nCost: %d \nCarbon: %d \nTime: %d",
+        String detailText = String.format("%s -> %s (%s)",
         		pointsMap.get(startSegment).getName(),  pointsMap.get(endSegment).getName(), transportType, cost, carbon, time);
         System.out.println(detailText);
-        vbox.getChildren().add(new Label(detailText));
+        Label label = new Label(detailText);
+        label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;");
+        vbox.getChildren().add(label);
     }
     
     private void collectGem(int gemLocation, Route chosenRoute) {
