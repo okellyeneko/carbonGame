@@ -646,6 +646,8 @@ public class TransportGame {
 	         // Add the link to the current route instead of creating a new one
 	    	 
 	         currentRoute.addLink(link);
+	         player.updateBudgets(link.getTime(), link.getCost(), link.getCarbonFootprint());
+		     	updatePlayerStatus();	        		
 	         addRouteDetails(currentRoute); // Update route details with the current route
 	         displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
 	         showClearButton(currentRoute, gemLocation);
@@ -656,6 +658,9 @@ public class TransportGame {
             }
 	         
 	     });
+	     if (player.getTimeBudget() <= 0) {
+	    	 showGameOverPopup("Game OVER!!!");
+	     }
 	     
 	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
                  pointsMap.get(link.getEndPoint()).getName(), 
@@ -784,12 +789,15 @@ public class TransportGame {
         SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
 
         // Update the player's budgets based on the selected route
-        boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
+        // boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
         // Mark the gem as collected by removing it from the list of available gems
-        if(canContinue) {
-        	availableGems.remove(Integer.valueOf(gemLocation));
-            player.collectGem();
+        //if(canContinue) {
+        	//availableGems.remove(Integer.valueOf(gemLocation));
+            //player.collectGem();
+        if(player.getTimeBudget() > 0) {
+	    	availableGems.remove(Integer.valueOf(gemLocation));
+	        player.collectGem();
             
             //new high score
             if(player.getGemsCollected() >= highScore) {
@@ -811,6 +819,10 @@ public class TransportGame {
         	showGameOverPopup("Game OVER!!!");
         	
         }
+        player.deductTime(-20);
+        player.deductCarbonFootprint(-50);
+        player.deductCost(-10);
+        updatePlayerStatus();
         
     }
     
@@ -840,6 +852,10 @@ public class TransportGame {
             }
             message.append("Consider these options next time to optimize your travel impact!");
         }
+        message.append(String.format("You get a Bonus!\n")); 
+        message.append(String.format("Cost budget increased by 10 or reset to maximum\n"));
+        message.append(String.format("Time budget increased by 20 or reset to maximum\n"));
+        message.append(String.format("Carbon budget increased by 50 or reset to maximum\n"));
 
         Platform.runLater(() -> {
             Stage primaryStage = Main.getPrimaryStage(); // Use your static method to get the primary stage
@@ -857,6 +873,8 @@ public class TransportGame {
             DialogPane dialogPane = alert.getDialogPane();
             dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
             dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
+            dialogPane.setPrefWidth(600);
+            dialogPane.setPrefHeight(350);
             alert.showAndWait();
 
             // Return to full-screen mode if it was originally set
@@ -889,19 +907,28 @@ public class TransportGame {
         if (progressCarbon < 0.25) {
         	carbonProgress.setStyle("-fx-accent: red;");
         }
-        else {
+        else if (progressCarbon < 0.75){
+        	carbonProgress.setStyle("-fx-accent: yellow;");
+        }
+        else if (progressCarbon >= 0.75){
         	carbonProgress.setStyle("-fx-accent: limegreen;");
         }
         if (progressTime < 0.25) {
         	timeProgress.setStyle("-fx-accent: red;");
         }
-        else {
+        else if (progressTime < 0.75){
+        	timeProgress.setStyle("-fx-accent: yellow;");
+        }
+        else if (progressTime >= 0.75){
         	timeProgress.setStyle("-fx-accent: limegreen;");
         }
         if (progressCost < 0.25) {
         	costProgress.setStyle("-fx-accent: red;");
         }
-        else {
+        else if (progressCost < 0.75){
+        	costProgress.setStyle("-fx-accent: yellow;");
+        }
+        else if (progressCost >= 0.75){
         	costProgress.setStyle("-fx-accent: limegreen;");
         }
     	carbonProgress.setProgress(progressCarbon);

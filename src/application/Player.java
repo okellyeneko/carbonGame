@@ -28,6 +28,9 @@ public class Player {
     	this.timeBudget -= timeCost;
         this.costBudget -= monetaryCost;
         this.carbonBudget -= carbonCost;
+        this.timeBudget = Math.max(this.timeBudget, 0);
+        this.costBudget = Math.max(this.costBudget, 0);
+        this.carbonBudget = Math.max(this.carbonBudget, 0);
     	if(this.timeBudget <= 0 || this.costBudget <= 0 || this.costBudget  <= 0 ) {
     		return false;
     	}
@@ -38,14 +41,17 @@ public class Player {
     // New methods to specifically deduct time, cost, and carbon footprint
     public void deductTime(int time) {
         this.timeBudget -= time;
+        this.timeBudget = Math.min(this.timeBudget, 100);
     }
 
     public void deductCost(int cost) {
         this.costBudget -= cost;
+        this.costBudget = Math.min(this.costBudget, 50);
     }
 
     public void deductCarbonFootprint(int carbonFootprint) {
         this.carbonBudget -= carbonFootprint;
+        this.carbonBudget = Math.min(this.carbonBudget, 200);
     }
 
     // Getters and setters
