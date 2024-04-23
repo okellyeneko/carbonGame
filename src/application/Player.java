@@ -78,7 +78,19 @@ public class Player {
     public int getCarbonBudget() {
         return carbonBudget;
     }
-    
+
+    public void setTimeBudget(int time) {
+        this.timeBudget = time;
+    }
+
+    public void setCostBudget(int cost) {
+        this.costBudget = cost;
+    }
+
+    public void setCarbonBudget(int carbon) {
+        this.carbonBudget = carbon;
+    }
+
     public boolean canContinue() {
         return timeBudget > 0 && costBudget > 0 && carbonBudget > 0;
     }

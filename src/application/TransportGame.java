@@ -83,7 +83,9 @@ public class TransportGame {
     private HBox carbonHbox;
     private HBox timeHbox;
     private HBox costHbox;
-    
+    private int gemCollectCarbon = 200;
+    private int gemCollectTime = 100;
+    private int gemCollectCost = 50;
     
     public TransportGame(BorderPane root, Scene gameScene) {
         this.root = root;
@@ -658,7 +660,7 @@ public class TransportGame {
             }
 	         
 	     });
-	     if (player.getTimeBudget() <= 0) {
+	     if (!player.canContinue()) {
 	    	 showGameOverPopup("Game OVER!!!");
 	     }
 	     
@@ -681,7 +683,11 @@ public class TransportGame {
         Button clearButton = new Button("Clear");
         clearButton.setOnAction(event -> {
             // Reset the route 
-            routeOptions.getChildren().clear(); 
+            routeOptions.getChildren().clear();
+            player.setCarbonBudget(gemCollectCarbon);
+            player.setCostBudget(gemCollectCost);
+            player.setTimeBudget(gemCollectTime);
+            updatePlayerStatus();
             Route newRoute = new Route(); 
             displayLinkOptions(player.getLocation(), newRoute, gemLocation);
         });
@@ -791,11 +797,13 @@ public class TransportGame {
         // Update the player's budgets based on the selected route
         // boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
+        
+        
         // Mark the gem as collected by removing it from the list of available gems
         //if(canContinue) {
         	//availableGems.remove(Integer.valueOf(gemLocation));
             //player.collectGem();
-        if(player.getTimeBudget() > 0) {
+        if(player.canContinue()) {
 	    	availableGems.remove(Integer.valueOf(gemLocation));
 	        player.collectGem();
             
@@ -822,7 +830,11 @@ public class TransportGame {
         player.deductTime(-20);
         player.deductCarbonFootprint(-50);
         player.deductCost(-10);
+        //SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
         updatePlayerStatus();
+        gemCollectCarbon = player.getCarbonBudget();
+        gemCollectTime = player.getTimeBudget();
+        gemCollectCost = player.getCostBudget();
         
     }
     
@@ -838,7 +850,9 @@ public class TransportGame {
         StringBuilder message = new StringBuilder();
 
         if (isLowestCarbon) {
-            message.append("Congratulations! You've chosen the route with the lowest carbon footprint. Thank you for being environmentally conscious!");
+            message.append("Congratulations! You've chosen the route with the lowest carbon footprint. Thank you for being environmentally conscious!\n");
+            message.append("As a reward you get a bonus gem!!\n\n");
+            player.collectGem();
         } else {
             message.append("You've chosen a good route, but here's how you could do even better:\n");
             if (!isFastest) {
@@ -850,9 +864,9 @@ public class TransportGame {
             if (!isLowestCarbon) {
                 message.append(String.format("Lower carbon route: Reduces carbon emissions by %d units.\n", lowestCarbonRoute.getTotalCarbonFootprint() - selectedRoute.getTotalCarbonFootprint()));
             }
-            message.append("Consider these options next time to optimize your travel impact!");
+            message.append("Consider these options next time to optimize your travel impact!\n\n");
         }
-        message.append(String.format("You get a Bonus!\n")); 
+        message.append(String.format("You get a Budget Bonus!\n")); 
         message.append(String.format("Cost budget increased by 10 or reset to maximum\n"));
         message.append(String.format("Time budget increased by 20 or reset to maximum\n"));
         message.append(String.format("Carbon budget increased by 50 or reset to maximum\n"));
@@ -948,7 +962,7 @@ public class TransportGame {
         alert.setTitle("Game Over"); 
         alert.setHeaderText(null); 
         alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); 
-
+        SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
         // Show the alert and wait for the user to close it
         alert.showAndWait();
         Stage primaryStage = Main.getPrimaryStage();
@@ -957,7 +971,7 @@ public class TransportGame {
 
         
         primaryStage.setScene(menuScene);
-       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
+       	//SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
         primaryStage.show();
     }
 
