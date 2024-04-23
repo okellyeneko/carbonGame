@@ -36,11 +36,12 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Font;
-
-
-
-
-
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.StackPane;
 
 
 
@@ -68,6 +69,7 @@ public class TransportGame {
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
+    private VBox rightPanel;
     private VBox routeOptions;
     private VBox budgetsArea;
     private ProgressBar carbonProgress;
@@ -97,9 +99,18 @@ public class TransportGame {
     private void initializeGame() {
 
         leftPanel = new VBox(10);
+        
         routeOptions = new VBox(5);
         budgetsArea = new VBox(5);
-        this.root.setLeft(leftPanel);        
+        this.root.setLeft(leftPanel);
+        
+        rightPanel = new VBox(10);
+        
+        routeOptions = new VBox(5);
+        budgetsArea = new VBox(5);
+        this.root.setRight(rightPanel);
+        
+        
         budgetsHeading = new Label("Budget Overview");
         routeHeading = new Label("Route Details");
         carbonBudgetLabel = new Label("Carbon Budget: ");
@@ -138,13 +149,14 @@ public class TransportGame {
         //leftPanel.getChildren().add(highScoreLabel);
         leftPanel.getChildren().add(scoreLabel);        
         leftPanel.getChildren().add(budgetsArea);
-        leftPanel.getChildren().add(routeOptions);
+        rightPanel.getChildren().add(routeOptions);
         routeOptions.getChildren().add(routeHeading);
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);        
         highScore = highScoreManager.readHighScore();
         // Styling in CSS
         leftPanel.getStyleClass().add("left-panel"); 
+        rightPanel.getStyleClass().add("right-panel"); 
         scoreLabel.getStyleClass().add("score-label");
         budgetsHeading.getStyleClass().add("heading-label");
         routeHeading.getStyleClass().add("route-label");
@@ -631,6 +643,8 @@ public class TransportGame {
 	         // Add the link to the current route instead of creating a new one
 	    	 
 	         currentRoute.addLink(link);
+	         player.updateBudgets(link.getTime(), link.getCost(), link.getCarbonFootprint());
+		     	updatePlayerStatus();	        		
 	         addRouteDetails(currentRoute); // Update route details with the current route
 	         displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
 	         showClearButton(currentRoute, gemLocation);
@@ -641,6 +655,7 @@ public class TransportGame {
             }
 	         
 	     });
+	     
 	     
 	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
                  pointsMap.get(link.getEndPoint()).getName(), 
@@ -768,32 +783,40 @@ public class TransportGame {
         printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
         
         String routeSummary = String.format("Cost: %d Carbon: %d Time: %d", route.getTotalCost(), route.getTotalCarbonFootprint(), route.getTotalTime());
-        routeOptions.getChildren().add(new Label(routeSummary));
+        Label label = new Label(routeSummary);
+        label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black; -fx-background-color: lightgreen; -fx-padding: 5px; -fx-border-color: black;");
+        routeOptions.getChildren().add(label);
     }
 
     private void printSegment(VBox vbox, int startSegment, int endSegment, Transport transportType,
                               int cost, int carbon, int time) {
-        String detailText = String.format("%s -> %s (%s) \nCost: %d \nCarbon: %d \nTime: %d",
+        String detailText = String.format("%s -> %s (%s)",
         		pointsMap.get(startSegment).getName(),  pointsMap.get(endSegment).getName(), transportType, cost, carbon, time);
         System.out.println(detailText);
-        vbox.getChildren().add(new Label(detailText));
+        Label label = new Label(detailText);
+        label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;");
+        vbox.getChildren().add(label);
     }
     
     private void collectGem(int gemLocation, Route chosenRoute) {
         System.out.println("Collecting gem at " + gemLocation + " via chosen route.");
         routeOptions.getChildren().clear();
-        compareRoutes(chosenRoute, gemLocation);
-        // Update the player's location to the route's end point
-        player.setLocation(gemLocation);
-        SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
+        
 
         // Update the player's budgets based on the selected route
-        boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
+        // boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
         // Mark the gem as collected by removing it from the list of available gems
-        if(canContinue) {
-        	availableGems.remove(Integer.valueOf(gemLocation));
-            player.collectGem();
+        //if(canContinue) {
+        	//availableGems.remove(Integer.valueOf(gemLocation));
+            //player.collectGem();
+        if(player.getTimeBudget() > 0) {
+        	compareRoutes(chosenRoute, gemLocation);
+            // Update the player's location to the route's end point
+            player.setLocation(gemLocation);
+            SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
+	    	availableGems.remove(Integer.valueOf(gemLocation));
+	        player.collectGem();
             
             //new high score
             if(player.getGemsCollected() >= highScore) {
@@ -812,9 +835,13 @@ public class TransportGame {
             }
         }else {
 
-        	showGameOverPopup("Game OVER!!!");
+        	showGameOverPopup();
         	
         }
+        player.deductTime(-20);
+        player.deductCarbonFootprint(-50);
+        player.deductCost(-10);
+        updatePlayerStatus();
         
     }
     
@@ -827,47 +854,293 @@ public class TransportGame {
         boolean isCheapest = selectedRoute.getTotalCost() <= cheapestRoute.getTotalCost();
         boolean isLowestCarbon = selectedRoute.getTotalCarbonFootprint() <= lowestCarbonRoute.getTotalCarbonFootprint();
 
-        StringBuilder message = new StringBuilder();
 
-        if (isLowestCarbon) {
-            message.append("Congratulations! You've chosen the route with the lowest carbon footprint. Thank you for being environmentally conscious!");
-        } else {
-            message.append("You've chosen a good route, but here's how you could do even better:\n");
-            if (!isFastest) {
-                message.append(String.format("Faster route: Saves you %d minutes.\n", fastestRoute.getTotalTime() - selectedRoute.getTotalTime()));
-            }
-            if (!isCheapest) {
-                message.append(String.format("Cheaper route: Saves you $%d.\n", cheapestRoute.getTotalCost() - selectedRoute.getTotalCost()));
-            }
-            if (!isLowestCarbon) {
-                message.append(String.format("Lower carbon route: Reduces carbon emissions by %d units.\n", lowestCarbonRoute.getTotalCarbonFootprint() - selectedRoute.getTotalCarbonFootprint()));
-            }
-            message.append("Consider these options next time to optimize your travel impact!");
-        }
-
+        
         Platform.runLater(() -> {
-            Stage primaryStage = Main.getPrimaryStage(); // Use your static method to get the primary stage
+            Stage primaryStage = Main.getPrimaryStage();
             boolean wasFullScreen = primaryStage.isFullScreen();
-
-            // Temporarily exit full screen to ensure alert is visible
             if (wasFullScreen) {
                 primaryStage.setFullScreen(false);
             }
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Route Comparison");
-            alert.setHeaderText(null); // No header text
-            alert.setContentText(message.toString());
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
-            dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
-            alert.showAndWait();
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Route Comparison");
+            
+            Image gemImage = new Image(getClass().getResourceAsStream("gem.png"));
+            ImageView gemImageView = new ImageView(gemImage);
+            gemImageView.setFitWidth(30); // Adjust the size as needed
+            gemImageView.setFitHeight(30); // Adjust the size as needed
+            gemImageView.setPreserveRatio(true);
+
+            Text gemTitle = new Text("Gem Collected");
+            gemTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+            HBox titleBox = new HBox(10, gemImageView, gemTitle);
+            titleBox.setAlignment(Pos.CENTER);
+            titleBox.setPadding(new Insets(10));
+            
+            // Style the title box
+            titleBox.setStyle("-fx-background-color: #4CAF50; -fx-padding: 10; " +
+                              "-fx-border-radius: 5; -fx-background-radius: 5; " +
+                              "-fx-border-width: 2; -fx-border-color: #388E3C;");
+
+            // Load images
+            Image carbonImage = new Image(getClass().getResourceAsStream("carbon.png"));
+            Image costImage = new Image(getClass().getResourceAsStream("cost.png"));
+            Image timeImage = new Image(getClass().getResourceAsStream("time.png"));
+
+            // Create ImageView for each image
+            ImageView carbonImageView = new ImageView(carbonImage);
+            ImageView costImageView = new ImageView(costImage);
+            ImageView timeImageView = new ImageView(timeImage);
+
+            // Create Text for each comparison message
+            String carbonMessage = isLowestCarbon ? 
+                "This is the route with the lowest carbon footprint. Great choice for the environment!" :
+                String.format("A lower carbon route would reduce emissions by %d units.",
+                    selectedRoute.getTotalCarbonFootprint() - lowestCarbonRoute.getTotalCarbonFootprint());
+            String costMessage = isCheapest ? 
+                "This is the cheapest route. Good job on saving money!" :
+                String.format("A cheaper route could save you $%d.",
+                		selectedRoute.getTotalCost() - cheapestRoute.getTotalCost());
+            String timeMessage = isFastest ? 
+                "This is the fastest route. Excellent time management!" :
+                String.format("A faster route could save you %d minutes.",
+                		selectedRoute.getTotalTime() - fastestRoute.getTotalTime());
+            
+            VBox carbonInfoBox = new VBox();
+            VBox costInfoBox = new VBox();
+            VBox timeInfoBox = new VBox();
+            
+            Button carbonMoreInfoButton = new Button("...");
+            setupMoreInfoButton(carbonMoreInfoButton, lowestCarbonRoute, carbonInfoBox);
+
+            Button costMoreInfoButton = new Button("...");
+            setupMoreInfoButton(costMoreInfoButton, cheapestRoute, costInfoBox);
+
+            Button timeMoreInfoButton = new Button("...");
+            setupMoreInfoButton(timeMoreInfoButton, fastestRoute, timeInfoBox);
+
+            Text carbonText = createStyledText(carbonMessage);
+            Text costText = createStyledText(costMessage);
+            Text timeText = createStyledText(timeMessage);
+
+            // Set image view properties
+            setupImageView(carbonImageView, costImageView, timeImageView);
+
+            // Create HBoxes for each route comparison
+            HBox carbonBox = new HBox(10, carbonImageView, carbonText, carbonMoreInfoButton);
+            HBox costBox = new HBox(10, costImageView, costText, costMoreInfoButton);
+            HBox timeBox = new HBox(10, timeImageView, timeText, timeMoreInfoButton);
+
+            // Set alignment and padding for HBoxes
+            carbonBox.setAlignment(Pos.CENTER_LEFT);
+            costBox.setAlignment(Pos.CENTER_LEFT);
+            timeBox.setAlignment(Pos.CENTER_LEFT);
+
+            // Create Close button
+            Button closeButton = new Button("Close");
+            setupCloseButton(closeButton, popupStage, wasFullScreen, primaryStage);
+
+            // Budget Info Text
+            Text budgetText = new Text("You get a Bonus!\n" +
+                                       "Cost \t\t\t+ 10\n" +
+                                       "Time \t\t\t+ 20\n" +
+                                       "Carbon budget \t+ 50\n");
+            budgetText.setFont(Font.font("Arial", 14));
+
+            // Styling for the budget information box
+            VBox budgetBox = new VBox(budgetText);
+            budgetBox.setPadding(new Insets(10));
+            budgetBox.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
+                               "-fx-border-insets: 5; -fx-border-width: 2; " +
+                               "-fx-border-style: solid inside; -fx-border-radius: 5; " +
+                               "-fx-background-radius: 5; -fx-padding: 10;");
+
+            // Create layout VBox with all elements
+            VBox layout = new VBox(10, titleBox, carbonBox, carbonInfoBox, costBox, costInfoBox, timeBox, timeInfoBox, budgetBox, closeButton);
+            layout.setAlignment(Pos.CENTER);
+            layout.setPadding(new Insets(15));
+            layout.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #333333; -fx-border-width: 1;");
+
+         // Create a ScrollPane
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(layout); // Set the VBox as the content of the scroll pane
+            scrollPane.setFitToWidth(true); // Set the width of the scroll pane to fit the width of the content
+            scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED); // Vertical scrollbar policy
+            scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER); // Horizontal scrollbar policy
+            scrollPane.setStyle("-fx-background-color: transparent;"); // Make the ScrollPane's background transparent
+
+            // Scene with ScrollPane instead of just layout
+            Scene scene = new Scene(scrollPane, 400, 400); // Adjust the size as necessary
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
 
             // Return to full-screen mode if it was originally set
             if (wasFullScreen) {
                 primaryStage.setFullScreen(true);
             }
         });
+    }
+    
+    private Text createStyledText(String message) {
+        Text text = new Text(message);
+        text.setFont(Font.font("Arial", 16));
+        text.setWrappingWidth(250); // Adjust as necessary for your layout
+        return text;
+    }
+    
+    private List<Link> consolidateLinks(List<Link> links) {
+        List<Link> consolidated = new ArrayList<>();
+        Link currentLink = null;
+
+        for (Link nextLink : links) {
+            if (currentLink == null || currentLink.getTransport() != nextLink.getTransport()) {
+                if (currentLink != null) {
+                    consolidated.add(currentLink);
+                }
+                currentLink = nextLink;
+            } else {
+                // Merge nextLink into currentLink
+                currentLink = new Link(currentLink.getStartPoint(), nextLink.getEndPoint(),
+                        currentLink.getTransport(), currentLink.getTime() + nextLink.getTime(),
+                        currentLink.getCost() + nextLink.getCost(), currentLink.getCarbonFootprint() + nextLink.getCarbonFootprint());
+            }
+        }
+        
+        if (currentLink != null) {
+            consolidated.add(currentLink);
+        }
+
+        return consolidated;
+    }
+
+    
+    private void setupMoreInfoButton(Button moreInfoButton, Route route, VBox infoBox) {
+    	moreInfoButton.setOnAction(e -> {
+            if (infoBox.getChildren().isEmpty()) {
+                displayRouteDescription(route, infoBox);
+            } else {
+                infoBox.getChildren().clear();
+            }
+        });
+        
+        // Button styling
+        moreInfoButton.setStyle("-fx-background-color: #78909C; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-border-color: transparent; " +
+                                "-fx-border-radius: 5; " +
+                                "-fx-background-radius: 5; " +
+                                "-fx-padding: 5 10; " +
+                                "-fx-font-size: 10pt;");
+        
+        // Set hover style
+        moreInfoButton.setOnMouseEntered(e -> moreInfoButton.setStyle("-fx-background-color: #546E7A; " +
+                                                                      "-fx-text-fill: white; " +
+                                                                      "-fx-font-weight: bold; " +
+                                                                      "-fx-border-color: transparent; " +
+                                                                      "-fx-border-radius: 5; " +
+                                                                      "-fx-background-radius: 5; " +
+                                                                      "-fx-padding: 5 10; " +
+                                                                      "-fx-font-size: 10pt;"));
+        moreInfoButton.setOnMouseExited(e -> moreInfoButton.setStyle("-fx-background-color: #78909C; " +
+                                                                     "-fx-text-fill: white; " +
+                                                                     "-fx-font-weight: bold; " +
+                                                                     "-fx-border-color: transparent; " +
+                                                                     "-fx-border-radius: 5; " +
+                                                                     "-fx-background-radius: 5; " +
+                                                                     "-fx-padding: 5 10; " +
+                                                                     "-fx-font-size: 10pt;"));
+    }
+    
+    private void displayRouteDescription(Route route, VBox vbox) {
+        List<Link> consolidatedLinks = consolidateLinks(route.getLinks());
+        vbox.getChildren().clear(); // Clear the VBox for new descriptions
+
+        for (Link link : consolidatedLinks) {
+            // Load the appropriate transport icon
+            String iconName = "";
+            switch (link.getTransport()) {
+                case BUS:
+                    iconName = "bus.png";
+                    break;
+                case LUAS:
+                    iconName = "luas.png";
+                    break;
+                case CYCLE:
+                    iconName = "bike.png";
+                    break;
+                case DART:
+                    iconName = "dart.png";
+                    break;
+            }
+            Image transportImage = new Image(getClass().getResourceAsStream(iconName));
+            ImageView transportImageView = new ImageView(transportImage);
+            setupImageView(transportImageView); // Adjust imageView properties as needed
+
+            // Create the text description
+            String description = String.format("%s to %s on %s",
+                    pointsMap.get(link.getStartPoint()).getName(), pointsMap.get(link.getEndPoint()).getName(), link.getTransport().name());
+            Text descriptionText = new Text(description);
+            descriptionText.setFont(Font.font("Arial", 14));
+
+            // Combine the image and text into an HBox and add it to the VBox
+            HBox routeHBox = new HBox(10, transportImageView, descriptionText);
+            routeHBox.setAlignment(Pos.CENTER_LEFT);
+            vbox.getChildren().add(routeHBox);
+        }
+    }
+
+
+
+    // Helper method to setup image views
+    private void setupImageView(ImageView... imageViews) {
+        for (ImageView imageView : imageViews) {
+            imageView.setFitHeight(30); // Adjust size as needed
+            imageView.setFitWidth(30);
+            imageView.setPreserveRatio(true);
+        }
+    }
+
+    // Helper method to setup close button
+    private void setupCloseButton(Button closeButton, Stage popupStage, boolean wasFullScreen, Stage primaryStage) {
+        closeButton.setFont(Font.font("Arial", 14));
+        
+        // Normal style
+        closeButton.setStyle("-fx-background-color: darkblue; -fx-text-fill: white; " +
+                             "-fx-border-color: transparent; -fx-border-width: 2; " +
+                             "-fx-border-radius: 5; -fx-background-radius: 5;");
+
+        // Hover style
+        closeButton.setOnMouseEntered(e -> closeButton.setStyle("-fx-background-color: navy; " +
+                                                                "-fx-text-fill: white; " +
+                                                                "-fx-border-color: blue; " +
+                                                                "-fx-border-width: 2; " +
+                                                                "-fx-border-radius: 5; " +
+                                                                "-fx-background-radius: 5;"));
+        closeButton.setOnMouseExited(e -> closeButton.setStyle("-fx-background-color: darkblue; " +
+                                                               "-fx-text-fill: white; " +
+                                                               "-fx-border-color: transparent; " +
+                                                               "-fx-border-width: 2; " +
+                                                               "-fx-border-radius: 5; " +
+                                                               "-fx-background-radius: 5;"));
+
+        closeButton.setOnAction(e -> {
+            popupStage.close();
+            if (wasFullScreen) {
+                primaryStage.setFullScreen(true);
+            }
+        });
+    }
+
+
+    // Helper method to setup layout
+    private void setupLayout(VBox layout) {
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(15));
+        layout.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #C0C0C0; -fx-border-width: 1;");
     }
 
 
@@ -893,19 +1166,28 @@ public class TransportGame {
         if (progressCarbon < 0.25) {
         	carbonProgress.setStyle("-fx-accent: red;");
         }
-        else {
+        else if (progressCarbon < 0.75){
+        	carbonProgress.setStyle("-fx-accent: yellow;");
+        }
+        else if (progressCarbon >= 0.75){
         	carbonProgress.setStyle("-fx-accent: limegreen;");
         }
         if (progressTime < 0.25) {
         	timeProgress.setStyle("-fx-accent: red;");
         }
-        else {
+        else if (progressTime < 0.75){
+        	timeProgress.setStyle("-fx-accent: yellow;");
+        }
+        else if (progressTime >= 0.75){
         	timeProgress.setStyle("-fx-accent: limegreen;");
         }
         if (progressCost < 0.25) {
         	costProgress.setStyle("-fx-accent: red;");
         }
-        else {
+        else if (progressCost < 0.75){
+        	costProgress.setStyle("-fx-accent: yellow;");
+        }
+        else if (progressCost >= 0.75){
         	costProgress.setStyle("-fx-accent: limegreen;");
         }
     	carbonProgress.setProgress(progressCarbon);
@@ -919,22 +1201,58 @@ public class TransportGame {
     
     }
     
-    public void showGameOverPopup(String message) {
-        // Create a new Alert of type INFORMATION
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game Over"); 
-        alert.setHeaderText(null); 
-        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); 
+    public void showGameOverPopup() {
+        // Create a new Stage for the game over popup
+        Stage gameOverStage = new Stage();
+        gameOverStage.initModality(Modality.APPLICATION_MODAL);
+        gameOverStage.setTitle("Game Over");
+        
 
-        // Show the alert and wait for the user to close it
-        alert.showAndWait();
+       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
+        // Create a label for "Game Over"
+        Label gameOverLabel = new Label("Game Over");
+        gameOverLabel.setStyle("-fx-font-size: 30px; -fx-text-fill: white;");
+
+        // Create an ImageView for the gem icon
+        ImageView gemIcon = new ImageView(new Image(getClass().getResourceAsStream("gem.png")));
+        gemIcon.setFitHeight(50);
+        gemIcon.setFitWidth(50);
+
+        // Create a label for the number of gems collected
+        Label gemsCollectedLabel = new Label(String.valueOf(player.getGemsCollected()));
+        gemsCollectedLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+
+        // Create a layout for the popup
+        StackPane popupLayout = new StackPane();
+        popupLayout.setStyle("-fx-background-color: #333333; -fx-padding: 20px;");
+        popupLayout.getChildren().addAll(gameOverLabel, gemIcon, gemsCollectedLabel);
+
+        // Set the layout alignment
+        StackPane.setAlignment(gameOverLabel, Pos.TOP_CENTER);
+        StackPane.setAlignment(gemIcon, Pos.CENTER);
+        StackPane.setAlignment(gemsCollectedLabel, Pos.BOTTOM_CENTER);
+
+        // Check if player's gems collected surpass the high score
+        if (player.getGemsCollected() >= highScore) {
+            Label congratsLabel = new Label("Congratulations! New High Score!");
+            congratsLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #ffd700;");
+            popupLayout.getChildren().add(congratsLabel);
+            StackPane.setAlignment(congratsLabel, Pos.BOTTOM_CENTER);
+        }
+
+        // Create a scene and set the layout
+        Scene gameOverScene = new Scene(popupLayout, 300, 200);
+        
+        // Set the scene for the Stage
+        gameOverStage.setScene(gameOverScene);
+
+        // Show the popup
+        gameOverStage.showAndWait();
+        
         Stage primaryStage = Main.getPrimaryStage();
         GameMenu gameMenu = new GameMenu(primaryStage);
         Scene menuScene = gameMenu.getGameMenuScene();
-
-        
         primaryStage.setScene(menuScene);
-       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
         primaryStage.show();
     }
 
