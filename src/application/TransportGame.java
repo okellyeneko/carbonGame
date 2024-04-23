@@ -41,7 +41,7 @@ import javafx.stage.Modality;
 import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-
+import javafx.scene.layout.StackPane;
 
 
 
@@ -501,7 +501,7 @@ public class TransportGame {
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = 0.4;
+        double scaleFactor2 = 0.3;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
@@ -670,9 +670,7 @@ public class TransportGame {
             }
 	         
 	     });
-	     if (player.getTimeBudget() <= 0) {
-	    	 showGameOverPopup("Game OVER!!!");
-	     }
+	     
 	     
 	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
                  pointsMap.get(link.getEndPoint()).getName(), 
@@ -799,10 +797,7 @@ public class TransportGame {
     private void collectGem(int gemLocation, Route chosenRoute) {
         System.out.println("Collecting gem at " + gemLocation + " via chosen route.");
         routeOptions.getChildren().clear();
-        compareRoutes(chosenRoute, gemLocation);
-        // Update the player's location to the route's end point
-        player.setLocation(gemLocation);
-        SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
+        
 
         // Update the player's budgets based on the selected route
         // boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
@@ -812,6 +807,10 @@ public class TransportGame {
         	//availableGems.remove(Integer.valueOf(gemLocation));
             //player.collectGem();
         if(player.getTimeBudget() > 0) {
+        	compareRoutes(chosenRoute, gemLocation);
+            // Update the player's location to the route's end point
+            player.setLocation(gemLocation);
+            SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
 	    	availableGems.remove(Integer.valueOf(gemLocation));
 	        player.collectGem();
             
@@ -832,7 +831,7 @@ public class TransportGame {
             }
         }else {
 
-        	showGameOverPopup("Game OVER!!!");
+        	showGameOverPopup();
         	
         }
         player.deductTime(-20);
@@ -1198,22 +1197,58 @@ public class TransportGame {
     
     }
     
-    public void showGameOverPopup(String message) {
-        // Create a new Alert of type INFORMATION
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game Over"); 
-        alert.setHeaderText(null); 
-        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); 
+    public void showGameOverPopup() {
+        // Create a new Stage for the game over popup
+        Stage gameOverStage = new Stage();
+        gameOverStage.initModality(Modality.APPLICATION_MODAL);
+        gameOverStage.setTitle("Game Over");
+        
 
-        // Show the alert and wait for the user to close it
-        alert.showAndWait();
+       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
+        // Create a label for "Game Over"
+        Label gameOverLabel = new Label("Game Over");
+        gameOverLabel.setStyle("-fx-font-size: 30px; -fx-text-fill: white;");
+
+        // Create an ImageView for the gem icon
+        ImageView gemIcon = new ImageView(new Image(getClass().getResourceAsStream("gem.png")));
+        gemIcon.setFitHeight(50);
+        gemIcon.setFitWidth(50);
+
+        // Create a label for the number of gems collected
+        Label gemsCollectedLabel = new Label(String.valueOf(player.getGemsCollected()));
+        gemsCollectedLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+
+        // Create a layout for the popup
+        StackPane popupLayout = new StackPane();
+        popupLayout.setStyle("-fx-background-color: #333333; -fx-padding: 20px;");
+        popupLayout.getChildren().addAll(gameOverLabel, gemIcon, gemsCollectedLabel);
+
+        // Set the layout alignment
+        StackPane.setAlignment(gameOverLabel, Pos.TOP_CENTER);
+        StackPane.setAlignment(gemIcon, Pos.CENTER);
+        StackPane.setAlignment(gemsCollectedLabel, Pos.BOTTOM_CENTER);
+
+        // Check if player's gems collected surpass the high score
+        if (player.getGemsCollected() >= highScore) {
+            Label congratsLabel = new Label("Congratulations! New High Score!");
+            congratsLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #ffd700;");
+            popupLayout.getChildren().add(congratsLabel);
+            StackPane.setAlignment(congratsLabel, Pos.BOTTOM_CENTER);
+        }
+
+        // Create a scene and set the layout
+        Scene gameOverScene = new Scene(popupLayout, 300, 200);
+        
+        // Set the scene for the Stage
+        gameOverStage.setScene(gameOverScene);
+
+        // Show the popup
+        gameOverStage.showAndWait();
+        
         Stage primaryStage = Main.getPrimaryStage();
         GameMenu gameMenu = new GameMenu(primaryStage);
         Scene menuScene = gameMenu.getGameMenuScene();
-
-        
         primaryStage.setScene(menuScene);
-       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
         primaryStage.show();
     }
 
