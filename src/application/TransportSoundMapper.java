@@ -8,7 +8,11 @@ public class TransportSoundMapper {
                 return "/soundEffects/bike.wav";
             case BUS:
                 return "/soundEffects/bus.mp3";
-            case LUAS:
+            case AIRPLANE:
+                return "/soundEffects/plane.mp3";
+            case BOAT:
+                return "/soundEffects/boat.mp3";
+            case TRAIN:
                 return "/soundEffects/luas.mp3";
             default:
                 return null;

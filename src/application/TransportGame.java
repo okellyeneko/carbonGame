@@ -46,24 +46,24 @@ import javafx.scene.text.Font;
 
 public class TransportGame {
     
-    private BorderPane  root; // Using BorderPane  for simplicity, replace with your actual game layout
+    private BorderPane  root; 
     private Player player;
     private MapGraph mapGrap;
     private int currentLevel = 1;
     private int currentRound = 1;
     private int gemsCollected = 0;
     private int gemsToCollect = 4; // Initial value for level 1
-    private int currentLocation = 1; // Assuming the game starts at point 1
+    private int currentLocation = 1; 
     HighScoreManager highScoreManager = new HighScoreManager();
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.7; // You can adjust this factor as needed
+    double scaleFactor = 1; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
-    double offsetX = 0.0 * scaleFactor; // Example offset if needed
+    double offsetX = 0.0 * scaleFactor; 
     double offsetY = 0.0 * scaleFactor;
-    double playerOffsetX = -20.0; // Example offset if needed
+    double playerOffsetX = -20.0; 
     double playerOffsetY = -20.0;
     private Scene gameScene;
     private Pane mainGameArea;
@@ -170,12 +170,10 @@ public class TransportGame {
         pointsMap.put(5, new Point(5, "Nidhogg's Nest", 2, 3.82));
         
         //Lighthouse - Forgotten Shores
-        
         pointsMap.put(6, new Point(6, "Sentinel Point", 5.4, 4.55));
         pointsMap.put(7, new Point(7, "Forgotten Shores", 8.43, 4.45));
         
         //Snowy mountains
-        
         pointsMap.put(8, new Point(8, "Sailor's Sanctuary", 6.35, 2.77));
         pointsMap.put(9, new Point(9, "Frostbound Slopes", 7.5, 3.1));
         pointsMap.put(10, new Point(10, "Frozen Shores", 8.32, 2.5));
@@ -183,6 +181,8 @@ public class TransportGame {
         pointsMap.put(12, new Point(12, "Pinecrest forests", 6.5, 0.37));
         pointsMap.put(13, new Point(13, "Snowglimmer Span", 8.92, -0.65));
         pointsMap.put(14, new Point(14, "Flimmer Span", 7.95, -0.35));
+        
+        
         pointsMap.put(15, new Point(15, "Whispering Woods", 7.3, -0.8));
         pointsMap.put(16, new Point(16, "Evergreen Cross", 6.53, -1.17));
         pointsMap.put(17, new Point(17, "Hares' Haven", 6.95, -1.55));
@@ -190,20 +190,25 @@ public class TransportGame {
         pointsMap.put(19, new Point(19, "Homestead Horizon", 8.95, -1.85));
         pointsMap.put(20, new Point(20, "Rivercross Glaciergate", 9.15, -1.37));
         pointsMap.put(21, new Point(21, "Snowdrift Domain", 8.27, 1.71));
+        
         pointsMap.put(22, new Point(22, "Silo Crossroads", 6.9, -3.87));
         pointsMap.put(23, new Point(23, "Forgefront Curve", 5.87, -3.87));
         pointsMap.put(24, new Point(24, "Gearwork Grove", 5.87, -3.18));
         pointsMap.put(25, new Point(25, "Warehouse Wharf", 4.05, -2.75));
         pointsMap.put(26, new Point(26, "Bolt & Barrel Borough", 3.1, -3.63));
+        
+        
         pointsMap.put(27, new Point(27, "Assembly fields", 0.45, -3.63));
         pointsMap.put(28, new Point(28, "Forgefield Commons", 1.9, -2.75));
         pointsMap.put(29, new Point(29, "Meadowmere Fortress", 1.1, -1.86));
         pointsMap.put(30, new Point(30, "Baron's Expanse", 2.5, -1.7));
         pointsMap.put(31, new Point(31, "Crownlands Acres", 1.34, -0.7));
+        
+        
         pointsMap.put(32, new Point(32, "Cobblestone Capital", 3.5, -1.25));
         pointsMap.put(33, new Point(33, "Harborsky Port", 2.6, -0.6));
         pointsMap.put(34, new Point(34, "Cabana Cove", 4.52, 0.1));
-        pointsMap.put(35, new Point(35, "TMainstreet Commons", 5.35, -1.7));
+        pointsMap.put(35, new Point(35, "Mainstreet Commons", 5.35, -1.7));
         pointsMap.put(36, new Point(36, "Townhall Terrace", 4.5, -1.5));
         
         
@@ -211,7 +216,180 @@ public class TransportGame {
     }
     
     private void initializeMapGraph() {
-    	mapGrap.addLink(new Link(2, 4, Transport.LUAS, 5, 2, 10));
+    	
+    	//Inferno Heart vertex 
+    	mapGrap.addLink(new Link(1, 2, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 3, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 4, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 5, Transport.CYCLE, 5, 2, 10));
+       	
+    	//Emberfall Coast
+    	mapGrap.addLink(new Link(2, 1, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 4, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 31, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 33, Transport.BOAT, 5, 2, 10));
+       	
+       	mapGrap.addLink(new Link(2, 31, Transport.AIRPLANE, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 33, Transport.AIRPLANE, 5, 2, 10));
+       	
+       	//Lava's Edge"
+    	mapGrap.addLink(new Link(3, 1, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 4, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 8, Transport.BOAT, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 12, Transport.BOAT, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 34, Transport.BOAT, 5, 2, 10));
+      	
+      	//Pyroclast Tombs
+    	mapGrap.addLink(new Link(4, 2, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(4, 3, Transport.CYCLE, 5, 2, 10));
+      	
+      	
+      	//Nidhogg's Nest
+       	mapGrap.addLink(new Link(5, 1, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(5, 6, Transport.BOAT, 5, 2, 10));
+       	
+       	//Sentinel Point
+       	mapGrap.addLink(new Link(6, 5, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(6, 7, Transport.BOAT, 5, 2, 10));
+       	
+       	//Forgotten Shores
+       	mapGrap.addLink(new Link(7, 6, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(7, 10, Transport.BOAT, 5, 2, 10));
+       	
+       	//Sailor's Sanctuary
+       	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(8, 9, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(8, 11, Transport.CYCLE, 5, 2, 10));
+       	
+       	//Frostbound Slopes
+       	mapGrap.addLink(new Link(9, 8, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(9, 10, Transport.CYCLE, 5, 2, 10));
+       	
+       	//Frozen Shores
+    	mapGrap.addLink(new Link(10, 7, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(10, 9, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(10, 21, Transport.CYCLE, 5, 2, 10));
+       	
+    	//Alpine Crossroads
+    	mapGrap.addLink(new Link(11, 8, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(11, 21, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(11, 12, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(11, 14, Transport.CYCLE, 5, 2, 10));
+       	
+    	//Pinecrest forests
+    	mapGrap.addLink(new Link(12, 3, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(12, 11, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Snowglimmer Span
+    	mapGrap.addLink(new Link(13, 14, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(13, 21, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(13, 20, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Snowdrift Domain
+    	mapGrap.addLink(new Link(21, 10, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(21, 11, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(21, 13, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Flimmer Span
+    	mapGrap.addLink(new Link(14, 11, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(14, 13, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(14, 15, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Whispering Woods
+    	mapGrap.addLink(new Link(15, 14, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(15, 16, Transport.CYCLE, 5, 2, 10));
+    
+       	//Evergreen Cross
+    	mapGrap.addLink(new Link(16, 15, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(16, 17, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(16, 35, Transport.CYCLE, 5, 2, 10));
+    	
+       	//Hares' Haven
+    	mapGrap.addLink(new Link(17, 16, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(17, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(17, 24, Transport.CYCLE, 5, 2, 10));
+    	
+       	//Greenridge Pastures
+    	mapGrap.addLink(new Link(18, 17, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(18, 19, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(18, 22, Transport.CYCLE, 5, 2, 10));
+    	
+       	//Homestead Horizon
+    	mapGrap.addLink(new Link(19, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(19, 20, Transport.BOAT, 5, 2, 10));
+    	
+       	//Rivercross Glaciergate
+    	mapGrap.addLink(new Link(20, 19, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(20, 21, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Silo Crossroads
+    	mapGrap.addLink(new Link(22, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(22, 23, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Forgefront Curve
+    	mapGrap.addLink(new Link(23, 22, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(23, 24, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Gearwork Grove
+    	mapGrap.addLink(new Link(24, 23, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(24, 17, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(24, 25, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Warehouse Wharf
+    	mapGrap.addLink(new Link(25, 24, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(25, 26, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(25, 28, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(25, 36, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Bolt & Barrel Borough
+    	mapGrap.addLink(new Link(26, 25, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(26, 27, Transport.CYCLE, 5, 2, 10));
+    	
+    	//Assembly fields
+    	mapGrap.addLink(new Link(27, 26, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(27, 27, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(27, 29, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Forgefield Commons
+    	mapGrap.addLink(new Link(28, 25, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(28, 29, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Meadowmere Fortress
+    	mapGrap.addLink(new Link(29, 27, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(29, 28, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(29, 30, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(29, 31, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Baron's Expanse
+    	mapGrap.addLink(new Link(30, 29, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(30, 32, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Crownlands Acres
+    	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(31, 2, Transport.BOAT, 5, 2, 10));
+    	
+      	//Cobblestone Capital
+    	mapGrap.addLink(new Link(32, 33, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(32, 30, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(32, 34, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(32, 36, Transport.CYCLE, 5, 2, 10));
+     	
+      	//Harborsky Port
+    	mapGrap.addLink(new Link(33, 2, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(33, 32, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Cabana Cove
+    	mapGrap.addLink(new Link(34, 32, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(34, 3, Transport.BOAT, 5, 2, 10));
+    	
+      	//Mainstreet Commons
+    	mapGrap.addLink(new Link(35, 16, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(35, 36, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Townhall Terrace
+    	mapGrap.addLink(new Link(36, 35, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(36, 32, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(36, 25, Transport.CYCLE, 5, 2, 10));
     }
 
 
@@ -416,22 +594,27 @@ public class TransportGame {
 	     switch (transportType) {
 	         case BUS:
 	             image = new Image(getClass().getResourceAsStream("bus.png"));
-	             offsetX = (dy / length) * 20; // Offset for bus
+	             offsetX = (dy / length) * 20; 
 	             offsetY = (-dx / length) * 20;
 	             break;
 	         case CYCLE:
 	             image = new Image(getClass().getResourceAsStream("bike.png")); 
-	             offsetX = (dy / length) * 10; // Different offset for cycle
+	             offsetX = (dy / length) * 10; 
 	             offsetY = (-dx / length) * 10;
 	             break;
-	         case LUAS:
-	             image = new Image(getClass().getResourceAsStream("luas.png")); 
-	             offsetX = (dy / length) * -15; // Different offset for LUAS
+	         case AIRPLANE:
+	             image = new Image(getClass().getResourceAsStream("plane.png")); 
+	             offsetX = (dy / length) * 15; 
+	             offsetY = (-dx / length) * 15;
+	             break;
+	         case BOAT:
+	             image = new Image(getClass().getResourceAsStream("boat.png")); 
+	             offsetX = (dy / length) * -15;
 	             offsetY = (-dx / length) * -15;
 	             break;
 	         default:
 	             // Default case
-	             image = new Image(getClass().getResourceAsStream("bus.png")); 
+	             image = new Image(getClass().getResourceAsStream("bike.png")); 
 	             offsetX = offsetY = 0; // No offset
 	             break;
 	     }
@@ -507,14 +690,11 @@ public class TransportGame {
         case BUS:
             line.setStroke(Color.YELLOW);
             break;
-        case LUAS:
+        case TRAIN:
             line.setStroke(Color.GREEN);
             break;
         case CYCLE:
             line.setStroke(Color.ORANGE);
-            break;
-        case DART:
-            line.setStroke(Color.RED);
             break;
         default:
             line.setStroke(Color.BLACK); // Default color if none of the cases match
