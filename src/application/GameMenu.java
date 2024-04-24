@@ -61,7 +61,7 @@ public class GameMenu {
         // Create and return the scene with potential styling
         Scene scene = new Scene(layout);
         scene.getStylesheets().add(getClass().getResource("/application/style.css").toExternalForm());
-
+        return scene;
     }
 
 
