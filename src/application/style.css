@@ -34,12 +34,7 @@
     -fx-font-size: 14px; /* Font size */
     -fx-font-weight: bold; /* Bold font weight */
     -fx-text-fill: white; /* White text for contrast */
-    -fx-background-color:  #4682b4; /* Blue background */
-    -fx-padding: 8px; /* Increased padding for better visual presence */
-    -fx-border-radius: 5px; /* Rounded corners */
-    -fx-background-radius: 5px; /* Background rounded corners to match the border */
-    -fx-border-color: #2b6a7f; /* Dark blue border */
-    -fx-border-width: 2px; /* Thicker border for emphasis */
+    
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 3); /* Subtle shadow for 3D effect */
 
 }

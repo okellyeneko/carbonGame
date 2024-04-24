@@ -159,6 +159,10 @@ public class TransportGame {
         budgetsHeading.getStyleClass().add("heading-label");
         routeHeading.getStyleClass().add("route-label");
         routeOptions.getStyleClass().add("route-options");
+        routeOptions.getStyleClass().add("route-options");       
+        carbonBudgetLabel.getStyleClass().add("label-budget");
+        timeBudgetLabel.getStyleClass().add("label-budget");
+        costBudgetLabel.getStyleClass().add("label-budget");
     }
 
 
@@ -516,7 +520,7 @@ public class TransportGame {
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = .363;
+        double scaleFactor2 = .378;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
