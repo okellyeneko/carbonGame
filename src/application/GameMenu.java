@@ -36,7 +36,7 @@ public class GameMenu {
         // Logo setup
         Image logoImage = new Image(getClass().getResourceAsStream("carbon_logo.png"));
         ImageView logoImageView = new ImageView(logoImage);
-        logoImageView.setFitWidth(500);
+        logoImageView.setFitWidth(200);
         logoImageView.setPreserveRatio(true);
         StackPane logoPane = new StackPane(logoImageView);
         logoPane.setAlignment(Pos.TOP_CENTER); // Center the logo at the top
