@@ -47,7 +47,7 @@ public class GameMenu {
         imagePane.getChildren().add(backgroundImageView);
 
         // Logo setup
-        Image logoImage = new Image(getClass().getResourceAsStream("carbon_logo_colour.png"));
+        Image logoImage = new Image(getClass().getResourceAsStream("logo.png"));
         ImageView logoImageView = new ImageView(logoImage);
         logoImageView.setFitWidth(250);
         logoImageView.setPreserveRatio(true);
