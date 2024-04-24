@@ -92,3 +92,40 @@
     -fx-effect: dropshadow(three-pass-box, rgba(255,215,0,0.8), 5, 0, 0, 5);
     -fx-alignment: center;
 }
+
+
+.button-play {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20; /* Padding for better look */
+}
+
+.button-instructions {
+    -fx-background-color: #2196F3; /* Blue background */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+}
+
+.alert .dialog-pane {
+    -fx-background-color: #f4c430; /* sandy color */
+    -fx-font-family: "Comic Sans MS"; /* Fun, casual font */
+    -fx-border-color: green; /* Tropical green border */
+}
+
+.alert .dialog-pane .content-label {
+    -fx-text-fill: #006400; /* dark green text */
+    -fx-font-size: 14px;
+}
+
+.alert .dialog-pane .header-panel {
+    -fx-background-color: #87CEFA; /* light blue sky */
+}
+
+.alert .dialog-pane .button-bar button {
+    -fx-background-color: #32CD32; /* lime green */
+    -fx-text-fill: white;
+}

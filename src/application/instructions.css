@@ -1,0 +1,19 @@
+.alert .dialog-pane {
+    -fx-background-color: #f4c430; /* sandy color */
+    -fx-font-family: "Comic Sans MS"; /* Fun, casual font */
+    -fx-border-color: green; /* Tropical green border */
+}
+
+.alert .dialog-pane .content-label {
+    -fx-text-fill: #006400; /* dark green text */
+    -fx-font-size: 14px;
+}
+
+.alert .dialog-pane .header-panel {
+    -fx-background-color: #87CEFA; /* light blue sky */
+}
+
+.alert .dialog-pane .button-bar button {
+    -fx-background-color: #32CD32; /* lime green */
+    -fx-text-fill: white;
+}
