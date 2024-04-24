@@ -370,7 +370,6 @@ public class TransportGame {
     	mapGrap.addLink(new Link(30, 32, Transport.CYCLE, 18, 2, 0));
 
     	//Crownlands Acres
-    	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 18, 2, 0));
     	mapGrap.addLink(new Link(31, 2, Transport.BOAT, 5, 2, 10));
 
     	//Harborsky Port
