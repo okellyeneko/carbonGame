@@ -100,79 +100,67 @@ public class TransportGame {
     }
     
     private void initializeGame() {
-
         leftPanel = new VBox(10);
-        
-        routeOptions = new VBox(5);
-        budgetsArea = new VBox(5);
-        this.root.setLeft(leftPanel);
-        
         rightPanel = new VBox(10);
-        
-        routeOptions = new VBox(5);
+
+        // Initialize Budget and Route details areas
+        initializeBudgetsArea();
+        initializeRouteOptions();
+
+        // Set panels to their respective sides
+        root.setLeft(leftPanel);
+        root.setRight(rightPanel);
+
+        mainGameArea = new Pane();
+        root.setCenter(mainGameArea);        
+
+        // Apply CSS styles if necessary
+        applyCSSStyles();
+
+        highScore = highScoreManager.readHighScore();
+    }
+
+    private void initializeBudgetsArea() {
         budgetsArea = new VBox(5);
-        this.root.setRight(rightPanel);
-        
-        
         budgetsHeading = new Label("Budget Overview");
-        routeHeading = new Label("Route Details");
         carbonBudgetLabel = new Label("Carbon Budget: ");
         timeBudgetLabel = new Label("Time Budget: ");
         costBudgetLabel = new Label("Cost Budget: ");
-        scoreLabel = new Label("High Score:" + System.lineSeparator() + "Current Score");  
-        
-        
-        carbonProgress = new ProgressBar();
-        carbonProgress.setStyle("-fx-accent: green;");
-        carbonProgress.setProgress(1.0);
-        timeProgress = new ProgressBar();
-        timeProgress.setStyle("-fx-accent: green;");
-        timeProgress.setProgress(1.0);
-        costProgress = new ProgressBar();
-        costProgress.setStyle("-fx-accent: green;");
-        costProgress.setProgress(1.0);
-        carbonBudgetLabel = new Label("Carbon Budget: ");
-        timeBudgetLabel = new Label("Time Budget:   ");
-        costBudgetLabel = new Label("Cost Budget:   ");
+        scoreLabel = new Label("High Score:" + System.lineSeparator() + "Current Score");
 
-        carbonHbox = new HBox();
-        timeHbox = new HBox();
-        costHbox = new HBox();
-        
-        carbonHbox.setSpacing(10);
-        timeHbox.setSpacing(10);
-        costHbox.setSpacing(10);
-        
-        carbonHbox.getChildren().addAll(carbonBudgetLabel, carbonProgress);
-        timeHbox.getChildren().addAll(timeBudgetLabel, timeProgress);
-        costHbox.getChildren().addAll(costBudgetLabel, costProgress);
-        
-        budgetsArea.getChildren().add(budgetsHeading);
-        budgetsArea.getChildren().addAll(carbonBudgetLabel, carbonHbox, timeBudgetLabel, timeHbox, costBudgetLabel, costHbox);
-        //leftPanel.getChildren().add(highScoreLabel);
-        leftPanel.getChildren().add(scoreLabel);        
-        leftPanel.getChildren().add(budgetsArea);
-        rightPanel.getChildren().add(routeOptions);
+        carbonProgress = new ProgressBar(1.0);
+        carbonProgress.setStyle("-fx-accent: green;");
+        timeProgress = new ProgressBar(1.0);
+        timeProgress.setStyle("-fx-accent: green;");
+        costProgress = new ProgressBar(1.0);
+        costProgress.setStyle("-fx-accent: green;");
+
+        carbonHbox = new HBox(10, carbonBudgetLabel, carbonProgress);
+        timeHbox = new HBox(10, timeBudgetLabel, timeProgress);
+        costHbox = new HBox(10, costBudgetLabel, costProgress);
+
+        budgetsArea.getChildren().addAll(budgetsHeading, carbonHbox, timeHbox, costHbox);
+        leftPanel.getChildren().addAll(scoreLabel, budgetsArea);
+    }
+
+    private void initializeRouteOptions() {
+        routeOptions = new VBox(5);
+        routeOptions.setAlignment(Pos.TOP_RIGHT); 
+        routeHeading = new Label("Route Details");
         routeOptions.getChildren().add(routeHeading);
-        mainGameArea = new Pane();
-        root.setCenter(mainGameArea);        
-        highScore = highScoreManager.readHighScore();
-        // Styling in CSS
-        leftPanel.getStyleClass().add("left-panel"); 
-        rightPanel.getStyleClass().add("right-panel"); 
+        rightPanel.getChildren().add(routeOptions);
+    }
+
+    private void applyCSSStyles() {
+        gameScene.getStylesheets().add(getClass().getResource("/application/style.css").toExternalForm());
+        leftPanel.getStyleClass().add("left-panel");
+        rightPanel.getStyleClass().add("right-panel");
         scoreLabel.getStyleClass().add("score-label");
         budgetsHeading.getStyleClass().add("heading-label");
         routeHeading.getStyleClass().add("route-label");
-        routeOptions.getStyleClass().add("route-options");       
-        budgetsArea.getStyleClass().add("budgets-area");
-        carbonBudgetLabel.getStyleClass().add("label-budget");
-        timeBudgetLabel.getStyleClass().add("label-budget");
-        costBudgetLabel.getStyleClass().add("label-budget");
-        gameScene.getStylesheets().add(getClass().getResource("/application/style.css").toExternalForm());
-        
-        
+        routeOptions.getStyleClass().add("route-options");
     }
-  
+
 
     private void initializePoints() {
     	
@@ -640,11 +628,15 @@ public class TransportGame {
         
         //Add Collect Gem Button
         if(point == gemLocation) {
-        	
+        	;
             Button collectGemButton = new Button("Collect Gem");
-            collectGemButton.setOnAction(r -> collectGem(gemLocation, route));
-
+            collectGemButton.getStyleClass().add("collect-gem-button");
+            collectGemButton.setOnAction(event -> collectGem(gemLocation, route));
             routeOptions.getChildren().add(collectGemButton);
+            
+            collectGemButton.setOnAction(event -> {
+                collectGem(gemLocation, route);
+            });
         }
     }
     
@@ -755,6 +747,7 @@ public class TransportGame {
     
     private void showClearButton(Route route, int gemLocation) {
         Button clearButton = new Button("Clear");
+        clearButton.getStyleClass().add("button-hover");
         clearButton.setOnAction(event -> {
             // Reset the route 
             routeOptions.getChildren().clear();
@@ -879,7 +872,7 @@ public class TransportGame {
         		pointsMap.get(startSegment).getName(),  pointsMap.get(endSegment).getName(), transportType, cost, carbon, time);
         System.out.println(detailText);
         Label label = new Label(detailText);
-        label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;");
+        label.setStyle("-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: white;");
         vbox.getChildren().add(label);
     }
     
