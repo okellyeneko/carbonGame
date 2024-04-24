@@ -941,6 +941,11 @@ public class TransportGame {
         boolean isFastest = selectedRoute.getTotalTime() <= fastestRoute.getTotalTime();
         boolean isCheapest = selectedRoute.getTotalCost() <= cheapestRoute.getTotalCost();
         boolean isLowestCarbon = selectedRoute.getTotalCarbonFootprint() <= lowestCarbonRoute.getTotalCarbonFootprint();
+        
+        if (isLowestCarbon) {
+            SoundEffectsPlayer.playSound("/soundEffects/good.mp3");  // Assuming you have a sound file for this
+        }
+
 
 
 
