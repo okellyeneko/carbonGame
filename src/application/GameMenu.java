@@ -103,7 +103,7 @@ public class GameMenu {
 
             // Apply CSS style
             DialogPane dialogPane = instructionsAlert.getDialogPane();
-            dialogPane.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+            dialogPane.getStylesheets().add(getClass().getResource("instructions.css").toExternalForm());
             dialogPane.getStyleClass().add("alert");
 
             instructionsAlert.showAndWait();
