@@ -1,5 +1,4 @@
 package application;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -19,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.text.Font;
 import javafx.scene.shape.Circle;
 import javafx.scene.layout.BorderPane;
@@ -36,36 +36,40 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.Font;
-
-
-
-
-
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.geometry.Insets;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.layout.StackPane;
 
 
 
 public class TransportGame {
     
-    private BorderPane  root; // Using BorderPane  for simplicity, replace with your actual game layout
+    private BorderPane  root; 
     private Player player;
     private MapGraph mapGrap;
     private int currentLevel = 1;
     private int currentRound = 1;
     private int gemsCollected = 0;
     private int gemsToCollect = 4; // Initial value for level 1
-    private int currentLocation = 1; // Assuming the game starts at point 1
+    private int currentLocation = 1; 
     HighScoreManager highScoreManager = new HighScoreManager();
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1.2; // You can adjust this factor as needed
+    double scaleFactor = 1; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
-    double offsetX = 0.0 * scaleFactor; // Example offset if needed
+    double offsetX = 0.0 * scaleFactor; 
     double offsetY = 0.0 * scaleFactor;
+    double playerOffsetX = -20.0; 
+    double playerOffsetY = -20.0;
     private Scene gameScene;
     private Pane mainGameArea;
     private VBox leftPanel;
+    private VBox rightPanel;
     private VBox routeOptions;
     private VBox budgetsArea;
     private ProgressBar carbonProgress;
@@ -87,6 +91,7 @@ public class TransportGame {
     private int gemCollectTime = 100;
     private int gemCollectCost = 50;
     
+    
     public TransportGame(BorderPane root, Scene gameScene) {
         this.root = root;
         this.gameScene = gameScene;
@@ -96,9 +101,18 @@ public class TransportGame {
     private void initializeGame() {
 
         leftPanel = new VBox(10);
+        
         routeOptions = new VBox(5);
         budgetsArea = new VBox(5);
-        this.root.setLeft(leftPanel);        
+        this.root.setLeft(leftPanel);
+        
+        rightPanel = new VBox(10);
+        
+        routeOptions = new VBox(5);
+        budgetsArea = new VBox(5);
+        this.root.setRight(rightPanel);
+        
+        
         budgetsHeading = new Label("Budget Overview");
         routeHeading = new Label("Route Details");
         carbonBudgetLabel = new Label("Carbon Budget: ");
@@ -137,13 +151,14 @@ public class TransportGame {
         //leftPanel.getChildren().add(highScoreLabel);
         leftPanel.getChildren().add(scoreLabel);        
         leftPanel.getChildren().add(budgetsArea);
-        leftPanel.getChildren().add(routeOptions);
+        rightPanel.getChildren().add(routeOptions);
         routeOptions.getChildren().add(routeHeading);
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);        
         highScore = highScoreManager.readHighScore();
         // Styling in CSS
         leftPanel.getStyleClass().add("left-panel"); 
+        rightPanel.getStyleClass().add("right-panel"); 
         scoreLabel.getStyleClass().add("score-label");
         budgetsHeading.getStyleClass().add("heading-label");
         routeHeading.getStyleClass().add("route-label");
@@ -159,273 +174,236 @@ public class TransportGame {
   
 
     private void initializePoints() {
-        pointsMap.put(1, new Point(1, "Dundrum", 2.46, -0.05));
-        pointsMap.put(2, new Point(2, "Miltown", 0.82, 1.55));
-        pointsMap.put(3, new Point(3, "Ranelagh", 0.26, 1.85));
-        pointsMap.put(4, new Point(4, "Stephens Green", 0.82, 2.26));
-        pointsMap.put(5, new Point(5, "Connolly Station", 1.06, 3.87));
-        pointsMap.put(6, new Point(6, "Grand Canal Dock", 2.46, 3.46));
-        pointsMap.put(7, new Point(7, "Sandymount", 0.26, 4.05));
-        pointsMap.put(8, new Point(8, "Booterstown", 4.05, 1.5));
-        pointsMap.put(9, new Point(9, "Blackrock", 3.85, 0.17));
-        pointsMap.put(10, new Point(10, "Mount Merrion", 3.95, 2.94));
-        pointsMap.put(11, new Point(11, "UCD", 4.05, 2.18));
-        pointsMap.put(12, new Point(12, "Donnybrook", 0.53, -0.05));
-        pointsMap.put(13, new Point(13, "A", 3.51, 3.465));
-        pointsMap.put(14, new Point(14, "B", 5.28, 3.48));
-        pointsMap.put(15, new Point(15, "C", 4.53, 3.9));
-        pointsMap.put(16, new Point(16, "D", 4.09, 4.4));
-        pointsMap.put(17, new Point(17, "E", 4.45, 4.85));
-        pointsMap.put(18, new Point(18, "F", 3.4, 4.85));
-        pointsMap.put(19, new Point(19, "G", 2.95, 4.75));
-        pointsMap.put(20, new Point(20, "H", 2.5, 4.57));
-        pointsMap.put(21, new Point(21, "I", 5.28, 1.99));
-        pointsMap.put(22, new Point(22, "J", 5.29, 2.94));
-        pointsMap.put(23, new Point(23, "K", 2.89, 3.05));
-        pointsMap.put(24, new Point(24, "L", 1.89, 3.17));
-        pointsMap.put(25, new Point(25, "M", 1.89, 3.17));
-        pointsMap.put(26, new Point(26, "N", 4.1, 4.85));
-        pointsMap.put(27, new Point(27, "O", 2.7, 2.9));
-        pointsMap.put(28, new Point(28, "P", 3.45, 2.2));
-        pointsMap.put(29, new Point(29, "Q", 5.1, 4.0));
-        pointsMap.put(30, new Point(30, "R", 4.96, 2.2));
-        pointsMap.put(31, new Point(31, "S", 4.96, 2.7));
-        pointsMap.put(32, new Point(32, "T", 5.29, 2.7));
-        pointsMap.put(33, new Point(33, "U", 1.05, 2.7));
-        pointsMap.put(34, new Point(34, "V", 2.25, 4.1));
+    	
+    	//Volcano island
+    	
+        pointsMap.put(1, new Point(1, "Inferno Heart", 1.775, 3.05));
+        pointsMap.put(2, new Point(2, "Emberfall Coast", 1.775, 1.2));
+        pointsMap.put(3, new Point(3, "Lava's Edge", 3, 3.05));
+        pointsMap.put(4, new Point(4, "Pyroclast Tombs", 2.5, 2.2));
+        pointsMap.put(5, new Point(5, "Nidhogg's Nest", 2, 3.82));
+        
+        //Lighthouse - Forgotten Shores
+        pointsMap.put(6, new Point(6, "Sentinel Point", 5.4, 4.55));
+        pointsMap.put(7, new Point(7, "Forgotten Shores", 8.43, 4.45));
+        
+        //Snowy mountains
+        pointsMap.put(8, new Point(8, "Sailor's Sanctuary", 6.35, 2.77));
+        pointsMap.put(9, new Point(9, "Frostbound Slopes", 7.5, 3.1));
+        pointsMap.put(10, new Point(10, "Frozen Shores", 8.32, 2.5));
+        pointsMap.put(11, new Point(11, "Alpine Crossroads", 8.2, 0.8));
+        pointsMap.put(12, new Point(12, "Pinecrest forests", 6.5, 0.37));
+        pointsMap.put(13, new Point(13, "Snowglimmer Span", 8.92, -0.65));
+        pointsMap.put(14, new Point(14, "Flimmer Span", 7.95, -0.35));
+        
+        
+        pointsMap.put(15, new Point(15, "Whispering Woods", 7.3, -0.8));
+        pointsMap.put(16, new Point(16, "Evergreen Cross", 6.53, -1.17));
+        pointsMap.put(17, new Point(17, "Hares' Haven", 6.95, -1.55));
+        pointsMap.put(18, new Point(18, "Greenridge Pastures", 8.45, -2.82));
+        pointsMap.put(19, new Point(19, "Homestead Horizon", 8.95, -1.85));
+        pointsMap.put(20, new Point(20, "Rivercross Glaciergate", 9.15, -1.37));
+        pointsMap.put(21, new Point(21, "Snowdrift Domain", 8.27, 1.71));
+        
+        pointsMap.put(22, new Point(22, "Silo Crossroads", 6.9, -3.87));
+        pointsMap.put(23, new Point(23, "Forgefront Curve", 5.87, -3.87));
+        pointsMap.put(24, new Point(24, "Gearwork Grove", 5.87, -3.18));
+        pointsMap.put(25, new Point(25, "Warehouse Wharf", 4.05, -2.75));
+        pointsMap.put(26, new Point(26, "Bolt & Barrel Borough", 3.1, -3.63));
+        
+        
+        pointsMap.put(27, new Point(27, "Assembly fields", 0.45, -3.63));
+        pointsMap.put(28, new Point(28, "Forgefield Commons", 1.9, -2.75));
+        pointsMap.put(29, new Point(29, "Meadowmere Fortress", 1.1, -1.86));
+        pointsMap.put(30, new Point(30, "Baron's Expanse", 2.5, -1.7));
+        pointsMap.put(31, new Point(31, "Crownlands Acres", 1.34, -0.7));
+        
+        
+        pointsMap.put(32, new Point(32, "Cobblestone Capital", 3.5, -1.25));
+        pointsMap.put(33, new Point(33, "Harborsky Port", 2.6, -0.6));
+        pointsMap.put(34, new Point(34, "Cabana Cove", 4.52, 0.1));
+        pointsMap.put(35, new Point(35, "Mainstreet Commons", 5.35, -1.7));
+        pointsMap.put(36, new Point(36, "Townhall Terrace", 4.5, -1.5));
+        
+        
+        
     }
     
     private void initializeMapGraph() {
-        // Initialise your mapGraph with Links, similar to previous examples
-    	mapGrap.addLink(new Link(2, 4, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(2, 12, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(2, 3, Transport.LUAS, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(3, 2, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(3, 7, Transport.LUAS, 5, 2, 10));
+    	//Inferno Heart vertex 
+    	mapGrap.addLink(new Link(1, 2, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 3, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 4, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 5, Transport.CYCLE, 5, 2, 10));
+       	
+    	//Emberfall Coast
+    	mapGrap.addLink(new Link(2, 1, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 4, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 31, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 33, Transport.BOAT, 5, 2, 10));
+       	
+       	mapGrap.addLink(new Link(2, 31, Transport.AIRPLANE, 5, 2, 10));
+       	mapGrap.addLink(new Link(2, 33, Transport.AIRPLANE, 5, 2, 10));
+       	
+       	//Lava's Edge"
+    	mapGrap.addLink(new Link(3, 1, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 4, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 8, Transport.BOAT, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 12, Transport.BOAT, 5, 2, 10));
+      	mapGrap.addLink(new Link(3, 34, Transport.BOAT, 5, 2, 10));
+      	
+      	//Pyroclast Tombs
+    	mapGrap.addLink(new Link(4, 2, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(4, 3, Transport.CYCLE, 5, 2, 10));
+      	
+      	
+      	//Nidhogg's Nest
+       	mapGrap.addLink(new Link(5, 1, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(5, 6, Transport.BOAT, 5, 2, 10));
+       	
+       	//Sentinel Point
+       	mapGrap.addLink(new Link(6, 5, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(6, 7, Transport.BOAT, 5, 2, 10));
+       	
+       	//Forgotten Shores
+       	mapGrap.addLink(new Link(7, 6, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(7, 10, Transport.BOAT, 5, 2, 10));
+       	
+       	//Sailor's Sanctuary
+       	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
+       	mapGrap.addLink(new Link(8, 9, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(8, 11, Transport.CYCLE, 5, 2, 10));
+       	
+       	//Frostbound Slopes
+       	mapGrap.addLink(new Link(9, 8, Transport.CYCLE, 5, 2, 10));
+       	mapGrap.addLink(new Link(9, 10, Transport.CYCLE, 5, 2, 10));
+       	
+       	//Frozen Shores
+    	mapGrap.addLink(new Link(10, 7, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(10, 9, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(10, 21, Transport.CYCLE, 5, 2, 10));
+       	
+    	//Alpine Crossroads
+    	mapGrap.addLink(new Link(11, 8, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(11, 21, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(11, 12, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(11, 14, Transport.CYCLE, 5, 2, 10));
+       	
+    	//Pinecrest forests
+    	mapGrap.addLink(new Link(12, 3, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(12, 11, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(4, 2, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(4, 33, Transport.LUAS, 5, 2, 10));
+    	//Snowglimmer Span
+    	mapGrap.addLink(new Link(13, 14, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(13, 21, Transport.CYCLE, 5, 2, 10));
+      	mapGrap.addLink(new Link(13, 20, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(6, 13, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(6, 23, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(6, 25, Transport.LUAS, 5, 2, 10));
+    	//Snowdrift Domain
+    	mapGrap.addLink(new Link(21, 10, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(21, 11, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(21, 13, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(25, 6, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(25, 27, Transport.LUAS, 5, 2, 10));
+    	//Flimmer Span
+    	mapGrap.addLink(new Link(14, 11, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(14, 13, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(14, 15, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(27, 25, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(27, 23, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(27, 28, Transport.LUAS, 5, 2, 10));
+    	//Whispering Woods
+    	mapGrap.addLink(new Link(15, 14, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(15, 16, Transport.CYCLE, 5, 2, 10));
+    
+       	//Evergreen Cross
+    	mapGrap.addLink(new Link(16, 15, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(16, 17, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(16, 35, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(28, 27, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(28, 11, Transport.LUAS, 5, 2, 10));
+       	//Hares' Haven
+    	mapGrap.addLink(new Link(17, 16, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(17, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(17, 24, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(33, 4, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(33, 5, Transport.LUAS, 5, 2, 10));
+       	//Greenridge Pastures
+    	mapGrap.addLink(new Link(18, 17, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(18, 19, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(18, 22, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(12, 1, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(12, 2, Transport.LUAS, 5, 2, 10));
+       	//Homestead Horizon
+    	mapGrap.addLink(new Link(19, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(19, 20, Transport.BOAT, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(1, 12, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(1, 9, Transport.LUAS, 5, 2, 10));
+       	//Rivercross Glaciergate
+    	mapGrap.addLink(new Link(20, 19, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(20, 21, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(1, 12, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(1, 9, Transport.CYCLE, 5, 2, 10));
+      	//Silo Crossroads
+    	mapGrap.addLink(new Link(22, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(22, 23, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(7, 3, Transport.LUAS, 5, 2, 10));
+      	//Forgefront Curve
+    	mapGrap.addLink(new Link(23, 22, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(23, 24, Transport.CYCLE, 5, 2, 10));
     	
-      	mapGrap.addLink(new Link(9, 1, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(9, 8, Transport.LUAS, 5, 2, 10));
+    	//Gearwork Grove
+    	mapGrap.addLink(new Link(24, 23, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(24, 17, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(24, 25, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(8, 9, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(8, 11, Transport.LUAS, 5, 2, 10));
+    	//Warehouse Wharf
+    	mapGrap.addLink(new Link(25, 24, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(25, 26, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(25, 28, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(25, 36, Transport.CYCLE, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(11, 28, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 30, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 8, Transport.LUAS, 5, 2, 10));
-
-
-    	mapGrap.addLink(new Link(10, 13, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(10, 22, Transport.LUAS, 5, 2, 10));
+    	//Bolt & Barrel Borough
+    	mapGrap.addLink(new Link(26, 25, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(26, 27, Transport.CYCLE, 5, 2, 10));
     	
-     	mapGrap.addLink(new Link(13, 6, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(13, 10, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(13, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(13, 14, Transport.LUAS, 5, 2, 10));
+    	//Assembly fields
+    	mapGrap.addLink(new Link(27, 26, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(27, 27, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(27, 29, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Forgefield Commons
+    	mapGrap.addLink(new Link(28, 25, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(28, 29, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Meadowmere Fortress
+    	mapGrap.addLink(new Link(29, 27, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(29, 28, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(29, 30, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(29, 31, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Baron's Expanse
+    	mapGrap.addLink(new Link(30, 29, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(30, 32, Transport.CYCLE, 5, 2, 10));
+    	
+      	//Crownlands Acres
+    	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(31, 2, Transport.BOAT, 5, 2, 10));
+    	
+      	//Cobblestone Capital
+    	mapGrap.addLink(new Link(32, 33, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(32, 30, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(32, 34, Transport.CYCLE, 5, 2, 10));
+     	mapGrap.addLink(new Link(32, 36, Transport.CYCLE, 5, 2, 10));
      	
-     	mapGrap.addLink(new Link(15, 14, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(15, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(15, 29, Transport.LUAS, 5, 2, 10));
+      	//Harborsky Port
+    	mapGrap.addLink(new Link(33, 2, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(33, 32, Transport.CYCLE, 5, 2, 10));
     	
-     	mapGrap.addLink(new Link(14, 13, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(14, 22, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(14, 29, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(14, 15, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(16, 26, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 19, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 29, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 13, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(16, 15, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(19, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(19, 20, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(21, 32, Transport.LUAS, 5, 2, 10));
-     
-    	mapGrap.addLink(new Link(23, 27, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(23, 6, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(26, 16, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(26, 17, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(26, 18, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(17, 26, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(18, 26, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(29, 14, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(29, 15, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(29, 16, Transport.LUAS, 5, 2, 10));
-     	
-    	mapGrap.addLink(new Link(5, 34, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(5, 33, Transport.LUAS, 5, 2, 10));
+      	//Cabana Cove
+    	mapGrap.addLink(new Link(34, 32, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(34, 3, Transport.BOAT, 5, 2, 10));
     	
-    	mapGrap.addLink(new Link(30, 31, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(30, 11, Transport.LUAS, 5, 2, 10));
+      	//Mainstreet Commons
+    	mapGrap.addLink(new Link(35, 16, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(35, 36, Transport.CYCLE, 5, 2, 10));
     	
-      	mapGrap.addLink(new Link(31, 30, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(31, 32, Transport.LUAS, 5, 2, 10));
-    	
-     	mapGrap.addLink(new Link(32, 31, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(32, 21, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(32, 22, Transport.LUAS, 5, 2, 10));
-     	
-     	mapGrap.addLink(new Link(22, 32, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(22, 10, Transport.LUAS, 5, 2, 10));
-     	mapGrap.addLink(new Link(22, 14, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(34, 5, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(34, 20, Transport.LUAS, 5, 2, 10));
-    	
-    	mapGrap.addLink(new Link(20, 34, Transport.LUAS, 5, 2, 10));
-    	mapGrap.addLink(new Link(20, 19, Transport.LUAS, 5, 2, 10));
-    	
-    	// BUS routes addition
-    	mapGrap.addLink(new Link(2, 4, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(2, 12, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(2, 3, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(3, 2, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(3, 7, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(4, 2, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(4, 33, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(6, 13, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(6, 23, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(6, 25, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(25, 6, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(25, 27, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(27, 25, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(27, 23, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(27, 28, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(28, 27, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(28, 11, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(33, 4, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(33, 5, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(12, 1, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(12, 2,Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(1, 12, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(1, 9, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(7, 3, Transport.BUS, 10, 1, 15));
-    	
-      	mapGrap.addLink(new Link(9, 1, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(9, 8, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(8, 9, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(8, 11, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(11, 28, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(11, 30, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(11, 8, Transport.BUS, 10, 1, 15));
-
-
-    	mapGrap.addLink(new Link(10, 13, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(10, 22, Transport.BUS, 10, 1, 15));
-    	
-     	mapGrap.addLink(new Link(13, 6, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(13, 10, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(13, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(13, 14, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(15, 14, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(15, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(15, 29, Transport.BUS, 10, 1, 15));
-    	
-     	mapGrap.addLink(new Link(14, 13, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(14, 22, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(14, 29, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(14, 15, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(16, 26, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 19, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 29, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 13, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(16, 15, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(19, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(19, 20, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(21, 32, Transport.BUS, 10, 1, 15));
-     
-    	mapGrap.addLink(new Link(23, 27, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(23, 6, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(26, 16, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(26, 17, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(26, 18, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(17, 26, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(18, 26, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(29, 14, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(29, 15, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(29, 16, Transport.BUS, 10, 1, 15));
-     	
-    	mapGrap.addLink(new Link(5, 34, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(5, 33, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(30, 31, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(30, 11, Transport.BUS, 10, 1, 15));
-    	
-      	mapGrap.addLink(new Link(31, 30, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(31, 32, Transport.BUS, 10, 1, 15));
-    	
-     	mapGrap.addLink(new Link(32, 31, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(32, 21, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(32, 22, Transport.BUS, 10, 1, 15));
-     	
-     	mapGrap.addLink(new Link(22, 32, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(22, 10, Transport.BUS, 10, 1, 15));
-     	mapGrap.addLink(new Link(22, 14, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(34, 5, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(34, 20, Transport.BUS, 10, 1, 15));
-    	
-    	mapGrap.addLink(new Link(20, 34, Transport.BUS, 10, 1, 15));
-    	mapGrap.addLink(new Link(20, 19, Transport.BUS, 10, 1, 15));
-
-
+      	//Townhall Terrace
+    	mapGrap.addLink(new Link(36, 35, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(36, 32, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(36, 25, Transport.CYCLE, 5, 2, 10));
     }
 
 
@@ -486,37 +464,51 @@ public class TransportGame {
         mainGameArea.getChildren().add(anchorPane); // Add anchorPane to the main game area
 
         // Load the map image
-        Image mapImage = new Image(getClass().getResourceAsStream("map.jpeg"));
+        Image mapImage = new Image(getClass().getResourceAsStream("map.png"));
         ImageView mapView = new ImageView(mapImage);
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = 0.4;
+        double scaleFactor2 = 0.363;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
-            // Display station name label
+            // Display station name label with background, modified text, and shadow effect
             Label stationLabel = new Label(point.getName());
-            stationLabel.setLayoutX(point.getLongitude() * scaleX + offsetX);
-            stationLabel.setLayoutY(point.getLatitude() * scaleY + offsetY);
+            stationLabel.setLayoutX(point.getLongitude() * scaleX);
+            stationLabel.setLayoutY(point.getLatitude() * scaleY);
+            stationLabel.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 1.5;");
+            stationLabel.setFont(new Font("Arial", 12)); // Set font size and family
+            stationLabel.setWrapText(true); // Allow text wrapping
+            stationLabel.setMaxWidth(80); // Set a max width for text wrapping and alignment
+
+            // Create and apply the DropShadow effect
+            DropShadow dropShadow = new DropShadow();
+            dropShadow.setRadius(3.0);
+            dropShadow.setOffsetX(2.0);
+            dropShadow.setOffsetY(2.0);
+            dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
+
+            stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
+
             anchorPane.getChildren().add(stationLabel);
 
             // Redraw circle for station
-            Circle stationCircle = new Circle(point.getLongitude() * scaleX + offsetX, point.getLatitude() * scaleY + offsetY, 5, Color.BLUE);
+            Circle stationCircle = new Circle(point.getLongitude() * scaleX, point.getLatitude() * scaleY, 5, Color.BLUE);
             anchorPane.getChildren().add(stationCircle);
         }
 
         // Place player sprite on the map
         Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
         ImageView playerImageView = new ImageView(playerSprite);
-        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + offsetX; // Example scaling
-        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + offsetY; // Example scaling
+        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + playerOffsetX; // Example scaling
+        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + playerOffsetY; // Example scaling
 
         // Assuming the player's sprite image is too big, let's scale it down
-        playerImageView.setFitWidth(30); // Set width to 20px, adjust as necessary
-        playerImageView.setFitHeight(30); // Set height to 20px, adjust as necessary
+        playerImageView.setFitWidth(40); // Set width to 20px, adjust as necessary
+        playerImageView.setFitHeight(40); // Set height to 20px, adjust as necessary
         playerImageView.setX(playerX - 10); // Center the player image
         playerImageView.setY(playerY - 10);
 
@@ -616,22 +608,27 @@ public class TransportGame {
 	     switch (transportType) {
 	         case BUS:
 	             image = new Image(getClass().getResourceAsStream("bus.png"));
-	             offsetX = (dy / length) * 20; // Offset for bus
+	             offsetX = (dy / length) * 20; 
 	             offsetY = (-dx / length) * 20;
 	             break;
 	         case CYCLE:
 	             image = new Image(getClass().getResourceAsStream("bike.png")); 
-	             offsetX = (dy / length) * 10; // Different offset for cycle
+	             offsetX = (dy / length) * 10; 
 	             offsetY = (-dx / length) * 10;
 	             break;
-	         case LUAS:
-	             image = new Image(getClass().getResourceAsStream("luas.png")); 
-	             offsetX = (dy / length) * -15; // Different offset for LUAS
+	         case AIRPLANE:
+	             image = new Image(getClass().getResourceAsStream("plane.png")); 
+	             offsetX = (dy / length) * 15; 
+	             offsetY = (-dx / length) * 15;
+	             break;
+	         case BOAT:
+	             image = new Image(getClass().getResourceAsStream("boat.png")); 
+	             offsetX = (dy / length) * -15;
 	             offsetY = (-dx / length) * -15;
 	             break;
 	         default:
 	             // Default case
-	             image = new Image(getClass().getResourceAsStream("bus.png")); 
+	             image = new Image(getClass().getResourceAsStream("bike.png")); 
 	             offsetX = offsetY = 0; // No offset
 	             break;
 	     }
@@ -660,9 +657,7 @@ public class TransportGame {
             }
 	         
 	     });
-	     if (!player.canContinue()) {
-	    	 showGameOverPopup("Game OVER!!!");
-	     }
+
 	     
 	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
                  pointsMap.get(link.getEndPoint()).getName(), 
@@ -716,19 +711,38 @@ public class TransportGame {
         case BUS:
             line.setStroke(Color.YELLOW);
             break;
-        case LUAS:
+        case TRAIN:
             line.setStroke(Color.GREEN);
             break;
         case CYCLE:
             line.setStroke(Color.ORANGE);
             break;
-        case DART:
-            line.setStroke(Color.RED);
-            break;
         default:
             line.setStroke(Color.BLACK); // Default color if none of the cases match
             break;
         }
+
+        
+        String tooltipText = String.format("Transport: %s\nCost: %d\nTime: %d\nCarbon: %d",
+                link.getTransport(),
+                link.getCost(),
+                link.getTime(),
+                link.getCarbonFootprint());
+				Tooltip tooltip = new Tooltip(tooltipText);
+				Tooltip.install(line, tooltip);
+				tooltip.setShowDelay(javafx.util.Duration.millis(100)); // Use the fully qualified name
+
+				
+    	    // Enhance hover effect
+		final Color originalStrokeColor = (Color) line.getStroke();
+		line.setOnMouseEntered(e -> {
+			line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
+			line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
+		});
+		line.setOnMouseExited(e -> {
+			line.setStrokeWidth(6); // Revert to original stroke width
+			line.setStroke(originalStrokeColor); // Revert to original color
+	    });	
 		return line;
     }
    
@@ -775,24 +789,25 @@ public class TransportGame {
         printSegment(routeOptions, startSegment, endSegment, transportType, segmentCost, segmentCarbon, segmentTime);
         
         String routeSummary = String.format("Cost: %d Carbon: %d Time: %d", route.getTotalCost(), route.getTotalCarbonFootprint(), route.getTotalTime());
-        routeOptions.getChildren().add(new Label(routeSummary));
+        Label label = new Label(routeSummary);
+        label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: black; -fx-background-color: lightgreen; -fx-padding: 5px; -fx-border-color: black;");
+        routeOptions.getChildren().add(label);
     }
 
     private void printSegment(VBox vbox, int startSegment, int endSegment, Transport transportType,
                               int cost, int carbon, int time) {
-        String detailText = String.format("%s -> %s (%s) \nCost: %d \nCarbon: %d \nTime: %d",
+        String detailText = String.format("%s -> %s (%s)",
         		pointsMap.get(startSegment).getName(),  pointsMap.get(endSegment).getName(), transportType, cost, carbon, time);
         System.out.println(detailText);
-        vbox.getChildren().add(new Label(detailText));
+        Label label = new Label(detailText);
+        label.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: white;");
+        vbox.getChildren().add(label);
     }
     
     private void collectGem(int gemLocation, Route chosenRoute) {
         System.out.println("Collecting gem at " + gemLocation + " via chosen route.");
         routeOptions.getChildren().clear();
-        compareRoutes(chosenRoute, gemLocation);
-        // Update the player's location to the route's end point
-        player.setLocation(gemLocation);
-        SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
+        
 
         // Update the player's budgets based on the selected route
         // boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
@@ -803,7 +818,14 @@ public class TransportGame {
         //if(canContinue) {
         	//availableGems.remove(Integer.valueOf(gemLocation));
             //player.collectGem();
+
         if(player.canContinue()) {
+
+        	compareRoutes(chosenRoute, gemLocation);
+            // Update the player's location to the route's end point
+            player.setLocation(gemLocation);
+            SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
+
 	    	availableGems.remove(Integer.valueOf(gemLocation));
 	        player.collectGem();
             
@@ -824,7 +846,7 @@ public class TransportGame {
             }
         }else {
 
-        	showGameOverPopup("Game OVER!!!");
+        	showGameOverPopup();
         	
         }
         player.deductTime(-20);
@@ -847,55 +869,299 @@ public class TransportGame {
         boolean isCheapest = selectedRoute.getTotalCost() <= cheapestRoute.getTotalCost();
         boolean isLowestCarbon = selectedRoute.getTotalCarbonFootprint() <= lowestCarbonRoute.getTotalCarbonFootprint();
 
-        StringBuilder message = new StringBuilder();
 
-        if (isLowestCarbon) {
-            message.append("Congratulations! You've chosen the route with the lowest carbon footprint. Thank you for being environmentally conscious!\n");
-            message.append("As a reward you get a bonus gem!!\n\n");
-            player.collectGem();
-        } else {
-            message.append("You've chosen a good route, but here's how you could do even better:\n");
-            if (!isFastest) {
-                message.append(String.format("Faster route: Saves you %d minutes.\n", fastestRoute.getTotalTime() - selectedRoute.getTotalTime()));
-            }
-            if (!isCheapest) {
-                message.append(String.format("Cheaper route: Saves you $%d.\n", cheapestRoute.getTotalCost() - selectedRoute.getTotalCost()));
-            }
-            if (!isLowestCarbon) {
-                message.append(String.format("Lower carbon route: Reduces carbon emissions by %d units.\n", lowestCarbonRoute.getTotalCarbonFootprint() - selectedRoute.getTotalCarbonFootprint()));
-            }
-            message.append("Consider these options next time to optimize your travel impact!\n\n");
-        }
-        message.append(String.format("You get a Budget Bonus!\n")); 
-        message.append(String.format("Cost budget increased by 10 or reset to maximum\n"));
-        message.append(String.format("Time budget increased by 20 or reset to maximum\n"));
-        message.append(String.format("Carbon budget increased by 50 or reset to maximum\n"));
 
+        
         Platform.runLater(() -> {
-            Stage primaryStage = Main.getPrimaryStage(); // Use your static method to get the primary stage
+            Stage primaryStage = Main.getPrimaryStage();
             boolean wasFullScreen = primaryStage.isFullScreen();
-
-            // Temporarily exit full screen to ensure alert is visible
             if (wasFullScreen) {
                 primaryStage.setFullScreen(false);
             }
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Route Comparison");
-            alert.setHeaderText(null); // No header text
-            alert.setContentText(message.toString());
-            DialogPane dialogPane = alert.getDialogPane();
-            dialogPane.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: blue; -fx-border-width: 2;");
-            dialogPane.lookup(".content.label").setStyle("-fx-font-size: 16px; -fx-text-fill: #333333;");
-            dialogPane.setPrefWidth(600);
-            dialogPane.setPrefHeight(350);
-            alert.showAndWait();
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Route Comparison");
+            
+            Image gemImage = new Image(getClass().getResourceAsStream("gem.png"));
+            ImageView gemImageView = new ImageView(gemImage);
+            gemImageView.setFitWidth(30); // Adjust the size as needed
+            gemImageView.setFitHeight(30); // Adjust the size as needed
+            gemImageView.setPreserveRatio(true);
+
+            Text gemTitle = new Text("Gem Collected");
+            gemTitle.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+
+            HBox titleBox = new HBox(10, gemImageView, gemTitle);
+            titleBox.setAlignment(Pos.CENTER);
+            titleBox.setPadding(new Insets(10));
+            
+            // Style the title box
+            titleBox.setStyle("-fx-background-color: #4CAF50; -fx-padding: 10; " +
+                              "-fx-border-radius: 5; -fx-background-radius: 5; " +
+                              "-fx-border-width: 2; -fx-border-color: #388E3C;");
+
+            // Load images
+            Image carbonImage = new Image(getClass().getResourceAsStream("carbon.png"));
+            Image costImage = new Image(getClass().getResourceAsStream("cost.png"));
+            Image timeImage = new Image(getClass().getResourceAsStream("time.png"));
+
+            // Create ImageView for each image
+            ImageView carbonImageView = new ImageView(carbonImage);
+            ImageView costImageView = new ImageView(costImage);
+            ImageView timeImageView = new ImageView(timeImage);
+
+            // Create Text for each comparison message
+            String carbonMessage = isLowestCarbon ? 
+                "This is the route with the lowest carbon footprint. Great choice for the environment!" :
+                String.format("A lower carbon route would reduce emissions by %d units.",
+                    selectedRoute.getTotalCarbonFootprint() - lowestCarbonRoute.getTotalCarbonFootprint());
+            String costMessage = isCheapest ? 
+                "This is the cheapest route. Good job on saving money!" :
+                String.format("A cheaper route could save you $%d.",
+                		selectedRoute.getTotalCost() - cheapestRoute.getTotalCost());
+            String timeMessage = isFastest ? 
+                "This is the fastest route. Excellent time management!" :
+                String.format("A faster route could save you %d minutes.",
+                		selectedRoute.getTotalTime() - fastestRoute.getTotalTime());
+            
+            VBox carbonInfoBox = new VBox();
+            VBox costInfoBox = new VBox();
+            VBox timeInfoBox = new VBox();
+            
+            Button carbonMoreInfoButton = new Button("...");
+            setupMoreInfoButton(carbonMoreInfoButton, lowestCarbonRoute, carbonInfoBox);
+
+            Button costMoreInfoButton = new Button("...");
+            setupMoreInfoButton(costMoreInfoButton, cheapestRoute, costInfoBox);
+
+            Button timeMoreInfoButton = new Button("...");
+            setupMoreInfoButton(timeMoreInfoButton, fastestRoute, timeInfoBox);
+
+            Text carbonText = createStyledText(carbonMessage);
+            Text costText = createStyledText(costMessage);
+            Text timeText = createStyledText(timeMessage);
+
+            // Set image view properties
+            setupImageView(carbonImageView, costImageView, timeImageView);
+
+            // Create HBoxes for each route comparison
+            HBox carbonBox = new HBox(10, carbonImageView, carbonText, carbonMoreInfoButton);
+            HBox costBox = new HBox(10, costImageView, costText, costMoreInfoButton);
+            HBox timeBox = new HBox(10, timeImageView, timeText, timeMoreInfoButton);
+
+            // Set alignment and padding for HBoxes
+            carbonBox.setAlignment(Pos.CENTER_LEFT);
+            costBox.setAlignment(Pos.CENTER_LEFT);
+            timeBox.setAlignment(Pos.CENTER_LEFT);
+
+            // Create Close button
+            Button closeButton = new Button("Close");
+            setupCloseButton(closeButton, popupStage, wasFullScreen, primaryStage);
+
+            // Budget Info Text
+            Text budgetText = new Text("You get a Bonus!\n" +
+                                       "Cost \t\t\t+ 10\n" +
+                                       "Time \t\t\t+ 20\n" +
+                                       "Carbon budget \t+ 50\n");
+            budgetText.setFont(Font.font("Arial", 14));
+
+            // Styling for the budget information box
+            VBox budgetBox = new VBox(budgetText);
+            budgetBox.setPadding(new Insets(10));
+            budgetBox.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
+                               "-fx-border-insets: 5; -fx-border-width: 2; " +
+                               "-fx-border-style: solid inside; -fx-border-radius: 5; " +
+                               "-fx-background-radius: 5; -fx-padding: 10;");
+
+            // Create layout VBox with all elements
+            VBox layout = new VBox(10, titleBox, carbonBox, carbonInfoBox, costBox, costInfoBox, timeBox, timeInfoBox, budgetBox, closeButton);
+            layout.setAlignment(Pos.CENTER);
+            layout.setPadding(new Insets(15));
+            layout.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #333333; -fx-border-width: 1;");
+
+         // Create a ScrollPane
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(layout); // Set the VBox as the content of the scroll pane
+            scrollPane.setFitToWidth(true); // Set the width of the scroll pane to fit the width of the content
+            scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED); // Vertical scrollbar policy
+            scrollPane.setHbarPolicy(ScrollBarPolicy.NEVER); // Horizontal scrollbar policy
+            scrollPane.setStyle("-fx-background-color: transparent;"); // Make the ScrollPane's background transparent
+
+            // Scene with ScrollPane instead of just layout
+            Scene scene = new Scene(scrollPane, 400, 400); // Adjust the size as necessary
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
 
             // Return to full-screen mode if it was originally set
             if (wasFullScreen) {
                 primaryStage.setFullScreen(true);
             }
         });
+    }
+    
+    private Text createStyledText(String message) {
+        Text text = new Text(message);
+        text.setFont(Font.font("Arial", 16));
+        text.setWrappingWidth(250); // Adjust as necessary for your layout
+        return text;
+    }
+    
+    private List<Link> consolidateLinks(List<Link> links) {
+        List<Link> consolidated = new ArrayList<>();
+        Link currentLink = null;
+
+        for (Link nextLink : links) {
+            if (currentLink == null || currentLink.getTransport() != nextLink.getTransport()) {
+                if (currentLink != null) {
+                    consolidated.add(currentLink);
+                }
+                currentLink = nextLink;
+            } else {
+                // Merge nextLink into currentLink
+                currentLink = new Link(currentLink.getStartPoint(), nextLink.getEndPoint(),
+                        currentLink.getTransport(), currentLink.getTime() + nextLink.getTime(),
+                        currentLink.getCost() + nextLink.getCost(), currentLink.getCarbonFootprint() + nextLink.getCarbonFootprint());
+            }
+
+        }
+        
+        if (currentLink != null) {
+            consolidated.add(currentLink);
+        }
+
+
+        return consolidated;
+    }
+
+    
+    private void setupMoreInfoButton(Button moreInfoButton, Route route, VBox infoBox) {
+    	moreInfoButton.setOnAction(e -> {
+            if (infoBox.getChildren().isEmpty()) {
+                displayRouteDescription(route, infoBox);
+            } else {
+                infoBox.getChildren().clear();
+            }
+        });
+        
+        // Button styling
+        moreInfoButton.setStyle("-fx-background-color: #78909C; " +
+                                "-fx-text-fill: white; " +
+                                "-fx-font-weight: bold; " +
+                                "-fx-border-color: transparent; " +
+                                "-fx-border-radius: 5; " +
+                                "-fx-background-radius: 5; " +
+                                "-fx-padding: 5 10; " +
+                                "-fx-font-size: 10pt;");
+        
+        // Set hover style
+        moreInfoButton.setOnMouseEntered(e -> moreInfoButton.setStyle("-fx-background-color: #546E7A; " +
+                                                                      "-fx-text-fill: white; " +
+                                                                      "-fx-font-weight: bold; " +
+                                                                      "-fx-border-color: transparent; " +
+                                                                      "-fx-border-radius: 5; " +
+                                                                      "-fx-background-radius: 5; " +
+                                                                      "-fx-padding: 5 10; " +
+                                                                      "-fx-font-size: 10pt;"));
+        moreInfoButton.setOnMouseExited(e -> moreInfoButton.setStyle("-fx-background-color: #78909C; " +
+                                                                     "-fx-text-fill: white; " +
+                                                                     "-fx-font-weight: bold; " +
+                                                                     "-fx-border-color: transparent; " +
+                                                                     "-fx-border-radius: 5; " +
+                                                                     "-fx-background-radius: 5; " +
+                                                                     "-fx-padding: 5 10; " +
+                                                                     "-fx-font-size: 10pt;"));
+    }
+    
+    private void displayRouteDescription(Route route, VBox vbox) {
+        List<Link> consolidatedLinks = consolidateLinks(route.getLinks());
+        vbox.getChildren().clear(); // Clear the VBox for new descriptions
+
+        for (Link link : consolidatedLinks) {
+            // Load the appropriate transport icon
+            String iconName = "";
+            switch (link.getTransport()) {
+                case BUS:
+                    iconName = "bus.png";
+                    break;
+                case TRAIN:
+                    iconName = "luas.png";
+                    break;
+                case CYCLE:
+                    iconName = "bike.png";
+                    break;
+                case AIRPLANE:
+                    iconName = "plane.png";
+                    break;
+                case BOAT:
+                    iconName = "boat.png";
+                    break;
+            }
+            Image transportImage = new Image(getClass().getResourceAsStream(iconName));
+            ImageView transportImageView = new ImageView(transportImage);
+            setupImageView(transportImageView); // Adjust imageView properties as needed
+
+            // Create the text description
+            String description = String.format("%s to %s on %s",
+                    pointsMap.get(link.getStartPoint()).getName(), pointsMap.get(link.getEndPoint()).getName(), link.getTransport().name());
+            Text descriptionText = new Text(description);
+            descriptionText.setFont(Font.font("Arial", 14));
+
+            // Combine the image and text into an HBox and add it to the VBox
+            HBox routeHBox = new HBox(10, transportImageView, descriptionText);
+            routeHBox.setAlignment(Pos.CENTER_LEFT);
+            vbox.getChildren().add(routeHBox);
+        }
+    }
+
+
+
+    // Helper method to setup image views
+    private void setupImageView(ImageView... imageViews) {
+        for (ImageView imageView : imageViews) {
+            imageView.setFitHeight(30); // Adjust size as needed
+            imageView.setFitWidth(30);
+            imageView.setPreserveRatio(true);
+        }
+    }
+
+    // Helper method to setup close button
+    private void setupCloseButton(Button closeButton, Stage popupStage, boolean wasFullScreen, Stage primaryStage) {
+        closeButton.setFont(Font.font("Arial", 14));
+        
+        // Normal style
+        closeButton.setStyle("-fx-background-color: darkblue; -fx-text-fill: white; " +
+                             "-fx-border-color: transparent; -fx-border-width: 2; " +
+                             "-fx-border-radius: 5; -fx-background-radius: 5;");
+
+        // Hover style
+        closeButton.setOnMouseEntered(e -> closeButton.setStyle("-fx-background-color: navy; " +
+                                                                "-fx-text-fill: white; " +
+                                                                "-fx-border-color: blue; " +
+                                                                "-fx-border-width: 2; " +
+                                                                "-fx-border-radius: 5; " +
+                                                                "-fx-background-radius: 5;"));
+        closeButton.setOnMouseExited(e -> closeButton.setStyle("-fx-background-color: darkblue; " +
+                                                               "-fx-text-fill: white; " +
+                                                               "-fx-border-color: transparent; " +
+                                                               "-fx-border-width: 2; " +
+                                                               "-fx-border-radius: 5; " +
+                                                               "-fx-background-radius: 5;"));
+
+        closeButton.setOnAction(e -> {
+            popupStage.close();
+            if (wasFullScreen) {
+                primaryStage.setFullScreen(true);
+            }
+        });
+    }
+
+
+    // Helper method to setup layout
+    private void setupLayout(VBox layout) {
+        layout.setAlignment(Pos.CENTER);
+        layout.setPadding(new Insets(15));
+        layout.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: #C0C0C0; -fx-border-width: 1;");
     }
 
 
@@ -956,22 +1222,61 @@ public class TransportGame {
     
     }
     
-    public void showGameOverPopup(String message) {
-        // Create a new Alert of type INFORMATION
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Game Over"); 
-        alert.setHeaderText(null); 
-        alert.setContentText(message + "Gems Collected : " + player.getGemsCollected()); 
-        SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
-        // Show the alert and wait for the user to close it
-        alert.showAndWait();
+
+    public void showGameOverPopup() {
+        // Create a new Stage for the game over popup
+        Stage gameOverStage = new Stage();
+        gameOverStage.initModality(Modality.APPLICATION_MODAL);
+        gameOverStage.setTitle("Game Over");
+        
+
+       	SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
+        // Create a label for "Game Over"
+        Label gameOverLabel = new Label("Game Over");
+        gameOverLabel.setStyle("-fx-font-size: 30px; -fx-text-fill: white;");
+
+        // Create an ImageView for the gem icon
+        ImageView gemIcon = new ImageView(new Image(getClass().getResourceAsStream("gem.png")));
+        gemIcon.setFitHeight(50);
+        gemIcon.setFitWidth(50);
+
+        // Create a label for the number of gems collected
+        Label gemsCollectedLabel = new Label(String.valueOf(player.getGemsCollected()));
+        gemsCollectedLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: white;");
+
+        // Create a layout for the popup
+        StackPane popupLayout = new StackPane();
+        popupLayout.setStyle("-fx-background-color: #333333; -fx-padding: 20px;");
+        popupLayout.getChildren().addAll(gameOverLabel, gemIcon, gemsCollectedLabel);
+
+        // Set the layout alignment
+        StackPane.setAlignment(gameOverLabel, Pos.TOP_CENTER);
+        StackPane.setAlignment(gemIcon, Pos.CENTER);
+        StackPane.setAlignment(gemsCollectedLabel, Pos.BOTTOM_CENTER);
+
+        // Check if player's gems collected surpass the high score
+        if (player.getGemsCollected() >= highScore) {
+            Label congratsLabel = new Label("Congratulations! New High Score!");
+            congratsLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #ffd700;");
+            popupLayout.getChildren().add(congratsLabel);
+            StackPane.setAlignment(congratsLabel, Pos.BOTTOM_CENTER);
+        }
+
+        // Create a scene and set the layout
+        Scene gameOverScene = new Scene(popupLayout, 300, 200);
+        
+        // Set the scene for the Stage
+        gameOverStage.setScene(gameOverScene);
+
+        // Show the popup
+        gameOverStage.showAndWait();
+        
+
         Stage primaryStage = Main.getPrimaryStage();
         GameMenu gameMenu = new GameMenu(primaryStage);
         Scene menuScene = gameMenu.getGameMenuScene();
-
-        
         primaryStage.setScene(menuScene);
-       	//SoundEffectsPlayer.playSound("/soundEffects/gameOver.wav");
+
         primaryStage.show();
     }
 

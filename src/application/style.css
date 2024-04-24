@@ -3,14 +3,21 @@
     -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%); /* Blue gradient */
     -fx-padding: 10px;
     -fx-border-width: 2px;
-    -fx-pref-width: 200px; /* Preferred width */
+    -fx-pref-width: 270px; /* Preferred width */
 }
 
-/* Styling for Route Options VBox */
+.right-panel {
+    -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%); /* Blue gradient */
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-pref-width: 250px;
 
+}
+    
 .route-options {
     -fx-spacing: 5px; /* Space between children */
     -fx-padding: 5px; /* Padding around the content */
+    -fx-text-fill: #ffffff;
     
 }
 
