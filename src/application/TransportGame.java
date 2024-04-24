@@ -42,6 +42,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.StackPane;
+import javafx.scene.Cursor;
 
 
 
@@ -232,244 +233,233 @@ public class TransportGame {
     private void initializeMapGraph() {
     	
     	//Inferno Heart vertex 
-    	mapGrap.addLink(new Link(1, 2, Transport.BUS, 5, 2, 10));
-       	mapGrap.addLink(new Link(1, 3, Transport.BUS, 5, 2, 10));
-       	mapGrap.addLink(new Link(1, 4, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(1, 5, Transport.CYCLE, 5, 2, 10));
-       	
+    	mapGrap.addLink(new Link(1, 2, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(1, 3, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(1, 4, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(1, 5, Transport.CYCLE, 18, 2, 0));
+
     	//Emberfall Coast
-    	mapGrap.addLink(new Link(2, 1, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(2, 4, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(2, 31, Transport.BOAT, 5, 2, 10));
-       	mapGrap.addLink(new Link(2, 33, Transport.BOAT, 5, 2, 10));
-       	
-       	mapGrap.addLink(new Link(2, 31, Transport.AIRPLANE, 5, 2, 10));
-       	mapGrap.addLink(new Link(2, 33, Transport.AIRPLANE, 5, 2, 10));
-       	
-       	//Lava's Edge"
-    	mapGrap.addLink(new Link(3, 1, Transport.CYCLE, 5, 2, 10));
-      	mapGrap.addLink(new Link(3, 4, Transport.CYCLE, 5, 2, 10));
-      	mapGrap.addLink(new Link(3, 8, Transport.BOAT, 5, 2, 10));
-      	mapGrap.addLink(new Link(3, 12, Transport.BOAT, 5, 2, 10));
-      	mapGrap.addLink(new Link(3, 34, Transport.BOAT, 5, 2, 10));
-      	
-      	//Pyroclast Tombs
-    	mapGrap.addLink(new Link(4, 2, Transport.CYCLE, 5, 2, 10));
-      	mapGrap.addLink(new Link(4, 3, Transport.CYCLE, 5, 2, 10));
-      	
-      	
-      	//Nidhogg's Nest
-       	mapGrap.addLink(new Link(5, 1, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(5, 6, Transport.BOAT, 5, 2, 10));
-       	
-       	//Sentinel Point
-       	mapGrap.addLink(new Link(6, 5, Transport.BOAT, 5, 2, 10));
-       	mapGrap.addLink(new Link(6, 7, Transport.BOAT, 5, 2, 10));
-       	
-       	//Forgotten Shores
-       	mapGrap.addLink(new Link(7, 6, Transport.BOAT, 5, 2, 10));
-       	mapGrap.addLink(new Link(7, 10, Transport.BOAT, 5, 2, 10));
-       	
-       	//Sailor's Sanctuary
-       	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
-       	
-       	
-       	
-       	//Frozen Shores
+    	mapGrap.addLink(new Link(2, 1, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(2, 4, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(2, 31, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(2, 33, Transport.BOAT, 5, 2, 10));
+
+    	mapGrap.addLink(new Link(2, 31, Transport.AIRPLANE, 5, 2, 10));
+    	mapGrap.addLink(new Link(2, 33, Transport.AIRPLANE, 5, 2, 10));
+
+    	//Lava's Edge
+    	mapGrap.addLink(new Link(3, 1, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(3, 4, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(3, 8, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(3, 12, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(3, 34, Transport.BOAT, 5, 2, 10));
+
+    	//Pyroclast Tombs
+    	mapGrap.addLink(new Link(4, 2, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(4, 3, Transport.CYCLE, 18, 2, 0));
+
+    	//Nidhogg's Nest
+    	mapGrap.addLink(new Link(5, 1, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(5, 6, Transport.BOAT, 5, 2, 10));
+
+    	//Sentinel Point
+    	mapGrap.addLink(new Link(6, 5, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(6, 7, Transport.BOAT, 5, 2, 10));
+
+    	//Forgotten Shores
+    	mapGrap.addLink(new Link(7, 6, Transport.BOAT, 5, 2, 10));
+    	mapGrap.addLink(new Link(7, 10, Transport.BOAT, 5, 2, 10));
+
+    	//Sailor's Sanctuary
+    	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
+
+    	//Frozen Shores
     	mapGrap.addLink(new Link(10, 7, Transport.BOAT, 5, 2, 10));
-    	mapGrap.addLink(new Link(10, 9, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(10, 21, Transport.CYCLE, 5, 2, 10));
-       	
+    	mapGrap.addLink(new Link(10, 9, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(10, 21, Transport.CYCLE, 18, 2, 0));
+
     	//Alpine Crossroads
-    	mapGrap.addLink(new Link(11, 8, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 21, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 12, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(11, 14, Transport.CYCLE, 5, 2, 10));
-       	
+    	mapGrap.addLink(new Link(11, 8, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(11, 21, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(11, 12, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(11, 14, Transport.CYCLE, 18, 2, 0));
+
     	//Pinecrest forests
     	mapGrap.addLink(new Link(12, 3, Transport.BOAT, 5, 2, 10));
-    	mapGrap.addLink(new Link(12, 11, Transport.CYCLE, 5, 2, 10));
-    	
+    	mapGrap.addLink(new Link(12, 11, Transport.CYCLE, 18, 2, 0));
+
     	//Snowglimmer Span
-    	mapGrap.addLink(new Link(13, 14, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(13, 21, Transport.CYCLE, 5, 2, 10));
-      	mapGrap.addLink(new Link(13, 20, Transport.CYCLE, 5, 2, 10));
-    	
+    	mapGrap.addLink(new Link(13, 14, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(13, 21, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(13, 20, Transport.CYCLE, 18, 2, 0));
+
     	//Snowdrift Domain
-    	mapGrap.addLink(new Link(21, 10, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(21, 11, Transport.CYCLE, 5, 2, 10));
-     	mapGrap.addLink(new Link(21, 13, Transport.CYCLE, 5, 2, 10));
-    	
+    	mapGrap.addLink(new Link(21, 10, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(21, 11, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(21, 13, Transport.CYCLE, 18, 2, 0));
+
     	//Flimmer Span
-    	mapGrap.addLink(new Link(14, 11, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(14, 13, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(14, 15, Transport.CYCLE, 5, 2, 10));
-    	
+    	mapGrap.addLink(new Link(14, 11, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(14, 13, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(14, 15, Transport.CYCLE, 18, 2, 0));
+
     	//Whispering Woods
-    	mapGrap.addLink(new Link(15, 14, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(15, 16, Transport.CYCLE, 5, 2, 10));
-    
-       	//Evergreen Cross
-    	mapGrap.addLink(new Link(16, 15, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(16, 17, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(16, 35, Transport.CYCLE, 5, 2, 10));
-    	
-       	//Hares' Haven
-    	mapGrap.addLink(new Link(17, 16, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(17, 18, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(17, 24, Transport.CYCLE, 5, 2, 10));
-    	
-       	//Greenridge Pastures
-    	mapGrap.addLink(new Link(18, 17, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(18, 19, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(18, 22, Transport.CYCLE, 5, 2, 10));
-    	
-       	//Homestead Horizon
-    	mapGrap.addLink(new Link(19, 18, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(15, 14, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(15, 16, Transport.CYCLE, 18, 2, 0));
+
+    	//Evergreen Cross
+    	mapGrap.addLink(new Link(16, 15, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(16, 17, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(16, 35, Transport.CYCLE, 18, 2, 0));
+
+    	//Hares' Haven
+    	mapGrap.addLink(new Link(17, 16, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(17, 18, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(17, 24, Transport.CYCLE, 18, 2, 0));
+
+    	//Greenridge Pastures
+    	mapGrap.addLink(new Link(18, 17, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(18, 19, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(18, 22, Transport.CYCLE, 18, 2, 0));
+
+    	//Homestead Horizon
+    	mapGrap.addLink(new Link(19, 18, Transport.CYCLE, 18, 2, 0));
     	mapGrap.addLink(new Link(19, 20, Transport.BOAT, 5, 2, 10));
-    	
-       	//Rivercross Glaciergate
+
+    	//Rivercross Glaciergate
     	mapGrap.addLink(new Link(20, 19, Transport.BOAT, 5, 2, 10));
-    	mapGrap.addLink(new Link(20, 13, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Silo Crossroads
-    	mapGrap.addLink(new Link(22, 18, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(22, 23, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Forgefront Curve
-    	mapGrap.addLink(new Link(23, 22, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(23, 24, Transport.CYCLE, 5, 2, 10));
-    	
+    	mapGrap.addLink(new Link(20, 13, Transport.CYCLE, 18, 2, 0));
+
+    	//Silo Crossroads
+    	mapGrap.addLink(new Link(22, 18, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(22, 23, Transport.CYCLE, 18, 2, 0));
+
+    	//Forgefront Curve
+    	mapGrap.addLink(new Link(23, 22, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(23, 24, Transport.CYCLE, 18, 2, 0));
+
     	//Gearwork Grove
-    	mapGrap.addLink(new Link(24, 23, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(24, 17, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(24, 25, Transport.CYCLE, 5, 2, 10));
-    	
+    	mapGrap.addLink(new Link(24, 23, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(24, 17, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(24, 25, Transport.CYCLE, 18, 2, 0));
+
     	//Warehouse Wharf
-    	mapGrap.addLink(new Link(25, 24, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(25, 26, Transport.CYCLE, 5, 2, 10));
-     	mapGrap.addLink(new Link(25, 28, Transport.CYCLE, 5, 2, 10));
-     	mapGrap.addLink(new Link(25, 36, Transport.CYCLE, 5, 2, 10));
-    	
-    	
-    	
+    	mapGrap.addLink(new Link(25, 24, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(25, 26, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(25, 28, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(25, 36, Transport.CYCLE, 18, 2, 0));
+
     	//Assembly fields
-    	mapGrap.addLink(new Link(27, 26, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(27, 27, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(27, 29, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Forgefield Commons
-    	mapGrap.addLink(new Link(28, 25, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(28, 29, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Meadowmere Fortress
-    	mapGrap.addLink(new Link(29, 27, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(29, 28, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(29, 30, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(29, 31, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Baron's Expanse
-    	mapGrap.addLink(new Link(30, 29, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(30, 32, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Crownlands Acres
-    	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(27, 26, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(27, 27, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(27, 29, Transport.CYCLE, 18, 2, 0));
+
+    	//Forgefield Commons
+    	mapGrap.addLink(new Link(28, 25, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(28, 29, Transport.CYCLE, 18, 2, 0));
+
+    	//Meadowmere Fortress
+    	mapGrap.addLink(new Link(29, 27, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(29, 28, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(29, 30, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(29, 31, Transport.CYCLE, 18, 2, 0));
+
+    	//Baron's Expanse
+    	mapGrap.addLink(new Link(30, 29, Transport.CYCLE, 18, 2, 0));
+    	mapGrap.addLink(new Link(30, 32, Transport.CYCLE, 18, 2, 0));
+
+    	//Crownlands Acres
+    	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 18, 2, 0));
     	mapGrap.addLink(new Link(31, 2, Transport.BOAT, 5, 2, 10));
-    	
-      	
-     	
-      	//Harborsky Port
+
+    	//Harborsky Port
     	mapGrap.addLink(new Link(33, 2, Transport.BOAT, 5, 2, 10));
-    	mapGrap.addLink(new Link(33, 32, Transport.CYCLE, 5, 2, 10));
-    	
-      	//Cabana Cove
-    	mapGrap.addLink(new Link(34, 32, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(33, 32, Transport.CYCLE, 18, 2, 0));
+
+    	//Cabana Cove
+    	mapGrap.addLink(new Link(34, 32, Transport.CYCLE, 18, 2, 0));
     	mapGrap.addLink(new Link(34, 3, Transport.BOAT, 5, 2, 10));
-    	
-      	
-    	
-    	//Train from Crownlands
-    	mapGrap.addLink(new Link(31, 29, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(29, 28, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(28, 25, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(25, 26, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(25, 24, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(25, 36, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(24, 23, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(24, 17, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(36, 32, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(32, 33, Transport.TRAIN, 7, 3, 10));
-    	
-    	//Bus from Crownlands
-    	mapGrap.addLink(new Link(31, 29, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(29, 28, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(29, 27, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(29, 30, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(30, 32, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(32, 34, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(27, 26, Transport.BUS, 10, 2, 12));
-    	
-    	//Bus from Homestead
-    	mapGrap.addLink(new Link(19, 18, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(18, 17, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(17, 16, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(17, 15, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(15, 14, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(16, 35, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(35, 36, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(18, 22, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(22, 23, Transport.BUS, 10, 2, 12));
-    	
-    	//Bus at alpine
-    	mapGrap.addLink(new Link(11, 13, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(11, 14, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(11, 12, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(11, 8, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(11, 21, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(21, 10, Transport.BUS, 10, 2, 12));
-    	
-    	
+
     	// Train from Crownlands
-    	mapGrap.addLink(new Link(29, 31, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(28, 29, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(25, 28, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(26, 25, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(24, 25, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(36, 25, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(23, 24, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(17, 24, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(32, 36, Transport.TRAIN, 7, 3, 10));
-    	mapGrap.addLink(new Link(33, 32, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(29, 31, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(28, 29, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(25, 28, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(26, 25, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(24, 25, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(36, 25, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(23, 24, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(17, 24, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(32, 36, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(33, 32, Transport.TRAIN, 6, 6, 8));
 
     	// Bus from Crownlands
-    	mapGrap.addLink(new Link(29, 31, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(28, 29, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(27, 29, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(30, 29, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(32, 30, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(34, 32, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(26, 27, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(29, 31, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(28, 29, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(27, 29, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(30, 29, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(32, 30, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(34, 32, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(26, 27, Transport.BUS, 9, 4, 10));
 
     	// Bus from Homestead
-    	mapGrap.addLink(new Link(18, 19, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(17, 18, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(16, 17, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(15, 17, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(14, 15, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(35, 16, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(36, 35, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(22, 18, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(23, 22, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(18, 19, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(17, 18, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(16, 17, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(15, 17, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(14, 15, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(35, 16, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(36, 35, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(22, 18, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(23, 22, Transport.BUS, 9, 4, 10));
 
     	// Bus at Alpine
-    	mapGrap.addLink(new Link(13, 11, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(14, 11, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(12, 11, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(8, 11, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(21, 11, Transport.BUS, 10, 2, 12));
-    	mapGrap.addLink(new Link(10, 21, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(13, 11, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(14, 11, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(12, 11, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(8, 11, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(21, 11, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(10, 21, Transport.BUS, 9, 4, 10));
 
-    	
+    	// Train from Crownlands
+    	mapGrap.addLink(new Link(31, 29, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(29, 28, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(28, 25, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(25, 26, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(25, 24, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(25, 36, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(24, 23, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(24, 17, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(36, 32, Transport.TRAIN, 6, 6, 8));
+    	mapGrap.addLink(new Link(32, 33, Transport.TRAIN, 6, 6, 8));
+
+    	// Bus from Crownlands
+    	mapGrap.addLink(new Link(31, 29, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(29, 28, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(29, 27, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(29, 30, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(30, 32, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(32, 34, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(27, 26, Transport.BUS, 9, 4, 10));
+
+    	// Bus from Homestead
+    	mapGrap.addLink(new Link(19, 18, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(18, 17, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(17, 16, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(17, 15, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(15, 14, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(16, 35, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(35, 36, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(18, 22, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(22, 23, Transport.BUS, 9, 4, 10));
+
+    	// Bus at Alpine
+    	mapGrap.addLink(new Link(11, 13, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(11, 14, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(11, 12, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(11, 8, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(11, 21, Transport.BUS, 9, 4, 10));
+    	mapGrap.addLink(new Link(21, 10, Transport.BUS, 9, 4, 10));
+
     	
     }
 
@@ -634,7 +624,7 @@ public class TransportGame {
     	        }
 
     	    } else if (link.getStartPoint() == point) {
-    	        line.setStrokeWidth(8);
+    	        line.setStrokeWidth(5);
     	        line.setOpacity(1);
 
     	        ImageView imageView = placeIcon(link, route, gemLocation, count);
@@ -726,6 +716,9 @@ public class TransportGame {
 	     imageView.setX((midX * scaleX - imageView.getFitWidth() / 2) + offsetX);
 	     imageView.setY((midY * scaleY - imageView.getFitHeight() / 2) + offsetY);
 	     
+	     imageView.setOnMouseEntered(e -> imageView.setCursor(Cursor.HAND)); // Set cursor to hand when mouse enters
+	     imageView.setOnMouseExited(e -> imageView.setCursor(Cursor.DEFAULT)); // Set cursor to default when mouse exits
+
 	     // Event handler for imageView clicks
 	     imageView.setOnMouseClicked(e -> {
 	         // Add the link to the current route instead of creating a new one
@@ -820,15 +813,15 @@ public class TransportGame {
 
 				
     	    // Enhance hover effect
-		final Color originalStrokeColor = (Color) line.getStroke();
-		line.setOnMouseEntered(e -> {
-			//line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
-			line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
-		});
-		line.setOnMouseExited(e -> {
-			line.setStrokeWidth(6); // Revert to original stroke width
-			line.setStroke(originalStrokeColor); // Revert to original color
-	    });	
+//		final Color originalStrokeColor = (Color) line.getStroke();
+//		line.setOnMouseEntered(e -> {
+//			//line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
+//			line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
+//		});
+//		line.setOnMouseExited(e -> {
+//			line.setStrokeWidth(6); // Revert to original stroke width
+//			line.setStroke(originalStrokeColor); // Revert to original color
+//	    });	
 		return line;
     }
    
