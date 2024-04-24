@@ -919,7 +919,6 @@ public class TransportGame {
             	displayGems();
             }
         }else {
-
         	showGameOverPopup();
         	
         }
@@ -1298,6 +1297,7 @@ public class TransportGame {
     
 
     public void showGameOverPopup() {
+     	SoundEffectsPlayer.playSound("/soundEffects/looser.mp3");
         // Create a new Stage for the game over popup
         Stage gameOverStage = new Stage();
         gameOverStage.initModality(Modality.APPLICATION_MODAL);
