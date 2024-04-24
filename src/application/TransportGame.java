@@ -49,6 +49,7 @@ import javafx.util.Duration;
 
 public class TransportGame {
     
+	private PlayerAnimationHandler playerAnimationHandler;
     private BorderPane  root; 
     private Player player;
     private MapGraph mapGrap;
@@ -119,6 +120,7 @@ public class TransportGame {
         applyCSSStyles();
 
         highScore = highScoreManager.readHighScore();
+        
     }
 
     private void initializeBudgetsArea() {
@@ -467,13 +469,18 @@ public class TransportGame {
         
         // Clear previous game settings if any
         mainGameArea.getChildren().clear();
+        playerAnimationHandler = new PlayerAnimationHandler(playerImageView, scaleX, scaleY, player, () -> {
+            // Optional: Add any necessary completion behaviors
+        });
         
         startRound();
     }
 
 
     private void startRound() {
+    	
         if (currentRound <= 4) { // Check if the current level still has rounds to play
+        	player.setStartLocation(player.getLocation());
         	mainGameArea.getChildren().clear(); // Clear the GUI for the new round
             availableGems = placeGemsForRound(); // Place new gems for the round
             displayGems(); // Display the gems for the player to collect
@@ -486,6 +493,8 @@ public class TransportGame {
             startRound(); // Start the first round of the new level
         }
     }
+    
+    
     
     private List<Integer> placeGemsForRound() {
         List<Integer> gemLocations = new ArrayList<>(); // To hold the locations of the gems for this round
@@ -661,7 +670,10 @@ public class TransportGame {
             routeOptions.getChildren().add(collectGemButton);
             
             collectGemButton.setOnAction(event -> {
-                collectGem(gemLocation, route);
+            	System.out.println("Route before collecting gem: " + route.getLinks().size());
+            	collectGem(gemLocation, route);
+            	System.out.println("Route after collecting gem: " + route.getLinks().size());
+    
             });
         }
     }
@@ -739,21 +751,23 @@ public class TransportGame {
 
 	     // Event handler for imageView clicks
 	     imageView.setOnMouseClicked(e -> {
-	         // Add the link to the current route instead of creating a new one
-	    	 
-	         currentRoute.addLink(link);
-	         player.updateBudgets(link.getTime(), link.getCost(), link.getCarbonFootprint());
-		     	updatePlayerStatus();	        		
-	         addRouteDetails(currentRoute); // Update route details with the current route
-	         displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
-	         showClearButton(currentRoute, gemLocation);
-	         
-            String soundFileName = TransportSoundMapper.getSoundFileNameForTransport(link.getTransport());
-            if (soundFileName != null) {
-                SoundEffectsPlayer.playSound(soundFileName);
-            }
-	         
-	     });
+	    	    currentRoute.addLink(link);
+	    	 // After adding a link to the route
+	    	    System.out.println("Added link from " + link.getStartPoint() + " to " + link.getEndPoint());
+	    	    System.out.println("Total links in route now: " + currentRoute.getLinks().size());
+
+	    	    player.updateBudgets(link.getTime(), link.getCost(), link.getCarbonFootprint());
+	    	    updatePlayerStatus();                
+	    	    addRouteDetails(currentRoute); // Update route details with the current route
+	    	    displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
+	    	    showClearButton(currentRoute, gemLocation);
+
+	    	    String soundFileName = TransportSoundMapper.getSoundFileNameForTransport(link.getTransport());
+	    	    if (soundFileName != null) {
+	    	        SoundEffectsPlayer.playSound(soundFileName);
+	    	    }
+	    	    playerAnimationHandler.animatePlayerMovement(startPoint, endPoint);
+	    	});
 
 	     
 	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
@@ -775,22 +789,26 @@ public class TransportGame {
         Button clearButton = new Button("Clear");
         clearButton.getStyleClass().add("button-hover");
         clearButton.setOnAction(event -> {
-            // Reset the route 
+            // Reset the route and player's budgets
+            playerAnimationHandler.stopCurrentAnimation();
             routeOptions.getChildren().clear();
             player.setCarbonBudget(gemCollectCarbon);
             player.setCostBudget(gemCollectCost);
             player.setTimeBudget(gemCollectTime);
             updatePlayerStatus();
-            Route newRoute = new Route(); 
-            displayLinkOptions(player.getLocation(), newRoute, gemLocation);
+
+            // Reset player's location to the start of the current round, not to the very beginning of the game
+            player.setLocation(player.getStartLocation()); // This should reflect the start location for the current round
+            Route newRoute = new Route();
+            displayLinkOptions(player.getStartLocation(), newRoute, gemLocation);  // Redisplay options from the start location
         });
 
         // Add the clearButton to routeOptions
-        
         if (!routeOptions.getChildren().contains(clearButton)) {
             routeOptions.getChildren().add(clearButton);
         }
     }
+
 
     
     private Line drawLine(Link link) {
@@ -803,6 +821,7 @@ public class TransportGame {
                              endPoint.getLatitude() * scaleY);
         line.setStrokeWidth(4);
         line.setOpacity(0.3);
+        
         
        
         switch (link.getTransport()) {
@@ -1138,25 +1157,25 @@ public class TransportGame {
 
     
     private void setupMoreInfoButton(Button moreInfoButton, Route route, VBox infoBox) {
-    	moreInfoButton.setOnAction(e -> {
-            if (infoBox.getChildren().isEmpty()) {
+        // Debugging output to check what's inside the route
+        System.out.println("Route links count: " + route.getLinks().size());
+        route.getLinks().forEach(link -> System.out.println("Link from " + link.getStartPoint() + " to " + link.getEndPoint()));
+
+        moreInfoButton.setOnAction(e -> {
+            infoBox.getChildren().clear();
+            if (!route.getLinks().isEmpty()) {
                 displayRouteDescription(route, infoBox);
             } else {
-                infoBox.getChildren().clear();
+                infoBox.getChildren().add(new Label("No additional details available."));
             }
         });
-        
-        // Button styling
-        moreInfoButton.setStyle("-fx-background-color: #78909C; " +
-                                "-fx-text-fill: white; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-border-color: transparent; " +
-                                "-fx-border-radius: 5; " +
-                                "-fx-background-radius: 5; " +
-                                "-fx-padding: 5 10; " +
-                                "-fx-font-size: 10pt;");
-        
-        // Set hover style
+
+        // Button styling remains the same
+        moreInfoButton.setStyle("-fx-background-color: #78909C; -fx-text-fill: white; -fx-font-weight: bold; " +
+                                "-fx-border-color: transparent; -fx-border-radius: 5; -fx-background-radius: 5; " +
+                                "-fx-padding: 5 10; -fx-font-size: 10pt;");
+
+        // Hover style
         moreInfoButton.setOnMouseEntered(e -> moreInfoButton.setStyle("-fx-background-color: #546E7A; " +
                                                                       "-fx-text-fill: white; " +
                                                                       "-fx-font-weight: bold; " +
@@ -1174,6 +1193,7 @@ public class TransportGame {
                                                                      "-fx-padding: 5 10; " +
                                                                      "-fx-font-size: 10pt;"));
     }
+
     
     private void displayRouteDescription(Route route, VBox vbox) {
         List<Link> consolidatedLinks = consolidateLinks(route.getLinks());

@@ -6,11 +6,21 @@ public class Player {
     private int timeBudget;
     private int costBudget;
     private int carbonBudget;
+    private int startLocation;
 
-    public Player(int initialLocation) {
-        this.location = initialLocation;
+    public Player(int startLocation) {
         this.gemsCollected = 0;
         resetBudgets();
+        this.location = startLocation;
+        this.startLocation = startLocation;
+        
+    }
+    public int getStartLocation() {
+        return startLocation;
+    }
+
+    public void setStartLocation(int startLocation) {
+        this.startLocation = startLocation;
     }
 
     public void resetBudgets() {
