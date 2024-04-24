@@ -59,7 +59,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 1; // You can adjust this factor as needed
+    double scaleFactor = 0.75; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; 
@@ -232,8 +232,8 @@ public class TransportGame {
     private void initializeMapGraph() {
     	
     	//Inferno Heart vertex 
-    	mapGrap.addLink(new Link(1, 2, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(1, 3, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(1, 2, Transport.BUS, 5, 2, 10));
+       	mapGrap.addLink(new Link(1, 3, Transport.BUS, 5, 2, 10));
        	mapGrap.addLink(new Link(1, 4, Transport.CYCLE, 5, 2, 10));
        	mapGrap.addLink(new Link(1, 5, Transport.CYCLE, 5, 2, 10));
        	
@@ -272,12 +272,8 @@ public class TransportGame {
        	
        	//Sailor's Sanctuary
        	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
-       	mapGrap.addLink(new Link(8, 9, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(8, 11, Transport.CYCLE, 5, 2, 10));
        	
-       	//Frostbound Slopes
-       	mapGrap.addLink(new Link(9, 8, Transport.CYCLE, 5, 2, 10));
-       	mapGrap.addLink(new Link(9, 10, Transport.CYCLE, 5, 2, 10));
+       	
        	
        	//Frozen Shores
     	mapGrap.addLink(new Link(10, 7, Transport.BOAT, 5, 2, 10));
@@ -334,7 +330,7 @@ public class TransportGame {
     	
        	//Rivercross Glaciergate
     	mapGrap.addLink(new Link(20, 19, Transport.BOAT, 5, 2, 10));
-    	mapGrap.addLink(new Link(20, 21, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(20, 13, Transport.CYCLE, 5, 2, 10));
     	
       	//Silo Crossroads
     	mapGrap.addLink(new Link(22, 18, Transport.CYCLE, 5, 2, 10));
@@ -355,9 +351,7 @@ public class TransportGame {
      	mapGrap.addLink(new Link(25, 28, Transport.CYCLE, 5, 2, 10));
      	mapGrap.addLink(new Link(25, 36, Transport.CYCLE, 5, 2, 10));
     	
-    	//Bolt & Barrel Borough
-    	mapGrap.addLink(new Link(26, 25, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(26, 27, Transport.CYCLE, 5, 2, 10));
+    	
     	
     	//Assembly fields
     	mapGrap.addLink(new Link(27, 26, Transport.CYCLE, 5, 2, 10));
@@ -382,11 +376,7 @@ public class TransportGame {
     	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 5, 2, 10));
     	mapGrap.addLink(new Link(31, 2, Transport.BOAT, 5, 2, 10));
     	
-      	//Cobblestone Capital
-    	mapGrap.addLink(new Link(32, 33, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(32, 30, Transport.CYCLE, 5, 2, 10));
-     	mapGrap.addLink(new Link(32, 34, Transport.CYCLE, 5, 2, 10));
-     	mapGrap.addLink(new Link(32, 36, Transport.CYCLE, 5, 2, 10));
+      	
      	
       	//Harborsky Port
     	mapGrap.addLink(new Link(33, 2, Transport.BOAT, 5, 2, 10));
@@ -396,14 +386,91 @@ public class TransportGame {
     	mapGrap.addLink(new Link(34, 32, Transport.CYCLE, 5, 2, 10));
     	mapGrap.addLink(new Link(34, 3, Transport.BOAT, 5, 2, 10));
     	
-      	//Mainstreet Commons
-    	mapGrap.addLink(new Link(35, 16, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(35, 36, Transport.CYCLE, 5, 2, 10));
+      	
     	
-      	//Townhall Terrace
-    	mapGrap.addLink(new Link(36, 35, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(36, 32, Transport.CYCLE, 5, 2, 10));
-    	mapGrap.addLink(new Link(36, 25, Transport.CYCLE, 5, 2, 10));
+    	//Train from Crownlands
+    	mapGrap.addLink(new Link(31, 29, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(29, 28, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(28, 25, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(25, 26, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(25, 24, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(25, 36, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(24, 23, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(24, 17, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(36, 32, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(32, 33, Transport.TRAIN, 7, 3, 10));
+    	
+    	//Bus from Crownlands
+    	mapGrap.addLink(new Link(31, 29, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(29, 28, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(29, 27, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(29, 30, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(30, 32, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(32, 34, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(27, 26, Transport.BUS, 10, 2, 12));
+    	
+    	//Bus from Homestead
+    	mapGrap.addLink(new Link(19, 18, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(18, 17, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(17, 16, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(17, 15, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(15, 14, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(16, 35, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(35, 36, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(18, 22, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(22, 23, Transport.BUS, 10, 2, 12));
+    	
+    	//Bus at alpine
+    	mapGrap.addLink(new Link(11, 13, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(11, 14, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(11, 12, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(11, 8, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(11, 21, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(21, 10, Transport.BUS, 10, 2, 12));
+    	
+    	
+    	// Train from Crownlands
+    	mapGrap.addLink(new Link(29, 31, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(28, 29, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(25, 28, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(26, 25, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(24, 25, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(36, 25, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(23, 24, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(17, 24, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(32, 36, Transport.TRAIN, 7, 3, 10));
+    	mapGrap.addLink(new Link(33, 32, Transport.TRAIN, 7, 3, 10));
+
+    	// Bus from Crownlands
+    	mapGrap.addLink(new Link(29, 31, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(28, 29, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(27, 29, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(30, 29, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(32, 30, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(34, 32, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(26, 27, Transport.BUS, 10, 2, 12));
+
+    	// Bus from Homestead
+    	mapGrap.addLink(new Link(18, 19, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(17, 18, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(16, 17, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(15, 17, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(14, 15, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(35, 16, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(36, 35, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(22, 18, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(23, 22, Transport.BUS, 10, 2, 12));
+
+    	// Bus at Alpine
+    	mapGrap.addLink(new Link(13, 11, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(14, 11, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(12, 11, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(8, 11, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(21, 11, Transport.BUS, 10, 2, 12));
+    	mapGrap.addLink(new Link(10, 21, Transport.BUS, 10, 2, 12));
+
+    	
+    	
     }
 
 
@@ -469,7 +536,7 @@ public class TransportGame {
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = 0.363;
+        double scaleFactor2 = 0.27;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
@@ -546,30 +613,40 @@ public class TransportGame {
     	mainGameArea.getChildren().removeIf(node -> "iconTag".equals(node.getUserData()));
     	mainGameArea.getChildren().removeIf(node -> node instanceof Line);
     	
-        for (Link link : mapGrap.getAllLinks()) {
-        	Line line = drawLine(link);
-        	
-            if(point == gemLocation) {
-            	if(route.containsLink(link)) {
-            		line.setStrokeWidth(8);
-            	}
-            	
-            } else if (link.getStartPoint() == point) {
+    	// Initialize a list to hold all the ImageView instances
+    	List<ImageView> imageViewList = new ArrayList<>();
+    	Map<String, Integer> linkCount = new HashMap<>();
 
-                line.setStrokeWidth(8);
-                line.setOpacity(1);
-                
-                ImageView  imageView = placeIcon(link, route,  gemLocation);
-	       	     
-                mainGameArea.getChildren().add(imageView);
-                
-            }
-            
-            if(link.getEndPoint() != point) {
-            	mainGameArea.getChildren().add(line);
-            }
-            
-        }
+    	for (Link link : mapGrap.getAllLinks()) {
+    	    Line line = drawLine(link);
+    	    String key = link.getStartPoint() + "-" + link.getEndPoint();
+            linkCount.putIfAbsent(key, 0);
+            int count = linkCount.get(key);
+            linkCount.put(key, count + 1);
+
+    	    if (link.getEndPoint() != point) {
+    	        mainGameArea.getChildren().add(line);
+    	    }
+
+    	    if (point == gemLocation) {
+    	        if (route.containsLink(link)) {
+    	            line.setStrokeWidth(8);
+    	        }
+
+    	    } else if (link.getStartPoint() == point) {
+    	        line.setStrokeWidth(8);
+    	        line.setOpacity(1);
+
+    	        ImageView imageView = placeIcon(link, route, gemLocation, count);
+    	        // Add the imageView to the list instead of the game area
+    	        imageViewList.add(imageView);
+    	    }
+    	}
+
+    	// After the loop, add all ImageView instances from the list to the main game area
+    	for (ImageView imageView : imageViewList) {
+    	    mainGameArea.getChildren().add(imageView);
+    	}
         
         //Add Collect Gem Button
         if(point == gemLocation) {
@@ -581,7 +658,7 @@ public class TransportGame {
         }
     }
     
-    private ImageView placeIcon(Link link, Route currentRoute, int gemLocation) {
+    private ImageView placeIcon(Link link, Route currentRoute, int gemLocation, int offsetIndex) {
     	
         Point startPoint = pointsMap.get(link.getStartPoint());
         Point endPoint = pointsMap.get(link.getEndPoint());
@@ -592,46 +669,55 @@ public class TransportGame {
         double x2 = startPointIsLower ? endPoint.getLongitude() : startPoint.getLongitude();
         double y2 = startPointIsLower ? endPoint.getLatitude() : startPoint.getLatitude();
         
+
+        
         double midX = (x1 + x2) / 2;
         double midY = (y1 + y2) / 2;
-        
+
+        // Calculate the vector components and length of the line
         double dx = x2 - x1;
         double dy = y2 - y1;
         double length = Math.sqrt(dx * dx + dy * dy);
-        
-        Transport transportType = link.getTransport(); // Assuming link is an object that knows the transport type
 
-	     // Determine the image and offset based on the transport type
-	     Image image;
-	     double offsetX, offsetY;// Assuming dx and dy are defined as the difference in x and y coordinates
-	
-	     switch (transportType) {
-	         case BUS:
-	             image = new Image(getClass().getResourceAsStream("bus.png"));
-	             offsetX = (dy / length) * 20; 
-	             offsetY = (-dx / length) * 20;
-	             break;
-	         case CYCLE:
-	             image = new Image(getClass().getResourceAsStream("bike.png")); 
-	             offsetX = (dy / length) * 10; 
-	             offsetY = (-dx / length) * 10;
-	             break;
-	         case AIRPLANE:
-	             image = new Image(getClass().getResourceAsStream("plane.png")); 
-	             offsetX = (dy / length) * 15; 
-	             offsetY = (-dx / length) * 15;
-	             break;
-	         case BOAT:
-	             image = new Image(getClass().getResourceAsStream("boat.png")); 
-	             offsetX = (dy / length) * -15;
-	             offsetY = (-dx / length) * -15;
-	             break;
-	         default:
-	             // Default case
-	             image = new Image(getClass().getResourceAsStream("bike.png")); 
-	             offsetX = offsetY = 0; // No offset
-	             break;
-	     }
+        // Normalize the vector
+        double dxNorm = dx / length;
+        double dyNorm = dy / length;
+
+        // Determine the image and offset based on the transport type
+        Image image;
+        double offset;
+
+        // Offset array for values 0, 15, -15, 30, -30 based on count
+        int[] offsets = {0, 25, -20, 40, -40};
+        offset = offsets[offsetIndex];
+        
+        Transport transportType = link.getTransport();
+        
+        switch (transportType) {
+            case BUS:
+                image = new Image(getClass().getResourceAsStream("bus.png"));
+                break;
+            case CYCLE:
+                image = new Image(getClass().getResourceAsStream("bike.png"));
+                break;
+            case AIRPLANE:
+                image = new Image(getClass().getResourceAsStream("plane.png"));
+                break;
+            case BOAT:
+                image = new Image(getClass().getResourceAsStream("boat.png"));
+                break;
+            case TRAIN:
+                image = new Image(getClass().getResourceAsStream("train.png"));
+                break;
+            default:
+                // Default case
+                image = new Image(getClass().getResourceAsStream("bike.png"));
+                break;
+        }
+
+        // Apply the parallel offset to the midpoint
+        double offsetX = midX + offset * dxNorm;
+        double offsetY = midY + offset * dyNorm;
 
 	     // Create the ImageView for the transport icon as before
 	     ImageView imageView = new ImageView(image);
@@ -736,7 +822,7 @@ public class TransportGame {
     	    // Enhance hover effect
 		final Color originalStrokeColor = (Color) line.getStroke();
 		line.setOnMouseEntered(e -> {
-			line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
+			//line.setStrokeWidth(line.getStrokeWidth() * 1.2); // Increase stroke width on hover
 			line.setStroke(originalStrokeColor.brighter()); // Brighten the color on hover
 		});
 		line.setOnMouseExited(e -> {
@@ -989,7 +1075,7 @@ public class TransportGame {
             scrollPane.setStyle("-fx-background-color: transparent;"); // Make the ScrollPane's background transparent
 
             // Scene with ScrollPane instead of just layout
-            Scene scene = new Scene(scrollPane, 400, 400); // Adjust the size as necessary
+            Scene scene = new Scene(scrollPane, 450, 450); // Adjust the size as necessary
             popupStage.setScene(scene);
             popupStage.showAndWait();
 
@@ -1085,7 +1171,7 @@ public class TransportGame {
                     iconName = "bus.png";
                     break;
                 case TRAIN:
-                    iconName = "luas.png";
+                    iconName = "train.png";
                     break;
                 case CYCLE:
                     iconName = "bike.png";
