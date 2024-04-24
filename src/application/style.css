@@ -17,7 +17,6 @@
     -fx-spacing: 5px; /* Space between children */
     -fx-padding: 5px; /* Padding around the content */
     -fx-text-fill: #ffffff;
-    -fx-background-color: red;
 }
 
 .route-label {
