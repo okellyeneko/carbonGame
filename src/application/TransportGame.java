@@ -1066,14 +1066,17 @@ public class TransportGame {
                 case BUS:
                     iconName = "bus.png";
                     break;
-                case LUAS:
+                case TRAIN:
                     iconName = "luas.png";
                     break;
                 case CYCLE:
                     iconName = "bike.png";
                     break;
-                case DART:
-                    iconName = "dart.png";
+                case AIRPLANE:
+                    iconName = "plane.png";
+                    break;
+                case BOAT:
+                    iconName = "boat.png";
                     break;
             }
             Image transportImage = new Image(getClass().getResourceAsStream(iconName));
