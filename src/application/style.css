@@ -7,18 +7,16 @@
 }
 
 .right-panel {
-    -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%); /* Blue gradient */
+    -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%);
     -fx-padding: 10px;
     -fx-border-width: 2px;
-    -fx-pref-width: 275px;
-
+    -fx-pref-width: 250px;  /* Ensure this width accommodates all inner content */
 }
     
 .route-options {
     -fx-spacing: 5px; /* Space between children */
     -fx-padding: 5px; /* Padding around the content */
     -fx-text-fill: #ffffff;
-    
 }
 
 .route-label {
@@ -94,18 +92,38 @@
 }
 
 
-.button-play {
-    -fx-background-color: #4CAF50; /* Green background */
-    -fx-text-fill: white; /* White text */
-    -fx-font-size: 16px;
+.button-hover {
+    -fx-background-color: #3a82b1; /* Different shade of blue */
+    -fx-text-fill: white;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-padding: 10 20 10 20; /* Padding for better look */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 15px;
 }
 
-.button-instructions {
-    -fx-background-color: #2196F3; /* Blue background */
-    -fx-text-fill: white;
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-padding: 10 20 10 20;
+.button-hover:hover {
+    -fx-background-color: #2a6281; /* Darker shade for hover */
+    -fx-text-fill: #ffffff;
 }
+
+.collect-gem-button {
+    -fx-background-color: #3a82b1; /* Default blue background */
+    -fx-text-fill: white;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 15px;
+}
+
+.collect-gem-button:hover {
+    -fx-background-color: #4CAF50; /* Green background on hover */
+    -fx-text-fill: #ffffff;
+}
+
+
+
+
