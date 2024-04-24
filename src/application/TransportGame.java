@@ -43,7 +43,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Cursor;
-
+import javafx.animation.ScaleTransition;
+import javafx.util.Duration;
 
 
 public class TransportGame {
@@ -575,7 +576,16 @@ public class TransportGame {
         for (Integer gemLocation : availableGems) {
             Image gemSprite = new Image(getClass().getResourceAsStream("gem.png"));
             ImageView gemImageView = new ImageView(gemSprite);
-
+            
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), gemImageView);
+            scaleTransition.setFromX(1.0);
+            scaleTransition.setFromY(1.0);
+            scaleTransition.setToX(1.3); // Increase scale by 1.5 times
+            scaleTransition.setToY(1.3);
+            scaleTransition.setAutoReverse(true); // Make the transition reverse
+            scaleTransition.setCycleCount(ScaleTransition.INDEFINITE); // Repeat indefinitely
+         // Start the flashing animation
+            scaleTransition.play();
             // Set the size of the gem sprite
             double gemSize = 25; // Example size, adjust as necessary
             gemImageView.setFitWidth(gemSize); // Set width to 30px, adjust as necessary
@@ -587,7 +597,13 @@ public class TransportGame {
             gemImageView.setX(gemX);
             gemImageView.setY(gemY);
 
-            // Add click event to gem sprite to invoke the link options display
+            gemImageView.setOnMouseEntered(e -> {
+                gemImageView.setCursor(Cursor.HAND); // Change cursor to hand when mouse enters
+            });
+
+            gemImageView.setOnMouseExited(e -> {
+                gemImageView.setCursor(Cursor.DEFAULT); // Change cursor back to default when mouse exits
+            });
             gemImageView.setOnMouseClicked(e -> {
                 // Trigger the display of link options for the selected gem location
                 displayLinkOptions(player.getLocation(), new Route(), gemLocation);
@@ -678,7 +694,7 @@ public class TransportGame {
         double offset;
 
         // Offset array for values 0, 15, -15, 30, -30 based on count
-        int[] offsets = {0, 25, -20, 40, -40};
+        int[] offsets = {0, -25, 20, 40, -40};
         offset = offsets[offsetIndex];
         
         Transport transportType = link.getTransport();
@@ -1318,6 +1334,10 @@ public class TransportGame {
         ImageView gemIcon = new ImageView(new Image(getClass().getResourceAsStream("gem.png")));
         gemIcon.setFitHeight(50);
         gemIcon.setFitWidth(50);
+        
+        
+
+        
 
         // Create a label for the number of gems collected
         Label gemsCollectedLabel = new Label(String.valueOf(player.getGemsCollected()));
