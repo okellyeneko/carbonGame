@@ -453,6 +453,7 @@ public class TransportGame {
 
 
     public void startGame() {
+    	SoundEffectsPlayer.playSound("/soundEffects/letsgo.mp3");
     	SoundEffectsPlayer.playBackgroundMusic("/soundEffects/background.mp3", 0.2);
         currentLevel = 1;
         currentRound = 1;
