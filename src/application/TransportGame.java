@@ -60,7 +60,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 0.75; // You can adjust this factor as needed
+    double scaleFactor = 1; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; 
@@ -516,7 +516,7 @@ public class TransportGame {
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = 0.27;
+        double scaleFactor2 = .363;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
