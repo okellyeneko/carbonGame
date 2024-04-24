@@ -43,7 +43,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Cursor;
-
+import javafx.animation.ScaleTransition;
+import javafx.util.Duration;
 
 
 public class TransportGame {
@@ -91,7 +92,7 @@ public class TransportGame {
     private int gemCollectCarbon = 200;
     private int gemCollectTime = 100;
     private int gemCollectCost = 50;
-    
+    private ImageView playerImageView = new ImageView();
     
     public TransportGame(BorderPane root, Scene gameScene) {
         this.root = root;
@@ -357,7 +358,6 @@ public class TransportGame {
     	mapGrap.addLink(new Link(30, 32, Transport.CYCLE, 18, 2, 0));
 
     	//Crownlands Acres
-    	mapGrap.addLink(new Link(31, 29, Transport.CYCLE, 18, 2, 0));
     	mapGrap.addLink(new Link(31, 2, Transport.BOAT, 5, 2, 10));
 
     	//Harborsky Port
@@ -548,24 +548,24 @@ public class TransportGame {
         }
 
         // Place player sprite on the map
-        Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
-        ImageView playerImageView = new ImageView(playerSprite);
-        double playerX = pointsMap.get(player.getLocation()).getLongitude() * scaleX + playerOffsetX; // Example scaling
-        double playerY = pointsMap.get(player.getLocation()).getLatitude() * scaleY + playerOffsetY; // Example scaling
+        updatePlayerPosition(pointsMap.get(player.getLocation()).getLongitude(), pointsMap.get(player.getLocation()).getLatitude());
+        mainGameArea.getChildren().add(playerImageView);
 
-        // Assuming the player's sprite image is too big, let's scale it down
-        playerImageView.setFitWidth(40); // Set width to 20px, adjust as necessary
-        playerImageView.setFitHeight(40); // Set height to 20px, adjust as necessary
-        playerImageView.setX(playerX - 10); // Center the player image
-        playerImageView.setY(playerY - 10);
-
-        anchorPane.getChildren().add(playerImageView);
 
         // Display gem sprites instead of buttons
         for (Integer gemLocation : availableGems) {
             Image gemSprite = new Image(getClass().getResourceAsStream("gem.png"));
             ImageView gemImageView = new ImageView(gemSprite);
-
+            
+            ScaleTransition scaleTransition = new ScaleTransition(Duration.seconds(0.5), gemImageView);
+            scaleTransition.setFromX(1.0);
+            scaleTransition.setFromY(1.0);
+            scaleTransition.setToX(1.3); // Increase scale by 1.5 times
+            scaleTransition.setToY(1.3);
+            scaleTransition.setAutoReverse(true); // Make the transition reverse
+            scaleTransition.setCycleCount(ScaleTransition.INDEFINITE); // Repeat indefinitely
+         // Start the flashing animation
+            scaleTransition.play();
             // Set the size of the gem sprite
             double gemSize = 25; // Example size, adjust as necessary
             gemImageView.setFitWidth(gemSize); // Set width to 30px, adjust as necessary
@@ -577,7 +577,13 @@ public class TransportGame {
             gemImageView.setX(gemX);
             gemImageView.setY(gemY);
 
-            // Add click event to gem sprite to invoke the link options display
+            gemImageView.setOnMouseEntered(e -> {
+                gemImageView.setCursor(Cursor.HAND); // Change cursor to hand when mouse enters
+            });
+
+            gemImageView.setOnMouseExited(e -> {
+                gemImageView.setCursor(Cursor.DEFAULT); // Change cursor back to default when mouse exits
+            });
             gemImageView.setOnMouseClicked(e -> {
                 // Trigger the display of link options for the selected gem location
                 displayLinkOptions(player.getLocation(), new Route(), gemLocation);
@@ -586,13 +592,31 @@ public class TransportGame {
             anchorPane.getChildren().add(gemImageView);
         }
     }
+    
+    public void updatePlayerPosition(double newX, double newY) {
+    	if (playerImageView.getImage() == null) {
+            Image playerSprite = new Image(getClass().getResourceAsStream("player.png"));
+            playerImageView.setImage(playerSprite);
+        }
+
+        double playerX = newX * scaleX + playerOffsetX; // Apply scaling and offset
+        double playerY = newY * scaleY + playerOffsetY; // Apply scaling and offset
+
+        // Set size and position of the player image
+        playerImageView.setFitWidth(40); // Set width
+        playerImageView.setFitHeight(40); // Set height
+        playerImageView.setX(playerX - 20); // Adjust to center the image horizontally
+        playerImageView.setY(playerY - 20);
+    	
+ 
+    }
 
 
 
     private void displayLinkOptions(int point, Route route, int gemLocation) {
     	mainGameArea.getChildren().removeIf(node -> "iconTag".equals(node.getUserData()));
     	mainGameArea.getChildren().removeIf(node -> node instanceof Line);
-    	
+    	updatePlayerPosition(pointsMap.get(point).getLongitude(), pointsMap.get(point).getLatitude());
     	// Initialize a list to hold all the ImageView instances
     	List<ImageView> imageViewList = new ArrayList<>();
     	Map<String, Integer> linkCount = new HashMap<>();
@@ -672,7 +696,7 @@ public class TransportGame {
         double offset;
 
         // Offset array for values 0, 15, -15, 30, -30 based on count
-        int[] offsets = {0, 25, -20, 40, -40};
+        int[] offsets = {0, -25, 20, 40, -40};
         offset = offsets[offsetIndex];
         
         Transport transportType = link.getTransport();
@@ -1318,6 +1342,10 @@ public class TransportGame {
         ImageView gemIcon = new ImageView(new Image(getClass().getResourceAsStream("gem.png")));
         gemIcon.setFitHeight(50);
         gemIcon.setFitWidth(50);
+        
+        
+
+        
 
         // Create a label for the number of gems collected
         Label gemsCollectedLabel = new Label(String.valueOf(player.getGemsCollected()));
