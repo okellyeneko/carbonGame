@@ -1105,7 +1105,7 @@ public class TransportGame {
             String description = String.format("%s to %s on %s",
                     pointsMap.get(link.getStartPoint()).getName(), pointsMap.get(link.getEndPoint()).getName(), link.getTransport().name());
             Text descriptionText = new Text(description);
-            descriptionText.setFont(Font.font("Arial", 14));
+            descriptionText.setFont(Font.font("Arial", 12));
 
             // Combine the image and text into an HBox and add it to the VBox
             HBox routeHBox = new HBox(10, transportImageView, descriptionText);
