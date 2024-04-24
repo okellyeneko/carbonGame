@@ -87,7 +87,9 @@ public class TransportGame {
     private HBox carbonHbox;
     private HBox timeHbox;
     private HBox costHbox;
-    
+    private int gemCollectCarbon = 200;
+    private int gemCollectTime = 100;
+    private int gemCollectCost = 50;
     
     
     public TransportGame(BorderPane root, Scene gameScene) {
@@ -655,7 +657,7 @@ public class TransportGame {
             }
 	         
 	     });
-	     
+
 	     
 	     String tooltipText = String.format("To: %s\nTransport: %s\nTime: %d\nCost: $%d\nCarbon: %d",
                  pointsMap.get(link.getEndPoint()).getName(), 
@@ -676,7 +678,11 @@ public class TransportGame {
         Button clearButton = new Button("Clear");
         clearButton.setOnAction(event -> {
             // Reset the route 
-            routeOptions.getChildren().clear(); 
+            routeOptions.getChildren().clear();
+            player.setCarbonBudget(gemCollectCarbon);
+            player.setCostBudget(gemCollectCost);
+            player.setTimeBudget(gemCollectTime);
+            updatePlayerStatus();
             Route newRoute = new Route(); 
             displayLinkOptions(player.getLocation(), newRoute, gemLocation);
         });
@@ -806,15 +812,20 @@ public class TransportGame {
         // Update the player's budgets based on the selected route
         // boolean canContinue = player.updateBudgets(chosenRoute.getTotalTime(), chosenRoute.getTotalCost(), chosenRoute.getTotalCarbonFootprint());
         System.out.println("Cash: " + player.getCostBudget() + " Time: " + player.getTimeBudget() + " Carbon : " + player.getCarbonBudget());
+        
+        
         // Mark the gem as collected by removing it from the list of available gems
         //if(canContinue) {
         	//availableGems.remove(Integer.valueOf(gemLocation));
             //player.collectGem();
-        if(player.getTimeBudget() > 0) {
+
+        if(player.canContinue()) {
+
         	compareRoutes(chosenRoute, gemLocation);
             // Update the player's location to the route's end point
             player.setLocation(gemLocation);
             SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
+
 	    	availableGems.remove(Integer.valueOf(gemLocation));
 	        player.collectGem();
             
@@ -841,7 +852,11 @@ public class TransportGame {
         player.deductTime(-20);
         player.deductCarbonFootprint(-50);
         player.deductCost(-10);
+        //SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
         updatePlayerStatus();
+        gemCollectCarbon = player.getCarbonBudget();
+        gemCollectTime = player.getTimeBudget();
+        gemCollectCost = player.getCostBudget();
         
     }
     
@@ -853,6 +868,7 @@ public class TransportGame {
         boolean isFastest = selectedRoute.getTotalTime() <= fastestRoute.getTotalTime();
         boolean isCheapest = selectedRoute.getTotalCost() <= cheapestRoute.getTotalCost();
         boolean isLowestCarbon = selectedRoute.getTotalCarbonFootprint() <= lowestCarbonRoute.getTotalCarbonFootprint();
+
 
 
         
@@ -1007,11 +1023,13 @@ public class TransportGame {
                         currentLink.getTransport(), currentLink.getTime() + nextLink.getTime(),
                         currentLink.getCost() + nextLink.getCost(), currentLink.getCarbonFootprint() + nextLink.getCarbonFootprint());
             }
+
         }
         
         if (currentLink != null) {
             consolidated.add(currentLink);
         }
+
 
         return consolidated;
     }
@@ -1204,6 +1222,7 @@ public class TransportGame {
     
     }
     
+
     public void showGameOverPopup() {
         // Create a new Stage for the game over popup
         Stage gameOverStage = new Stage();
@@ -1252,10 +1271,12 @@ public class TransportGame {
         // Show the popup
         gameOverStage.showAndWait();
         
+
         Stage primaryStage = Main.getPrimaryStage();
         GameMenu gameMenu = new GameMenu(primaryStage);
         Scene menuScene = gameMenu.getGameMenuScene();
         primaryStage.setScene(menuScene);
+
         primaryStage.show();
     }
 
