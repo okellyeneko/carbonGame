@@ -1386,8 +1386,8 @@ public class TransportGame {
         timeProgress.setProgress(progressTime);
         costProgress.setProgress(progressCost);
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
-        timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget());
-        costBudgetLabel.setText("Cost Budget: " + player.getCostBudget());
+        timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget() + "  ");
+        costBudgetLabel.setText("Cost Budget: " + player.getCostBudget()+ "   ");
         scoreLabel.setText(String.format("High Score: %d%nCurrent Score: %d", highScore, player.getGemsCollected()));
 
     
