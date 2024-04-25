@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
 import javafx.scene.control.DialogPane;  
-
+import javafx.scene.Cursor;
 
 public class GameMenu {
     private Stage stage;
@@ -144,7 +144,14 @@ public class GameMenu {
 
     // Method to add hover effects to buttons
     private void addHoverEffect(Button button, DropShadow shadow) {
-        button.setOnMouseEntered(e -> button.setEffect(shadow));
-        button.setOnMouseExited(e -> button.setEffect(null));
+        button.setOnMouseEntered(e -> {
+            button.setEffect(shadow);
+            button.getScene().setCursor(Cursor.HAND); // Change cursor to hand cursor
+        });
+        button.setOnMouseExited(e -> {
+            button.setEffect(null);
+            button.getScene().setCursor(Cursor.DEFAULT); // Change cursor to default cursor
+        });
     }
+
 }
