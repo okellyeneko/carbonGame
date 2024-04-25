@@ -61,7 +61,7 @@ public class Player {
 
     public void deductCarbonFootprint(int carbonFootprint) {
         this.carbonBudget -= carbonFootprint;
-        this.carbonBudget = Math.min(this.carbonBudget, 200);
+        this.carbonBudget = Math.min(this.carbonBudget, 50);
     }
 
     // Getters and setters
