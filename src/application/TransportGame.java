@@ -103,6 +103,7 @@ public class TransportGame {
     }
     
     private void initializeGame() {
+ 
         leftPanel = new VBox(10);
         rightPanel = new VBox(10);
 
@@ -121,7 +122,6 @@ public class TransportGame {
         applyCSSStyles();
 
         highScore = highScoreManager.readHighScore();
-        
     }
 
     private void initializeBudgetsArea() {
@@ -272,6 +272,9 @@ public class TransportGame {
 
     	//Sailor's Sanctuary
     	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
+    	
+    	mapGrap.addLink(new Link(9, 10, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(9, 10, Transport.BUS, 5, 2, 10));
 
     	//Frozen Shores
     	mapGrap.addLink(new Link(10, 7, Transport.BOAT, 5, 2, 10));
@@ -462,6 +465,43 @@ public class TransportGame {
     	
     }
 
+    
+    public void generateCosts() {
+    	int pointDistance;
+    	for (Link link : mapGrap.getAllLinks()) {
+    		Point startPoint = pointsMap.get(link.getStartPoint());
+    		Point endPoint = pointsMap.get(link.getEndPoint());
+    		pointDistance = (int) (2*(Math.abs(startPoint.getLatitude() - endPoint.getLatitude()) + Math.abs(startPoint.getLongitude()-endPoint.getLongitude())));
+    		
+    		Transport transportType = link.getTransport();
+            
+            switch (transportType) {
+                case BUS:
+                	link.setTime(pointDistance);
+                	link.setCarbonFootprint(2 * pointDistance);
+                	break;
+                case CYCLE:
+                	link.setTime(3*pointDistance);
+                    break;
+                case AIRPLANE:
+                	link.setTime(pointDistance/2);
+                	link.setCarbonFootprint(4*pointDistance);
+                    break;
+                case BOAT:
+                	link.setTime(2* pointDistance);
+                	link.setCarbonFootprint(pointDistance);
+                    break;
+                case TRAIN:
+                	link.setTime(pointDistance/2);
+                	link.setCarbonFootprint(pointDistance/2);
+                    break;
+                default:
+                    // Default case
+                    break;
+            }
+    	}
+    	
+    }
 
     public void startGame() {
     	SoundEffectsPlayer.playSound("/soundEffects/letsgo.mp3");
@@ -475,6 +515,7 @@ public class TransportGame {
         mapGrap = new MapGraph();
         initializeMapGraph();
         initializePoints();
+        generateCosts();
         
         // Clear previous game settings if any
         mainGameArea.getChildren().clear();
