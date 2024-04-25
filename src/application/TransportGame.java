@@ -45,6 +45,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.Cursor;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
+import javafx.stage.Screen;
 
 
 public class TransportGame {
@@ -529,9 +530,22 @@ public class TransportGame {
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = .378;
-        mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
-        mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
+//        double scaleFactor2 = .378;
+//        mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
+//        mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
+        
+        double screenHeight = Screen.getPrimary().getVisualBounds().getHeight()-40;
+
+	     // Calculate the scale factor based on the screen height and the height of the map image
+	     double scaleFactor3 = screenHeight / mapImage.getHeight();
+	
+	     // Set the scale factor to fit the height of the screen
+	     mapView.setFitWidth(mapImage.getWidth() * scaleFactor3);
+	     mapView.setFitHeight(screenHeight);
+        
+        
+        scaleX = (mapView.getFitWidth() / mapImage.getWidth())*275;
+        scaleY = (mapView.getFitHeight() / mapImage.getHeight())*275;
 
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {

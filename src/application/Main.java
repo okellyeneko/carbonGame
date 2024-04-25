@@ -12,6 +12,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
     	Main.primaryStage = primaryStage;
+    	primaryStage.setMaximized(true);
+    	primaryStage.setResizable(false);
         GameMenu gameMenu = new GameMenu(primaryStage);
         Scene menuScene = gameMenu.getGameMenuScene();
 
