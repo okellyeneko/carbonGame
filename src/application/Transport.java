@@ -1,8 +1,9 @@
 package application;
 
 public enum Transport {
-    BUS,
-    LUAS,
     CYCLE,
-    DART
+    BUS,
+    TRAIN,
+    BOAT,
+    AIRPLANE,
 }

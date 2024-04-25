@@ -1,0 +1,136 @@
+/* General Styling for the Left Panel */
+.left-panel {
+    -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%); /* Blue gradient */
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-pref-width: 390px; /* Preferred width */
+}
+
+.right-panel {
+    -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%);
+    -fx-padding: 10px;
+    -fx-border-width: 2px;
+    -fx-pref-width: 350px;  /* Ensure this width accommodates all inner content */
+}
+    
+.route-options {
+    -fx-spacing: 5px; /* Space between children */
+    -fx-padding: 5px; /* Padding around the content */
+    -fx-text-fill: #ffffff;
+}
+
+.route-label {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: black; /* White text for contrast */
+    -fx-padding: 8px;
+    -fx-alignment: center; /* Center text within the label */
+}
+
+/* Styling for Labels with Bold Font in Budgets Area */
+.label-budget {
+    -fx-font-family: 'Consolas', monospace; /* Changed to more techy, gamelike font */
+    -fx-font-size: 14px; /* Font size */
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: black; /* White text for contrast */
+    
+
+}
+
+.heading-label {
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #ffffff; /* White text for contrast */
+    -fx-background-color: #333366; /* Dark blue background */
+    -fx-padding: 8px;
+    -fx-alignment: center; /* Center text within the label */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #464646; /* Slightly lighter dark border */
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.6), 5, 0, 0, 2); /* Subtle shadow for depth */
+}
+
+/* Additional styles for Buttons */
+.button-style {
+    -fx-background-color: #6a9fca; /* Consistent blue background for buttons */
+    -fx-text-fill: white; /* White text */
+    -fx-font-family: 'Consolas', monospace; /* More gamelike font */
+    -fx-font-weight: bold; /* Bold text */
+    -fx-border-radius: 10px;
+}
+
+/* Tooltip Styling for enhanced user experience */
+.tooltip {
+    -fx-font-family: 'Consolas', monospace; /* Consistent font usage */
+    -fx-font-size: 10px;
+    -fx-background-color: rgba(0, 0, 0, 0.8); /* Dark background */
+    -fx-text-fill: white; /* White text */
+}
+
+.score-label {
+    -fx-font-family: 'Consolas', monospace;
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-text-fill: #ffd700; /* Gold text for emphasis */
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-padding: 10px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-color: gold;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(255,215,0,0.8), 5, 0, 0, 5);
+    -fx-alignment: center;
+}
+.button-play {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20; /* Padding for better look */
+}
+.button-instructions {
+    -fx-background-color: #2196F3; /* Blue background */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+}
+
+.button-hover {
+    -fx-background-color: #3a82b1; /* Different shade of blue */
+    -fx-text-fill: white;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 15px;
+}
+
+.button-hover:hover {
+    -fx-background-color: #2a6281; /* Darker shade for hover */
+    -fx-text-fill: #ffffff;
+}
+
+.collect-gem-button {
+    -fx-background-color: #3a82b1; /* Default blue background */
+    -fx-text-fill: white;
+    -fx-font-family: 'Arial', sans-serif;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px 15px;
+}
+
+.collect-gem-button:hover {
+    -fx-background-color: #4CAF50; /* Green background on hover */
+    -fx-text-fill: #ffffff;
+}
+
+
+
+
