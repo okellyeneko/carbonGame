@@ -171,6 +171,7 @@ public class TransportGame {
         carbonBudgetLabel.getStyleClass().add("label-budget");
         timeBudgetLabel.getStyleClass().add("label-budget");
         costBudgetLabel.getStyleClass().add("label-budget");
+        budgetsArea.getStyleClass().add("budgets-area");
     }
 
 
@@ -594,21 +595,21 @@ public class TransportGame {
         playerAnimationHandler.updateScale(scaleX, scaleY);
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
-            // Display station name label with background, modified text, and shadow effect
             Label stationLabel = new Label(point.getName());
             stationLabel.setLayoutX(point.getLongitude() * scaleX);
             stationLabel.setLayoutY(point.getLatitude() * scaleY);
-            stationLabel.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 1.5;");
-            stationLabel.setFont(new Font("Arial", 12)); // Set font size and family
-            stationLabel.setWrapText(true); // Allow text wrapping
-            stationLabel.setMaxWidth(80); // Set a max width for text wrapping and alignment
+            // Updated style with a nicer, pastel color scheme and smaller dimensions
+            stationLabel.setStyle("-fx-background-color: #e8eaf6; -fx-text-fill: #1a237e; -fx-padding: 2px 6px; -fx-border-color: #9fa8da; -fx-border-width: 1px; -fx-border-radius: 3px; -fx-background-radius: 3px; -fx-text-alignment: center;");
+            stationLabel.setFont(new Font("Arial", 10)); // Smaller font for more compact appearance
+            stationLabel.setWrapText(true);
+            stationLabel.setMaxWidth(70);  // Set a max width for text wrapping and alignment
 
             // Create and apply the DropShadow effect
             DropShadow dropShadow = new DropShadow();
-            dropShadow.setRadius(3.0);
-            dropShadow.setOffsetX(2.0);
-            dropShadow.setOffsetY(2.0);
-            dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
+            dropShadow.setRadius(3.0); // Softer, less obtrusive shadow
+            dropShadow.setOffsetX(1.0); // Minimal horizontal offset
+            dropShadow.setOffsetY(1.0); // Minimal vertical offset
+            dropShadow.setColor(Color.rgb(40, 53, 147, 0.3)); // Slightly darker shadow
 
             stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
 

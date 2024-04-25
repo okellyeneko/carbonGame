@@ -49,7 +49,7 @@ public class GameMenu {
         // Logo setup
         Image logoImage = new Image(getClass().getResourceAsStream("logo.png"));
         ImageView logoImageView = new ImageView(logoImage);
-        logoImageView.setFitWidth(250);
+        logoImageView.setFitWidth(350);
         logoImageView.setPreserveRatio(true);
         
         DropShadow logoShadow = new DropShadow();
