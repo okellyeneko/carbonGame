@@ -546,7 +546,7 @@ public class TransportGame {
         
         scaleX = (mapView.getFitWidth() / mapImage.getWidth())*275;
         scaleY = (mapView.getFitHeight() / mapImage.getHeight())*275;
-
+        playerAnimationHandler.updateScale(scaleX, scaleY);
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
             // Display station name label with background, modified text, and shadow effect

@@ -50,4 +50,9 @@ public class PlayerAnimationHandler {
             currentTransition = null; // Clear the reference to the transition
         }
     }
+    
+    public void updateScale(double newScaleX, double newScaleY) {
+        this.scaleX = newScaleX;
+        this.scaleY = newScaleY;
+    }
 }
