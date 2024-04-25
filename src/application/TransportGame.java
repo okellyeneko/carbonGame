@@ -1081,21 +1081,48 @@ public class TransportGame {
             setupCloseButton(closeButton, popupStage, wasFullScreen, primaryStage);
 
             // Budget Info Text
-            Text budgetText = new Text("You get a Bonus!\n" +
-                                       "Cost \t\t\t+ 10\n" +
-                                       "Time \t\t\t+ 20\n" +
-                                       "Carbon budget \t+ 50\n");
-            budgetText.setFont(Font.font("Arial", 14));
+           Text budgetText = new Text("You get a Bonus!");
+           budgetText.setFont(Font.font("Arial", FontWeight.BOLD, 18));
 
-            // Styling for the budget information box
+//
+//            // Styling for the budget information box
             VBox budgetBox = new VBox(budgetText);
-            budgetBox.setPadding(new Insets(10));
+//            budgetBox.setPadding(new Insets(10));
+//            
+            
+            ImageView carbonIcon = new ImageView(carbonImage);
+            ImageView costIcon = new ImageView(costImage);
+            ImageView timeIcon = new ImageView(timeImage);
+            setupImageView(carbonIcon, costIcon, timeIcon);
+            
+            Text timeBonus = new Text("+ 20");
+            timeBonus.setFont(Font.font("Arial", 14));
+            Text costBonus = new Text("+ 10");
+            costBonus.setFont(Font.font("Arial", 14));
+            Text carbonBonus = new Text("+ 50");
+            carbonBonus.setFont(Font.font("Arial", 14));
+
+            // Create HBox for horizontal layout
+            HBox budgetHBox = new HBox(10); // 10 is the spacing between elements
+            budgetHBox.getChildren().addAll(timeIcon, timeBonus, costIcon, costBonus, carbonIcon, carbonBonus);
+            budgetBox.getChildren().add(budgetHBox);
+            budgetHBox.setAlignment(Pos.CENTER);
+            budgetBox.setAlignment(Pos.CENTER);
+
+
+            
             budgetBox.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
-                               "-fx-border-insets: 5; -fx-border-width: 2; " +
-                               "-fx-border-style: solid inside; -fx-border-radius: 5; " +
-                               "-fx-background-radius: 5; -fx-padding: 10;");
+                  "-fx-border-insets: 5; -fx-border-width: 2; " +
+                  "-fx-border-style: solid inside; -fx-border-radius: 5; " +
+                  "-fx-background-radius: 5; -fx-padding: 10;");
 
             // Create layout VBox with all elements
+            carbonBox.setAlignment(Pos.CENTER);
+            carbonInfoBox.setAlignment(Pos.CENTER);
+            costBox.setAlignment(Pos.CENTER);
+            costInfoBox.setAlignment(Pos.CENTER);
+            timeBox.setAlignment(Pos.CENTER);
+            timeInfoBox.setAlignment(Pos.CENTER);
             VBox layout = new VBox(10, titleBox, carbonBox, carbonInfoBox, costBox, costInfoBox, timeBox, timeInfoBox, budgetBox, closeButton);
             layout.setAlignment(Pos.CENTER);
             layout.setPadding(new Insets(15));
@@ -1157,41 +1184,45 @@ public class TransportGame {
 
     
     private void setupMoreInfoButton(Button moreInfoButton, Route route, VBox infoBox) {
-        // Debugging output to check what's inside the route
-        System.out.println("Route links count: " + route.getLinks().size());
-        route.getLinks().forEach(link -> System.out.println("Link from " + link.getStartPoint() + " to " + link.getEndPoint()));
-
+        
         moreInfoButton.setOnAction(e -> {
-            infoBox.getChildren().clear();
-            if (!route.getLinks().isEmpty()) {
-                displayRouteDescription(route, infoBox);
+            if (infoBox.getChildren().isEmpty()) {
+            	displayRouteDescription(route, infoBox);
             } else {
-                infoBox.getChildren().add(new Label("No additional details available."));
+                infoBox.getChildren().clear();
             }
         });
-
+        
         // Button styling remains the same
         moreInfoButton.setStyle("-fx-background-color: #78909C; -fx-text-fill: white; -fx-font-weight: bold; " +
                                 "-fx-border-color: transparent; -fx-border-radius: 5; -fx-background-radius: 5; " +
                                 "-fx-padding: 5 10; -fx-font-size: 10pt;");
 
         // Hover style
-        moreInfoButton.setOnMouseEntered(e -> moreInfoButton.setStyle("-fx-background-color: #546E7A; " +
-                                                                      "-fx-text-fill: white; " +
-                                                                      "-fx-font-weight: bold; " +
-                                                                      "-fx-border-color: transparent; " +
-                                                                      "-fx-border-radius: 5; " +
-                                                                      "-fx-background-radius: 5; " +
-                                                                      "-fx-padding: 5 10; " +
-                                                                      "-fx-font-size: 10pt;"));
-        moreInfoButton.setOnMouseExited(e -> moreInfoButton.setStyle("-fx-background-color: #78909C; " +
-                                                                     "-fx-text-fill: white; " +
-                                                                     "-fx-font-weight: bold; " +
-                                                                     "-fx-border-color: transparent; " +
-                                                                     "-fx-border-radius: 5; " +
-                                                                     "-fx-background-radius: 5; " +
-                                                                     "-fx-padding: 5 10; " +
-                                                                     "-fx-font-size: 10pt;"));
+        moreInfoButton.setOnMouseEntered(e -> {
+            moreInfoButton.setStyle("-fx-background-color: #546E7A; " +
+                                    "-fx-text-fill: white; " +
+                                    "-fx-font-weight: bold; " +
+                                    "-fx-border-color: transparent; " +
+                                    "-fx-border-radius: 5; " +
+                                    "-fx-background-radius: 5; " +
+                                    "-fx-padding: 5 10; " +
+                                    "-fx-font-size: 10pt;");
+            moreInfoButton.setCursor(Cursor.HAND);
+        });
+
+        moreInfoButton.setOnMouseExited(e -> {
+            moreInfoButton.setStyle("-fx-background-color: #78909C; " +
+                                    "-fx-text-fill: white; " +
+                                    "-fx-font-weight: bold; " +
+                                    "-fx-border-color: transparent; " +
+                                    "-fx-border-radius: 5; " +
+                                    "-fx-background-radius: 5; " +
+                                    "-fx-padding: 5 10; " +
+                                    "-fx-font-size: 10pt;");
+            moreInfoButton.setCursor(Cursor.DEFAULT);
+        });
+
     }
 
     
@@ -1231,7 +1262,7 @@ public class TransportGame {
 
             // Combine the image and text into an HBox and add it to the VBox
             HBox routeHBox = new HBox(10, transportImageView, descriptionText);
-            routeHBox.setAlignment(Pos.CENTER_LEFT);
+            routeHBox.setAlignment(Pos.CENTER);
             vbox.getChildren().add(routeHBox);
         }
     }
