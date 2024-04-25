@@ -1,0 +1,31 @@
+/* Style for the DialogPane */
+.dialog-pane {
+    -fx-background-color: #f0f5f5; /* Light blue-gray background */
+    -fx-border-color: #2e8b57; /* Sea green border color */
+    -fx-border-width: 2px;
+}
+
+/* Style for the header panel */
+.dialog-pane .header-panel {
+    -fx-background-color: #66cdaa; /* Medium aquamarine header background */
+}
+
+/* Style for the content label */
+.dialog-pane .content-label {
+    -fx-font-size: 14pt; /* Larger font size */
+    -fx-text-fill: #2e8b57; /* Dark green text color */
+}
+
+/* Style for the buttons */
+.dialog-pane .button-bar .button {
+    -fx-font-size: 12pt; /* Larger font size for buttons */
+    -fx-text-fill: #ffffff; /* White text color */
+    -fx-background-color: #66cdaa; /* Medium aquamarine button background */
+    -fx-background-radius: 5px; /* Rounded corners */
+    -fx-padding: 8px 16px; /* Padding inside buttons */
+}
+
+/* Hover effect for buttons */
+.dialog-pane .button-bar .button:hover {
+    -fx-background-color: #2e8b57; /* Dark green on hover */
+}

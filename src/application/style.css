@@ -34,12 +34,7 @@
     -fx-font-size: 14px; /* Font size */
     -fx-font-weight: bold; /* Bold font weight */
     -fx-text-fill: white; /* White text for contrast */
-    -fx-background-color:  #4682b4; /* Blue background */
-    -fx-padding: 8px; /* Increased padding for better visual presence */
-    -fx-border-radius: 5px; /* Rounded corners */
-    -fx-background-radius: 5px; /* Background rounded corners to match the border */
-    -fx-border-color: #2b6a7f; /* Dark blue border */
-    -fx-border-width: 2px; /* Thicker border for emphasis */
+    
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 3); /* Subtle shadow for 3D effect */
 
 }
@@ -90,7 +85,20 @@
     -fx-effect: dropshadow(three-pass-box, rgba(255,215,0,0.8), 5, 0, 0, 5);
     -fx-alignment: center;
 }
-
+.button-play {
+    -fx-background-color: #4CAF50; /* Green background */
+    -fx-text-fill: white; /* White text */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20; /* Padding for better look */
+}
+.button-instructions {
+    -fx-background-color: #2196F3; /* Blue background */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+}
 
 .button-hover {
     -fx-background-color: #3a82b1; /* Different shade of blue */

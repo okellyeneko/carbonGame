@@ -62,7 +62,7 @@ public class TransportGame {
     private int  highScore;
     private Map<Integer, Point> pointsMap;
     private List<Integer> availableGems;
-    double scaleFactor = 0.75; // You can adjust this factor as needed
+    double scaleFactor = 1; // You can adjust this factor as needed
     double scaleX = 100.0 * scaleFactor;
     double scaleY = 100.0 * scaleFactor;
     double offsetX = 0.0 * scaleFactor; 
@@ -162,6 +162,10 @@ public class TransportGame {
         budgetsHeading.getStyleClass().add("heading-label");
         routeHeading.getStyleClass().add("route-label");
         routeOptions.getStyleClass().add("route-options");
+        routeOptions.getStyleClass().add("route-options");       
+        carbonBudgetLabel.getStyleClass().add("label-budget");
+        timeBudgetLabel.getStyleClass().add("label-budget");
+        costBudgetLabel.getStyleClass().add("label-budget");
     }
 
 
@@ -525,7 +529,7 @@ public class TransportGame {
         anchorPane.getChildren().add(mapView); // Add the map to the container
 
         // Increase the size of the map
-        double scaleFactor2 = 0.27;
+        double scaleFactor2 = .378;
         mapView.setFitWidth(mapImage.getWidth() * scaleFactor2);
         mapView.setFitHeight(mapImage.getHeight() * scaleFactor2);
 
@@ -1258,7 +1262,7 @@ public class TransportGame {
             String description = String.format("%s to %s on %s",
                     pointsMap.get(link.getStartPoint()).getName(), pointsMap.get(link.getEndPoint()).getName(), link.getTransport().name());
             Text descriptionText = new Text(description);
-            descriptionText.setFont(Font.font("Arial", 14));
+            descriptionText.setFont(Font.font("Arial", 12));
 
             // Combine the image and text into an HBox and add it to the VBox
             HBox routeHBox = new HBox(10, transportImageView, descriptionText);
