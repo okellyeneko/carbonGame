@@ -27,7 +27,7 @@ public class Player {
         // Initial budget values, these could be adjusted based on the level or other criteria
         this.timeBudget = 100;
         this.costBudget = 50;
-        this.carbonBudget = 200;
+        this.carbonBudget = 50;
     }
 
     public void collectGem() {

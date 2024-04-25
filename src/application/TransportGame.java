@@ -46,7 +46,8 @@ import javafx.scene.Cursor;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
 import javafx.stage.Screen;
-
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 public class TransportGame {
     
@@ -103,6 +104,7 @@ public class TransportGame {
     }
     
     private void initializeGame() {
+ 
         leftPanel = new VBox(10);
         rightPanel = new VBox(10);
 
@@ -121,7 +123,6 @@ public class TransportGame {
         applyCSSStyles();
 
         highScore = highScoreManager.readHighScore();
-        
     }
 
     private void initializeBudgetsArea() {
@@ -134,21 +135,36 @@ public class TransportGame {
 
         carbonProgress = new ProgressBar(1.0);
         carbonProgress.setStyle("-fx-accent: green;");
+        carbonProgress.setPrefWidth(160);
         timeProgress = new ProgressBar(1.0);
         timeProgress.setStyle("-fx-accent: green;");
+        timeProgress.setPrefWidth(160);
         costProgress = new ProgressBar(1.0);
         costProgress.setStyle("-fx-accent: green;");
-
-        carbonHbox = new HBox(10, carbonBudgetLabel, carbonProgress);
-        timeHbox = new HBox(10, timeBudgetLabel, timeProgress);
-        costHbox = new HBox(10, costBudgetLabel, costProgress);
+        costProgress.setPrefWidth(160);
+        
+        carbonHbox = new HBox(10);
+        timeHbox = new HBox(10);
+        costHbox = new HBox(10);
+        setupHBox(carbonHbox, carbonBudgetLabel, carbonProgress);
+        setupHBox(timeHbox, timeBudgetLabel, timeProgress);
+        setupHBox(costHbox, costBudgetLabel, costProgress);
 
         budgetsArea.getChildren().addAll(budgetsHeading, carbonHbox, timeHbox, costHbox);
         budgetsArea.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
                 "-fx-border-insets: 5; -fx-border-width: 2; " +
                 "-fx-border-style: solid inside; -fx-border-radius: 5; " +
                 "-fx-background-radius: 5; -fx-padding: 10;");
+        
         leftPanel.getChildren().addAll(scoreLabel, budgetsArea);
+    }
+    
+    private void setupHBox(HBox hbox, Label label, ProgressBar progressBar) {
+        Region spacer = new Region(); // Creates a spacer
+        HBox.setHgrow(spacer, Priority.ALWAYS); // Allows the spacer to grow as needed
+
+        hbox.getChildren().addAll(label, spacer, progressBar); // Adds the label, spacer, and progress bar to the HBox
+        hbox.setAlignment(Pos.CENTER_LEFT); // Ensures that the contents are aligned to the center-left
     }
 
     private void initializeRouteOptions() {
@@ -171,6 +187,7 @@ public class TransportGame {
         carbonBudgetLabel.getStyleClass().add("label-budget");
         timeBudgetLabel.getStyleClass().add("label-budget");
         costBudgetLabel.getStyleClass().add("label-budget");
+        budgetsArea.getStyleClass().add("budgets-area");
     }
 
 
@@ -272,6 +289,9 @@ public class TransportGame {
 
     	//Sailor's Sanctuary
     	mapGrap.addLink(new Link(8, 3, Transport.BOAT, 5, 2, 10));
+    	
+    	mapGrap.addLink(new Link(9, 10, Transport.CYCLE, 5, 2, 10));
+    	mapGrap.addLink(new Link(9, 10, Transport.BUS, 5, 2, 10));
 
     	//Frozen Shores
     	mapGrap.addLink(new Link(10, 7, Transport.BOAT, 5, 2, 10));
@@ -462,6 +482,43 @@ public class TransportGame {
     	
     }
 
+    
+    public void generateCosts() {
+    	int pointDistance;
+    	for (Link link : mapGrap.getAllLinks()) {
+    		Point startPoint = pointsMap.get(link.getStartPoint());
+    		Point endPoint = pointsMap.get(link.getEndPoint());
+    		pointDistance = (int) (2*(Math.abs(startPoint.getLatitude() - endPoint.getLatitude()) + Math.abs(startPoint.getLongitude()-endPoint.getLongitude())));
+    		
+    		Transport transportType = link.getTransport();
+            
+            switch (transportType) {
+                case BUS:
+                	link.setTime(pointDistance);
+                	link.setCarbonFootprint(2 * pointDistance);
+                	break;
+                case CYCLE:
+                	link.setTime(3*pointDistance);
+                    break;
+                case AIRPLANE:
+                	link.setTime(pointDistance/2);
+                	link.setCarbonFootprint(4*pointDistance);
+                    break;
+                case BOAT:
+                	link.setTime(2* pointDistance);
+                	link.setCarbonFootprint(pointDistance);
+                    break;
+                case TRAIN:
+                	link.setTime(pointDistance/2);
+                	link.setCarbonFootprint(pointDistance/2);
+                    break;
+                default:
+                    // Default case
+                    break;
+            }
+    	}
+    	
+    }
 
     public void startGame() {
     	SoundEffectsPlayer.playSound("/soundEffects/letsgo.mp3");
@@ -475,6 +532,7 @@ public class TransportGame {
         mapGrap = new MapGraph();
         initializeMapGraph();
         initializePoints();
+        generateCosts();
         
         // Clear previous game settings if any
         mainGameArea.getChildren().clear();
@@ -553,21 +611,21 @@ public class TransportGame {
         playerAnimationHandler.updateScale(scaleX, scaleY);
         // Display station names and redraw circles for stations
         for (Point point : pointsMap.values()) {
-            // Display station name label with background, modified text, and shadow effect
             Label stationLabel = new Label(point.getName());
             stationLabel.setLayoutX(point.getLongitude() * scaleX);
             stationLabel.setLayoutY(point.getLatitude() * scaleY);
-            stationLabel.setStyle("-fx-background-color: white; -fx-text-fill: black; -fx-padding: 1.5;");
-            stationLabel.setFont(new Font("Arial", 12)); // Set font size and family
-            stationLabel.setWrapText(true); // Allow text wrapping
-            stationLabel.setMaxWidth(80); // Set a max width for text wrapping and alignment
+            // Updated style with a nicer, pastel color scheme and smaller dimensions
+            stationLabel.setStyle("-fx-background-color: #e8eaf6; -fx-text-fill: #1a237e; -fx-padding: 2px 6px; -fx-border-color: #9fa8da; -fx-border-width: 1px; -fx-border-radius: 3px; -fx-background-radius: 3px; -fx-text-alignment: center;");
+            stationLabel.setFont(new Font("Arial", 10)); // Smaller font for more compact appearance
+            stationLabel.setWrapText(true);
+            stationLabel.setMaxWidth(70);  // Set a max width for text wrapping and alignment
 
             // Create and apply the DropShadow effect
             DropShadow dropShadow = new DropShadow();
-            dropShadow.setRadius(3.0);
-            dropShadow.setOffsetX(2.0);
-            dropShadow.setOffsetY(2.0);
-            dropShadow.setColor(Color.color(0.2, 0.2, 0.2)); // Slightly darker shadow
+            dropShadow.setRadius(3.0); // Softer, less obtrusive shadow
+            dropShadow.setOffsetX(1.0); // Minimal horizontal offset
+            dropShadow.setOffsetY(1.0); // Minimal vertical offset
+            dropShadow.setColor(Color.rgb(40, 53, 147, 0.3)); // Slightly darker shadow
 
             stationLabel.setEffect(dropShadow); // Apply the shadow effect to the label
 
@@ -798,6 +856,9 @@ public class TransportGame {
 	    	    if (soundFileName != null) {
 	    	        SoundEffectsPlayer.playSound(soundFileName);
 	    	    }
+	    	    mainGameArea.getChildren().remove(playerImageView);
+
+	    	    mainGameArea.getChildren().add(playerImageView);
 	    	    playerAnimationHandler.animatePlayerMovement(startPoint, endPoint);
 	    	});
 
@@ -998,7 +1059,7 @@ public class TransportGame {
         	
         }
         player.deductTime(-20);
-        player.deductCarbonFootprint(-50);
+        player.deductCarbonFootprint(-5);
         player.deductCost(-10);
         //SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
         updatePlayerStatus();
@@ -1131,7 +1192,7 @@ public class TransportGame {
             timeBonus.setFont(Font.font("Arial", 14));
             Text costBonus = new Text("+ 10");
             costBonus.setFont(Font.font("Arial", 14));
-            Text carbonBonus = new Text("+ 50");
+            Text carbonBonus = new Text("+ 5");
             carbonBonus.setFont(Font.font("Arial", 14));
 
             // Create HBox for horizontal layout
@@ -1353,7 +1414,7 @@ public class TransportGame {
     
     public void updatePlayerStatus() {
     	progressCarbon = player.getCarbonBudget();
-        progressCarbon = progressCarbon/200;
+        progressCarbon = progressCarbon/50;
         progressTime = player.getTimeBudget();
         progressTime = progressTime/100;
         progressCost = player.getCostBudget();
@@ -1402,7 +1463,7 @@ public class TransportGame {
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
         timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget() + "  ");
         costBudgetLabel.setText("Cost Budget: " + player.getCostBudget()+ "   ");
-        scoreLabel.setText(String.format("High Score: %d%nCurrent Score: %d", highScore, player.getGemsCollected()));
+        scoreLabel.setText(String.format("High Score: %d Current Score: %d", highScore, player.getGemsCollected()));
 
     
     }

@@ -58,4 +58,16 @@ public class Link {
     public int getCarbonFootprint() {
         return carbonFootprint;
     }
+    
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public void setCost(int cost) {
+        this.cost = cost;
+    }
+
+    public void setCarbonFootprint(int carbon) {
+        this.carbonFootprint = carbon;
+    }
 }
