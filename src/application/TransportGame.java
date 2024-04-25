@@ -46,7 +46,8 @@ import javafx.scene.Cursor;
 import javafx.animation.ScaleTransition;
 import javafx.util.Duration;
 import javafx.stage.Screen;
-
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 public class TransportGame {
     
@@ -134,21 +135,36 @@ public class TransportGame {
 
         carbonProgress = new ProgressBar(1.0);
         carbonProgress.setStyle("-fx-accent: green;");
+        carbonProgress.setPrefWidth(160);
         timeProgress = new ProgressBar(1.0);
         timeProgress.setStyle("-fx-accent: green;");
+        timeProgress.setPrefWidth(160);
         costProgress = new ProgressBar(1.0);
         costProgress.setStyle("-fx-accent: green;");
-
-        carbonHbox = new HBox(10, carbonBudgetLabel, carbonProgress);
-        timeHbox = new HBox(10, timeBudgetLabel, timeProgress);
-        costHbox = new HBox(10, costBudgetLabel, costProgress);
+        costProgress.setPrefWidth(160);
+        
+        carbonHbox = new HBox(10);
+        timeHbox = new HBox(10);
+        costHbox = new HBox(10);
+        setupHBox(carbonHbox, carbonBudgetLabel, carbonProgress);
+        setupHBox(timeHbox, timeBudgetLabel, timeProgress);
+        setupHBox(costHbox, costBudgetLabel, costProgress);
 
         budgetsArea.getChildren().addAll(budgetsHeading, carbonHbox, timeHbox, costHbox);
         budgetsArea.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
                 "-fx-border-insets: 5; -fx-border-width: 2; " +
                 "-fx-border-style: solid inside; -fx-border-radius: 5; " +
                 "-fx-background-radius: 5; -fx-padding: 10;");
+        
         leftPanel.getChildren().addAll(scoreLabel, budgetsArea);
+    }
+    
+    private void setupHBox(HBox hbox, Label label, ProgressBar progressBar) {
+        Region spacer = new Region(); // Creates a spacer
+        HBox.setHgrow(spacer, Priority.ALWAYS); // Allows the spacer to grow as needed
+
+        hbox.getChildren().addAll(label, spacer, progressBar); // Adds the label, spacer, and progress bar to the HBox
+        hbox.setAlignment(Pos.CENTER_LEFT); // Ensures that the contents are aligned to the center-left
     }
 
     private void initializeRouteOptions() {
@@ -1402,7 +1418,7 @@ public class TransportGame {
         carbonBudgetLabel.setText("Carbon Budget: " + player.getCarbonBudget());
         timeBudgetLabel.setText("Time Budget: " + player.getTimeBudget() + "  ");
         costBudgetLabel.setText("Cost Budget: " + player.getCostBudget()+ "   ");
-        scoreLabel.setText(String.format("High Score: %d%nCurrent Score: %d", highScore, player.getGemsCollected()));
+        scoreLabel.setText(String.format("High Score: %d Current Score: %d", highScore, player.getGemsCollected()));
 
     
     }
