@@ -1511,10 +1511,11 @@ public class TransportGame {
             congratsLabel.setStyle("-fx-font-size: 20px; -fx-text-fill: #ffd700;");
             popupLayout.getChildren().add(congratsLabel);
             StackPane.setAlignment(congratsLabel, Pos.BOTTOM_CENTER);
+            StackPane.setMargin(congratsLabel, new Insets(0, 0, 50, 0));
         }
 
         // Create a scene and set the layout
-        Scene gameOverScene = new Scene(popupLayout, 300, 200);
+        Scene gameOverScene = new Scene(popupLayout, 350, 300);
         
         // Set the scene for the Stage
         gameOverStage.setScene(gameOverScene);
