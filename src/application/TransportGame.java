@@ -116,7 +116,7 @@ public class TransportGame {
 
         mainGameArea = new Pane();
         root.setCenter(mainGameArea);        
-
+        root.setStyle("-fx-background-color: " + "linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%)");
         // Apply CSS styles if necessary
         applyCSSStyles();
 
@@ -144,6 +144,10 @@ public class TransportGame {
         costHbox = new HBox(10, costBudgetLabel, costProgress);
 
         budgetsArea.getChildren().addAll(budgetsHeading, carbonHbox, timeHbox, costHbox);
+        budgetsArea.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
+                "-fx-border-insets: 5; -fx-border-width: 2; " +
+                "-fx-border-style: solid inside; -fx-border-radius: 5; " +
+                "-fx-background-radius: 5; -fx-padding: 10;");
         leftPanel.getChildren().addAll(scoreLabel, budgetsArea);
     }
 
@@ -151,8 +155,8 @@ public class TransportGame {
         routeOptions = new VBox(5);
         routeOptions.setAlignment(Pos.TOP_RIGHT); 
         routeHeading = new Label("Route Details");
-        routeOptions.getChildren().add(routeHeading);
-        rightPanel.getChildren().add(routeOptions);
+        //routeOptions.getChildren().add(routeHeading);
+        leftPanel.getChildren().add(routeOptions);
     }
 
     private void applyCSSStyles() {
@@ -776,8 +780,18 @@ public class TransportGame {
 
 	    	    player.updateBudgets(link.getTime(), link.getCost(), link.getCarbonFootprint());
 	    	    updatePlayerStatus();                
-	    	    addRouteDetails(currentRoute); // Update route details with the current route
+	    	    //addRouteDetails(currentRoute); // Update route details with the current route
+	    	    
+	    	    VBox routeDescriptionBox = new VBox();
+	    	    displayRouteDescription(currentRoute, routeDescriptionBox);
+	    	    routeOptions.getChildren().clear();
+	    	    routeOptions.getChildren().add(routeHeading);
+	    	    routeOptions.getChildren().add(routeDescriptionBox);
 	    	    displayLinkOptions(link.getEndPoint(), currentRoute, gemLocation); // Use the updated route for further actions
+	    	    routeOptions.setStyle("-fx-background-color: #f7f7f7; -fx-border-color: #cccccc; " +
+	                    "-fx-border-insets: 5; -fx-border-width: 2; " +
+	                    "-fx-border-style: solid inside; -fx-border-radius: 5; " +
+	                    "-fx-background-radius: 5; -fx-padding: 10;");
 	    	    showClearButton(currentRoute, gemLocation);
 
 	    	    String soundFileName = TransportSoundMapper.getSoundFileNameForTransport(link.getTransport());

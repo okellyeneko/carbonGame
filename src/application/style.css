@@ -3,14 +3,14 @@
     -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%); /* Blue gradient */
     -fx-padding: 10px;
     -fx-border-width: 2px;
-    -fx-pref-width: 270px; /* Preferred width */
+    -fx-pref-width: 390px; /* Preferred width */
 }
 
 .right-panel {
     -fx-background-color: linear-gradient(to bottom, #6a9fca 0%, #2b6a7f 100%);
     -fx-padding: 10px;
     -fx-border-width: 2px;
-    -fx-pref-width: 250px;  /* Ensure this width accommodates all inner content */
+    -fx-pref-width: 350px;  /* Ensure this width accommodates all inner content */
 }
     
 .route-options {
@@ -23,7 +23,7 @@
     -fx-font-family: 'Arial', sans-serif;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #ffffff; /* White text for contrast */
+    -fx-text-fill: black; /* White text for contrast */
     -fx-padding: 8px;
     -fx-alignment: center; /* Center text within the label */
 }
@@ -33,9 +33,8 @@
     -fx-font-family: 'Consolas', monospace; /* Changed to more techy, gamelike font */
     -fx-font-size: 14px; /* Font size */
     -fx-font-weight: bold; /* Bold font weight */
-    -fx-text-fill: white; /* White text for contrast */
+    -fx-text-fill: black; /* White text for contrast */
     
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.5), 5, 0, 0, 3); /* Subtle shadow for 3D effect */
 
 }
 
