@@ -1056,7 +1056,7 @@ public class TransportGame {
         	
         }
         player.deductTime(-20);
-        player.deductCarbonFootprint(-50);
+        player.deductCarbonFootprint(-5);
         player.deductCost(-10);
         //SoundEffectsPlayer.playSound("/soundEffects/gem.mp3");
         updatePlayerStatus();
@@ -1189,7 +1189,7 @@ public class TransportGame {
             timeBonus.setFont(Font.font("Arial", 14));
             Text costBonus = new Text("+ 10");
             costBonus.setFont(Font.font("Arial", 14));
-            Text carbonBonus = new Text("+ 50");
+            Text carbonBonus = new Text("+ 5");
             carbonBonus.setFont(Font.font("Arial", 14));
 
             // Create HBox for horizontal layout
@@ -1411,7 +1411,7 @@ public class TransportGame {
     
     public void updatePlayerStatus() {
     	progressCarbon = player.getCarbonBudget();
-        progressCarbon = progressCarbon/200;
+        progressCarbon = progressCarbon/50;
         progressTime = player.getTimeBudget();
         progressTime = progressTime/100;
         progressCost = player.getCostBudget();
