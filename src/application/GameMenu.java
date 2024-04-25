@@ -80,7 +80,7 @@ public class GameMenu {
         Button playGameButton = new Button("Play Game");
         playGameButton.setOnAction(e -> {
             BorderPane gameRoot = new BorderPane();
-            Scene gameScene = new Scene(gameRoot, 800, 600);
+            Scene gameScene = new Scene(gameRoot);
             TransportGame game = new TransportGame(gameRoot, gameScene);
             game.startGame();
             stage.setScene(gameScene);
@@ -124,7 +124,7 @@ public class GameMenu {
         // Layering everything
         root.getChildren().addAll(imagePane, logoPane, layout);
         
-        Scene scene = new Scene(root, Main.WIDTH, Main.HEIGHT);
+        Scene scene = new Scene(root);
         scaleTransition.play();
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         
