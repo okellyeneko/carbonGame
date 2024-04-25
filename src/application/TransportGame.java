@@ -856,6 +856,9 @@ public class TransportGame {
 	    	    if (soundFileName != null) {
 	    	        SoundEffectsPlayer.playSound(soundFileName);
 	    	    }
+	    	    mainGameArea.getChildren().remove(playerImageView);
+
+	    	    mainGameArea.getChildren().add(playerImageView);
 	    	    playerAnimationHandler.animatePlayerMovement(startPoint, endPoint);
 	    	});
 
