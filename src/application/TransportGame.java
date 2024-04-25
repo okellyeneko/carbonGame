@@ -92,7 +92,7 @@ public class TransportGame {
     private HBox carbonHbox;
     private HBox timeHbox;
     private HBox costHbox;
-    private int gemCollectCarbon = 200;
+    private int gemCollectCarbon = 50;
     private int gemCollectTime = 100;
     private int gemCollectCost = 50;
     private ImageView playerImageView = new ImageView();
