@@ -33,7 +33,7 @@ The game ends when the player runs out of any one budget. Each time a player col
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/carbon-crusade.git
+    git clone https://github.com/charliedrumm/carbonGame.git
     ```
 
 2. Navigate to the project directory:
